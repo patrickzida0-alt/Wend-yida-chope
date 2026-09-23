@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Wend-Yida Shop — marketplace burkinabè moderne">
+<title>Wend-Yida Shop | Marketplace Burkina Faso</title>
+<style>
+:root{
+  --gold:#e6a817;--green:#087443;--red:#c73b32;--dark:#101514;
+  --cream:#fffaf0;--muted:#68706d;--white:#fff;--border:#e9e5da;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f7f5ef;color:#17201d}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{
+  position:sticky;top:0;z-index:50;background:rgba(16,21,20,.96);
+  color:#fff;border-bottom:1px solid #ffffff18;backdrop-filter:blur(12px)
+}
+.topbar{max-width:1200px;margin:auto;padding:14px 5%;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;min-width:max-content;text-decoration:none;color:#fff}
+.logo-mark{
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green) 0 42%,var(--gold) 42% 58%,var(--red) 58%);
+  font-size:20px;font-weight:900;box-shadow:0 6px 20px #0005
+}
+.logo-text{font-size:21px;font-weight:900;letter-spacing:-.5px}.logo-text span{color:var(--gold)}
+.search{flex:1;display:flex;max-width:620px;margin:auto}
+.search input{width:100%;border:0;outline:0;padding:13px 16px;border-radius:12px 0 0 12px;background:#fff;color:#222}
+.search button{border:0;background:var(--gold);padding:0 17px;border-radius:0 12px 12px 0;font-weight:800}
+.actions{display:flex;gap:8px}
+.icon-btn{border:1px solid #ffffff25;background:#ffffff0d;color:#fff;padding:10px 12px;border-radius:11px}
+.cart-btn{background:var(--gold);color:#111;border:0;padding:11px 14px;border-radius:11px;font-weight:900}
+.hero{
+  background:
+   radial-gradient(circle at 15% 20%,#e6a8172a,transparent 27%),
+   radial-gradient(circle at 88% 30%,#08744335,transparent 30%),
+   linear-gradient(135deg,#101514,#18231f 55%,#321a16);
+  color:#fff;padding:70px 5% 62px;overflow:hidden
+}
+.hero-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center}
+.badge{display:inline-flex;padding:7px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff20;color:#ffd86a;font-weight:800}
+.hero h1{font-size:clamp(38px,6vw,70px);line-height:.98;margin:18px 0}
+.hero h1 span{color:var(--gold)}
+.hero p{font-size:18px;color:#d8dfdc;max-width:650px;line-height:1.6}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.primary,.secondary{border:0;border-radius:12px;padding:13px 18px;font-weight:900}
+.primary{background:var(--gold);color:#111}.secondary{background:#ffffff12;color:#fff;border:1px solid #ffffff2c}
+.hero-card{
+  background:#ffffff0d;border:1px solid #ffffff18;border-radius:24px;padding:25px;
+  box-shadow:0 25px 70px #0005
+}
+.flag{height:13px;border-radius:99px;background:linear-gradient(90deg,var(--green) 0 40%,var(--gold) 40% 60%,var(--red) 60%)}
+.hero-card h3{font-size:25px;margin:20px 0 8px}
+.hero-card p{font-size:14px}
+.container{max-width:1200px;margin:auto;padding:35px 5%}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px}
+.section-head h2{margin:0;font-size:28px}.section-head p{margin:5px 0;color:var(--muted)}
+.categories{display:flex;gap:10px;overflow:auto;padding-bottom:8px}
+.cat{white-space:nowrap;border:1px solid var(--border);background:#fff;padding:11px 15px;border-radius:999px;font-weight:800;color:#29332f}
+.cat.active,.cat:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 7px 24px #17201d0b;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 32px #17201d16}
+.photo{height:190px;background:linear-gradient(135deg,#f1eee4,#e6e1d4);display:grid;place-items:center;font-size:72px;position:relative}
+.tag{position:absolute;left:12px;top:12px;background:var(--red);color:#fff;padding:5px 8px;border-radius:7px;font-size:12px;font-weight:900}
+.card-body{padding:16px}.card h3{margin:0 0 8px;font-size:17px}.price{font-size:20px;font-weight:950;margin:8px 0;color:#111}
+.seller{font-size:12px;color:var(--muted);margin-bottom:12px}
+.buy{width:100%;padding:11px;border:0;border-radius:10px;background:var(--dark);color:#fff;font-weight:800}.buy:hover{background:var(--green)}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.info{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px}.info strong{display:block;font-size:18px;margin-bottom:5px}.info span{color:var(--muted);font-size:14px}
+.page{display:none}.page.active{display:block}
+.page-box{background:#fff;border:1px solid var(--border);border-radius:20px;padding:25px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-weight:800;font-size:14px}.field input,.field select,.field textarea{padding:12px;border:1px solid #ddd8ca;border-radius:10px;outline:0;background:#fff}
+.field textarea{min-height:100px;resize:vertical}
+.payment-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}
+.pay{border:1px solid var(--border);background:#fff;border-radius:12px;padding:15px;text-align:left}.pay strong{display:block}.pay small{color:var(--muted)}
+#cartPanel{
+  display:none;position:fixed;right:16px;top:78px;width:min(430px,calc(100% - 32px));max-height:78vh;overflow:auto;
+  background:#fff;padding:20px;border-radius:18px;box-shadow:0 18px 60px #0004;z-index:100;border:1px solid var(--border)
+}
+.cart-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#f2efe7;border-radius:8px;padding:5px 10px;font-size:20px}
+.cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid #eee;padding:12px 0}
+.remove{border:0;background:none;color:var(--red);font-size:12px}
+.total-row{display:flex;justify-content:space-between;font-size:20px;font-weight:900;margin-top:16px}
+.checkout{background:var(--green);color:#fff;border:0;width:100%;padding:13px;border-radius:10px;font-weight:900;margin-top:13px}
+footer{margin-top:45px;background:#101514;color:#bfc8c4;padding:35px 5%}
+.footer-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;display:block;margin:7px 0}
+.notice{padding:13px 16px;background:#fff8dd;border:1px solid #f1dda0;border-radius:12px;margin-bottom:15px;font-size:14px}
+@media(max-width:850px){
+ .topbar{flex-wrap:wrap}.brand{flex:1}.search{order:3;flex-basis:100%}
+ .hero-inner{grid-template-columns:1fr}.hero-card{display:none}
+ .info-grid,.payment-list{grid-template-columns:1fr}
+ .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
+ .footer-inner{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <a class="brand" href="#" onclick="showPage('home');return false">
+      <div class="logo-mark">WY</div><div class="logo-text">Wend-Yida <span>Shop</span></div>
+    </a>
+    <div class="search">
+      <input id="search" placeholder="Rechercher un produit..." oninput="render()">
+      <button onclick="render()">🔎</button>
+    </div>
+    <div class="actions">
+      <button class="icon-btn" onclick="showPage('sell')">Vendre</button>
+      <button class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="badge">🇧🇫 Marketplace burkinabè</span>
+      <h1>Achetez. Vendez.<br><span>Simplement.</span></h1>
+      <p>Une boutique en ligne moderne pensée pour le Burkina Faso : produits, vendeurs locaux et commandes réunis au même endroit.</p>
+      <div class="hero-buttons">
+        <button class="primary" onclick="document.getElementById('productsSection').scrollIntoView()">Découvrir les produits</button>
+        <button class="secondary" onclick="showPage('sell')">Publier un produit</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="flag"></div>
+      <h3>Wend-Yida</h3>
+      <p>Un nom, une identité et une expérience inspirés de notre marché et de notre culture.</p>
+      <div style="display:flex;justify-content:space-between;margin-top:20px;font-weight:800">
+        <span>🇧🇫 Local</span><span>⚡ Rapide</span><span>🔒 Simple</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+<section id="productsSection" class="container">
+  <div class="section-head">
+    <div><h2>Nos produits</h2><p>Découvrez une sélection de produits disponibles sur Wend-Yida Shop.</p></div>
+  </div>
+  <div class="categories">
+    <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
+    <button class="cat" onclick="setCategory('Mode',this)">👕 Mode</button>
+    <button class="cat" onclick="setCategory('Tech',this)">🎧 Tech</button>
+    <button class="cat" onclick="setCategory('Accessoires',this)">🎒 Accessoires</button>
+  </div>
+  <div class="grid" id="products" style="margin-top:18px"></div>
+
+  <div class="info-grid">
+    <div class="info"><strong>🇧🇫 Pensé pour le Burkina</strong><span>Une identité locale et une expérience adaptée aux utilisateurs burkinabè.</span></div>
+    <div class="info"><strong>📱 Paiement mobile</strong><span>La page de commande prévoit l'intégration des solutions de paiement mobile.</span></div>
+    <div class="info"><strong>🛍️ Acheteurs & vendeurs</strong><span>Une base simple pour transformer la boutique en véritable marketplace.</span></div>
+  </div>
+</section>
+
+<section id="sellPage" class="container page">
+  <div class="page-box">
+    <h2>Publier un produit</h2>
+    <p>Ajoute les informations de ton produit. Cette version prépare l'interface vendeur ; l'enregistrement réel nécessitera ensuite une base de données.</p>
+    <div class="form-grid">
+      <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso"></div>
+      <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
+      <div class="field"><label>Catégorie</label><select id="newCategory"><option>Mode</option><option>Tech</option><option>Accessoires</option></select></div>
+      <div class="field"><label>Emoji / image provisoire</label><input id="newEmoji" placeholder="👕"></div>
+      <div class="field full"><label>Description</label><textarea id="newDesc" placeholder="Décris ton produit..."></textarea></div>
+    </div>
+    <button class="primary" style="margin-top:15px" onclick="publishProduct()">Publier le produit</button>
+  </div>
+</section>
+
+<section id="checkoutPage" class="container page">
+  <div class="page-box">
+    <h2>Finaliser la commande</h2>
+    <div class="notice">💡 L'interface est prête pour une connexion à un vrai service de paiement. Les identifiants marchands et clés API doivent être ajoutés côté serveur avant les paiements réels.</div>
+    <h3>Total à payer : <span id="checkoutTotal">0</span> FCFA</h3>
+    <div class="payment-list">
+      <button class="pay" onclick="selectPay(this,'Orange Money Burkina')"><strong>🟠 Orange Money</strong><small>Burkina Faso</small></button>
+      <button class="pay" onclick="selectPay(this,'Moov Money')"><strong>🟢 Moov Money</strong><small>Burkina Faso</small></button>
+      <button class="pay" onclick="selectPay(this,'Paiement à la livraison')"><strong>🚚 À la livraison</strong><small>Selon disponibilité</small></button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nom complet</label><input id="buyerName" placeholder="Votre nom"></div>
+      <div class="field"><label>Téléphone</label><input id="buyerPhone" placeholder="70 00 00 00"></div>
+      <div class="field full"><label>Adresse de livraison</label><textarea id="buyerAddress" placeholder="Ville, quartier, indications..."></textarea></div>
+    </div>
+    <button class="checkout" onclick="confirmOrder()">Confirmer la commande</button>
+  </div>
+</section>
+
+<section id="aboutPage" class="container page">
+  <div class="page-box">
+    <h2>À propos de Wend-Yida Shop</h2>
+    <p>Wend-Yida Shop est conçu comme une marketplace en ligne mettant en avant une identité burkinabè, une navigation simple et une expérience mobile.</p>
+    <p>Le site actuel est une base front-end autonome. Pour devenir une plateforme complète, il faudra ajouter un serveur, une base de données, un système de comptes vendeurs/clients, la gestion des commandes et une passerelle de paiement sécurisée.</p>
+  </div>
+</section>
+</main>
+
+<div id="cartPanel">
+  <div class="cart-head"><h2 style="margin:0">Votre panier</h2><button class="close" onclick="toggleCart()">×</button></div>
+  <div id="cartItems"></div>
+  <div class="total-row"><span>Total</span><span><span id="total">0</span> FCFA</span></div>
+  <button class="checkout" onclick="checkout()">Passer au paiement</button>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><h3>🇧🇫 Wend-Yida Shop</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne.</p></div>
+    <div><h3>Navigation</h3><a href="#" onclick="showPage('home')">Accueil</a><a href="#" onclick="showPage('sell')">Vendre</a><a href="#" onclick="showPage('about')">À propos</a></div>
+    <div><h3>Services</h3><a href="#productsSection">Produits</a><a href="#" onclick="showPage('checkout')">Paiement</a><a href="#" onclick="toggleCart()">Panier</a></div>
+  </div>
+  <p style="text-align:center;margin:30px 0 0">© 2026 Wend-Yida Shop — Boutique en ligne</p>
+</footer>
+
+<script>
+let category="Tous";
+let selectedPayment="";
+let products=[
+ {id:1,name:"T-shirt tendance",price:5000,emoji:"👕",category:"Mode",seller:"Wend-Yida"},
+ {id:2,name:"Chaussures",price:15000,emoji:"👟",category:"Mode",seller:"Wend-Yida"},
+ {id:3,name:"Sac à dos",price:10000,emoji:"🎒",category:"Accessoires",seller:"Wend-Yida"},
+ {id:4,name:"Montre",price:12000,emoji:"⌚",category:"Accessoires",seller:"Wend-Yida"},
+ {id:5,name:"Écouteurs Bluetooth",price:8500,emoji:"🎧",category:"Tech",seller:"Wend-Yida"},
+ {id:6,name:"Casquette",price:4000,emoji:"🧢",category:"Mode",seller:"Wend-Yida"}
+];
+let cart=[];
+
+function money(n){return Number(n).toLocaleString("fr-FR")}
+function render(){
+ const q=(document.getElementById("search")?.value||"").toLowerCase();
+ const list=products.filter(p=>(category==="Tous"||p.category===category)&&p.name.toLowerCase().includes(q));
+ document.getElementById("products").innerHTML=list.length?list.map(p=>`
+ <article class="card">
+  <div class="photo">${p.emoji}${p.id>6?'<span class="tag">Nouveau</span>':''}</div>
+  <div class="card-body"><h3>${p.name}</h3><div class="seller">Vendu par ${p.seller}</div>
+  <div class="price">${money(p.price)} FCFA</div>
+  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button></div>
+ </article>`).join(""):"<p>Aucun produit trouvé.</p>";
+}
+function setCategory(c,el){
+ category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
+}
+function add(id){const p=products.find(x=>x.id===id);if(p){cart.push(p);updateCart();flashCart()}}
+function updateCart(){
+ document.getElementById("count").textContent=cart.length;
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map((p,i)=>`
+ <div class="cart-item"><div><strong>${p.name}</strong><br><small>${money(p.price)} FCFA</small></div>
+ <button class="remove" onclick="removeItem(${i})">Retirer</button></div>`).join(""):"<p>Votre panier est vide.</p>";
+ document.getElementById("total").textContent=money(cart.reduce((s,p)=>s+p.price,0));
+}
+function removeItem(i){cart.splice(i,1);updateCart()}
+function toggleCart(){
+ const panel=document.getElementById("cartPanel");
+ panel.style.display=panel.style.display==="block"?"none":"block";updateCart();
+}
+function flashCart(){document.getElementById("cartPanel").style.display="block"}
+function showPage(name){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ if(name==="home"){window.scrollTo({top:0,behavior:"smooth"});document.getElementById("hero").style.display="block";document.getElementById("productsSection").style.display="block"}
+ else{
+  document.getElementById("hero").style.display="none";document.getElementById("productsSection").style.display="none";
+  const page=document.getElementById(name==="sell"?"sellPage":name==="checkout"?"checkoutPage":"aboutPage");
+  page.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});
+  if(name==="checkout")document.getElementById("checkoutTotal").textContent=money(cart.reduce((s,p)=>s+p.price,0));
+ }
+}
+function publishProduct(){
+ const name=document.getElementById("newName").value.trim(),price=Number(document.getElementById("newPrice").value),emoji=document.getElementById("newEmoji").value||"🛍️",cat=document.getElementById("newCategory").value;
+ if(!name||!price){alert("Indique au minimum le nom et le prix du produit.");return}
+ products.push({id:Date.now(),name,price,emoji,category:cat,seller:"Nouveau vendeur"});
+ alert("Produit ajouté à l'aperçu de la boutique.");
+ document.getElementById("newName").value="";document.getElementById("newPrice").value="";document.getElementById("newEmoji").value="";
+ showPage("home");render();
+}
+function checkout(){
+ if(!cart.length){alert("Votre panier est vide.");return}
+ document.getElementById("cartPanel").style.display="none";showPage("checkout");
+}
+function selectPay(btn,name){
+ selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
+}
+function confirmOrder(){
+ if(!cart.length){alert("Votre panier est vide.");return}
+ if(!selectedPayment){alert("Choisis un mode de paiement.");return}
+ const name=document.getElementById("buyerName").value.trim(),phone=document.getElementById("buyerPhone").value.trim();
+ if(!name||!phone){alert("Renseigne ton nom et ton numéro de téléphone.");return}
+ alert("Commande enregistrée dans l'interface !\nPaiement choisi : "+selectedPayment+"\nTotal : "+money(cart.reduce((s,p)=>s+p.price,0))+" FCFA.\n\nPour recevoir réellement le paiement, il faut maintenant connecter une API de paiement sécurisée.");
+ cart=[];updateCart();showPage("home");
+}
+render();updateCart();
+</script>
+</body>
+</html>
