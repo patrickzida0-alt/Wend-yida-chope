@@ -301,7 +301,7 @@ function render(){
  const list=products.filter(p=>(category==="Tous"||p.category===category)&&(p.name+" "+(p.desc||"")).toLowerCase().includes(q));
  $("products").innerHTML=list.length?list.map(p=>`
  <article class="card">
-  <div cl<div class="photo">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"🛍️")}${p.mine?'<span class="tag">Mon produit</span>':''}</div>
+  <div class="photo">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"🛍️")}${p.mine?'<span class="tag">Mon produit</span>':''}</div>
   <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc?`<div class="seller">${esc(p.desc)}</div>`:''}<div class="seller">Vendu par ${esc(p.seller)}</div>
   <div class="price">${money(p.price)} FCFA</div>
   <button class="buy" onclick="add(${p.id})">Ajouter au panier</button>
