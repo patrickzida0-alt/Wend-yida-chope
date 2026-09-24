@@ -301,4 +301,120 @@ function render(){
  const list=products.filter(p=>(category==="Tous"||p.category===category)&&(p.name+" "+(p.desc||"")).toLowerCase().includes(q));
  $("products").innerHTML=list.length?list.map(p=>`
  <article class="card">
-  <div cl
+  <div cl<div class="photo">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"🛍️")}${p.mine?'<span class="tag">Mon produit</span>':''}</div>
+  <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc?`<div class="seller">${esc(p.desc)}</div>`:''}<div class="seller">Vendu par ${esc(p.seller)}</div>
+  <div class="price">${money(p.price)} FCFA</div>
+  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button>
+  ${p.mine?`<button class="remove" style="margin-top:8px" onclick="delProduct(${p.id})">Supprimer ce produit</button>`:''}</div>
+ </article>`).join(""):"<p>Aucun produit trouvé.</p>";
+}
+function onSearch(){if(!$("productsSection").offsetParent)showPage("home","products");render()}
+function setCategory(c,el){
+ category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
+}
+function add(id){
+ const c=cart.find(x=>x.id===id);c?c.qty++:cart.push({id,qty:1});
+ save("cart",cart);updateCart();toast("Ajouté au panier ✔");
+}
+function chg(id,d){
+ const c=cart.find(x=>x.id===id);if(!c)return;c.qty+=d;
+ if(c.qty<=0)cart=cart.filter(x=>x.id!==id);
+ save("cart",cart);updateCart();
+}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);save("cart",cart);updateCart()}
+async function delProduct(id){
+ if(!confirm("Supprimer ce produit ?"))return;
+ try{await api("/rest/v1/products?id=eq."+id,{method:"DELETE"});cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
+}
+function updateCart(){
+ const L=lines();
+ $("count").textContent=L.reduce((s,l)=>s+l.qty,0);
+ $("cartItems").innerHTML=L.length?L.map(l=>`
+ <div class="cart-item"><div><strong>${esc(l.p.name)}</strong><br><small>${money(l.p.price)} FCFA × ${l.qty}</small></div>
+ <div style="text-align:right"><button class="close" onclick="chg(${l.p.id},-1)">−</button> <b>${l.qty}</b> <button class="close" onclick="chg(${l.p.id},1)">+</button><br>
+ <button class="remove" onclick="removeItem(${l.p.id})">Retirer</button></div></div>`).join(""):"<p>Votre panier est vide.</p>";
+ $("total").textContent=money(total());
+}
+function toggleCart(){
+ const panel=$("cartPanel");
+ panel.style.display=panel.style.display==="block"?"none":"block";updateCart();
+}
+function showPage(name,target){
+ if((name==="sell"||name==="admin")&&!session){toast("Connecte-toi d'abord");name="account"}
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ const home=name==="home";
+ $("hero").style.display=home?"block":"none";
+ $("productsSection").style.display=home?"block":"none";
+ if(!home)$(name+"Page").classList.add("active");
+ if(name==="checkout"){
+  $("checkoutTotal").textContent=money(total());
+  $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${l.qty} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
+ }
+ if(name==="admin")loadAdmin();
+ if(target==="products")$("productsSection").scrollIntoView({behavior:"smooth"});
+ else window.scrollTo({top:0,behavior:"smooth"});
+}
+function handleImage(inp){
+ const f=inp.files[0];if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{const im=new Image();im.onload=()=>{
+  const s=Math.min(1,500/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  newImage=c.toDataURL("image/jpeg",.7);toast("Photo ajoutée ✔")};im.src=r.result};
+ r.readAsDataURL(f);
+}
+async function publishProduct(){
+ const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value));
+ if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
+ try{
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:$("newEmoji").value.trim()||"🛍️",img:newImage||null,description:$("newDesc").value.trim()||null,category:$("newCategory").value,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
+ }catch(e){alert("Publication impossible : "+e.message);return}
+ ["newName","newPrice","newEmoji","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");newImage="";
+ category="Tous";$("search").value="";document.querySelectorAll(".cat").forEach((x,i)=>x.classList.toggle("active",i===0));
+ await loadProducts();toast("Produit publié ✔");showPage("home","products");
+}
+function checkout(){
+ if(!lines().length){alert("Votre panier est vide.");return}
+ $("cartPanel").style.display="none";showPage("checkout");
+}
+function selectPay(btn,name){
+ selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
+}
+async function confirmOrder(){
+ const L=lines();
+ if(!L.length){alert("Votre panier est vide.");return}
+ if(!selectedPayment){alert("Choisis un mode de paiement.");return}
+ const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim();
+ let phone=$("buyerPhone").value.replace(/\D/g,"");
+ if(phone.startsWith("226")&&phone.length>8)phone=phone.slice(3);
+ if(!name){alert("Renseigne ton nom.");return}
+ if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
+ if(!addr){alert("Renseigne ton adresse de livraison.");return}
+ const id="WY-"+Date.now().toString().slice(-6),tot=total();
+ try{
+  await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code:id,name,phone,address:addr,payment:selectedPayment,total:tot,items:L.map(l=>({name:l.p.name,qty:l.qty,price:l.p.price}))}});
+ }catch(e){alert("Commande non enregistrée : "+e.message);return}
+ const msg=`🛒 Nouvelle commande ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})\nAdresse : ${addr}`;
+ const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+ let how="Vous paierez à la réception de votre commande.";
+ if(selectedPayment.startsWith("Orange"))how=`Envoyez <strong>${money(tot)} FCFA</strong> par Orange Money au <strong>${esc(CONFIG.orange)}</strong> avec la référence <strong>${id}</strong>.`;
+ if(selectedPayment.startsWith("Moov"))how=`Envoyez <strong>${money(tot)} FCFA</strong> par Moov Money au <strong>${esc(CONFIG.moov)}</strong> avec la référence <strong>${id}</strong>.`;
+ $("doneBody").innerHTML=`<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
+ $("waLink").href=url;
+ cart=[];save("cart",cart);updateCart();
+ ["buyerName","buyerPhone","buyerAddress"].forEach(i=>$(i).value="");
+ selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
+ showPage("done");window.open(url,"_blank");
+}
+/* ---------- Admin ---------- */
+async function loadAdmin(){
+ try{
+  const o=await api("/rest/v1/orders?select=*&order=created_at.desc");
+  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)} · ${esc(x.address)}</small><br><small>${x.items.map(i=>i.qty+"× "+esc(i.name)).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
+ }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
+}
+async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
+updateAuthUI();render();updateCart();loadProducts();
+</script>
+</body>
+</html>
