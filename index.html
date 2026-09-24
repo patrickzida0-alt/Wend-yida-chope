@@ -108,11 +108,11 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       <div class="logo-mark">WY</div><div class="logo-text">Wend-Yida <span>Shop</span></div>
     </a>
     <div class="search">
-      <input id="search" placeholder="Rechercher un produit..." oninput="render()">
-      <button onclick="render()">🔎</button>
+      <input id="search" placeholder="Rechercher un produit..." oninput="onSearch()">
+      <button onclick="onSearch()">🔎</button>
     </div>
     <div class="actions">
-      <button class="icon-btn" onclick="showPage('sell')">Vendre</button>
+      <button class="icon-btn" onclick="showPage('sell')">Vendre</button><button class="icon-btn" id="acctBtn" onclick="showPage('account')">Connexion</button>
       <button class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></button>
     </div>
   </div>
@@ -163,12 +163,14 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <section id="sellPage" class="container page">
   <div class="page-box">
     <h2>Publier un produit</h2>
-    <p>Ajoute les informations de ton produit. Cette version prépare l'interface vendeur ; l'enregistrement réel nécessitera ensuite une base de données.</p>
+    <p>Ajoute les informations de ton produit. Connecte-toi pour publier : ton produit sera visible par tous les visiteurs.</p>
     <div class="form-grid">
       <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso"></div>
       <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
       <div class="field"><label>Catégorie</label><select id="newCategory"><option>Mode</option><option>Tech</option><option>Accessoires</option></select></div>
-      <div class="field"><label>Emoji / image provisoire</label><input id="newEmoji" placeholder="👕"></div>
+      <div class="field"><label>Emoji (si pas de photo)</label><input id="newEmoji" placeholder="👕"></div>
+      <div class="field"><label>Photo (optionnel)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
+      <div class="field"><label>Nom du vendeur</label><input id="newSeller" placeholder="Ex. Boutique Faso"></div>
       <div class="field full"><label>Description</label><textarea id="newDesc" placeholder="Décris ton produit..."></textarea></div>
     </div>
     <button class="primary" style="margin-top:15px" onclick="publishProduct()">Publier le produit</button>
@@ -178,7 +180,8 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <section id="checkoutPage" class="container page">
   <div class="page-box">
     <h2>Finaliser la commande</h2>
-    <div class="notice">💡 L'interface est prête pour une connexion à un vrai service de paiement. Les identifiants marchands et clés API doivent être ajoutés côté serveur avant les paiements réels.</div>
+    <div class="notice">💡 Votre commande est envoyée au vendeur sur WhatsApp. Le paiement se fait à la livraison ou par transfert Orange Money / Moov Money selon le mode choisi.</div>
+    <div id="checkoutLines"></div>
     <h3>Total à payer : <span id="checkoutTotal">0</span> FCFA</h3>
     <div class="payment-list">
       <button class="pay" onclick="selectPay(this,'Orange Money Burkina')"><strong>🟠 Orange Money</strong><small>Burkina Faso</small></button>
@@ -201,6 +204,17 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <p>Le site actuel est une base front-end autonome. Pour devenir une plateforme complète, il faudra ajouter un serveur, une base de données, un système de comptes vendeurs/clients, la gestion des commandes et une passerelle de paiement sécurisée.</p>
   </div>
 </section>
+<section id="accountPage" class="container page"><div class="page-box" style="max-width:480px">
+  <h2>Mon compte</h2>
+  <div id="authForm"><div class="field"><label>Email</label><input id="authEmail" type="email"></div>
+   <div class="field" style="margin-top:10px"><label>Mot de passe (6 caractères min.)</label><input id="authPass" type="password"></div>
+   <div style="display:flex;gap:10px;margin-top:15px"><button class="primary" onclick="auth('login')">Se connecter</button><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="auth('signup')">Créer un compte</button></div></div>
+  <div id="authInfo" style="display:none"><p id="authWho"></p>
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="primary" onclick="showPage('sell')">Publier un produit</button><button class="primary" onclick="showPage('admin')">Commandes (admin)</button><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="logout()">Déconnexion</button></div></div>
+</div></section>
+<section id="adminPage" class="container page"><div class="page-box"><h2>Commandes</h2><div id="adminBody"></div></div></section>
+<section id="donePage" class="container page"><div class="page-box"><h2>✅ Commande enregistrée</h2><div id="doneBody"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><a id="waLink" class="primary" target="_blank" rel="noopener" style="text-decoration:none">Envoyer sur WhatsApp</a><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="showPage('home')">Retour à la boutique</button></div></div></section>
 </main>
 
 <div id="cartPanel">
@@ -214,87 +228,77 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   <div class="footer-inner">
     <div><h3>🇧🇫 Wend-Yida Shop</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne.</p></div>
     <div><h3>Navigation</h3><a href="#" onclick="showPage('home')">Accueil</a><a href="#" onclick="showPage('sell')">Vendre</a><a href="#" onclick="showPage('about')">À propos</a></div>
-    <div><h3>Services</h3><a href="#productsSection">Produits</a><a href="#" onclick="showPage('checkout')">Paiement</a><a href="#" onclick="toggleCart()">Panier</a></div>
+    <div><h3>Services</h3><a href="#" onclick="showPage('home','products');return false">Produits</a><a href="#" onclick="showPage('checkout')">Paiement</a><a href="#" onclick="toggleCart()">Panier</a></div>
   </div>
   <p style="text-align:center;margin:30px 0 0">© 2026 Wend-Yida Shop — Boutique en ligne</p>
 </footer>
 
 <script>
-let category="Tous";
-let selectedPayment="";
-let products=[
- {id:1,name:"T-shirt tendance",price:5000,emoji:"👕",category:"Mode",seller:"Wend-Yida"},
- {id:2,name:"Chaussures",price:15000,emoji:"👟",category:"Mode",seller:"Wend-Yida"},
- {id:3,name:"Sac à dos",price:10000,emoji:"🎒",category:"Accessoires",seller:"Wend-Yida"},
- {id:4,name:"Montre",price:12000,emoji:"⌚",category:"Accessoires",seller:"Wend-Yida"},
- {id:5,name:"Écouteurs Bluetooth",price:8500,emoji:"🎧",category:"Tech",seller:"Wend-Yida"},
- {id:6,name:"Casquette",price:4000,emoji:"🧢",category:"Mode",seller:"Wend-Yida"}
-];
-let cart=[];
-
-function money(n){return Number(n).toLocaleString("fr-FR")}
+// ⚙️ À MODIFIER : numéros du vendeur (WhatsApp au format international sans +, ex. 22670123456)
+const CONFIG={whatsapp:"22670000000",orange:"70 00 00 00",moov:"60 00 00 00"};
+const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuwpIfHb";
+const K="wendyida_";
+let category="Tous",selectedPayment="",newImage="",products=[];
+function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
+let cart=load("cart",[]),session=load("session",null);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>Number(n).toLocaleString("fr-FR");
+const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p);
+const total=()=>lines().reduce((s,l)=>s+l.p.price*l.qty,0);
+function toast(msg){
+ let t=$("toast");
+ if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#101514;color:#fff;padding:12px 18px;border-radius:12px;z-index:200;font-weight:700;transition:opacity .3s";document.body.appendChild(t)}
+ t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2200);
+}
+/* ---------- Supabase ---------- */
+function setSession(d){session=d;save("session",d);updateAuthUI()}
+async function refresh(){
+ if(!session||session.expires_at*1000>Date.now()+60000)return;
+ try{
+  const r=await fetch(SB+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:session.refresh_token})});
+  const d=await r.json();if(!r.ok)throw 0;setSession(d);
+ }catch(e){setSession(null)}
+}
+async function api(path,o={}){
+ await refresh();
+ const h={apikey:KEY,"Content-Type":"application/json",...(o.headers||{})};
+ if(session)h.Authorization="Bearer "+session.access_token;
+ const r=await fetch(SB+path,{method:o.method||"GET",headers:h,body:o.body?JSON.stringify(o.body):undefined});
+ const t=await r.text();let d=null;try{d=t?JSON.parse(t):null}catch(e){}
+ if(!r.ok)throw new Error((d&&(d.message||d.msg))||"Erreur "+r.status);
+ return d;
+}
+async function auth(mode){
+ const email=$("authEmail").value.trim(),password=$("authPass").value;
+ if(!email||password.length<6){alert("Email et mot de passe (6 caractères min.) requis.");return}
+ try{
+  const r=await fetch(SB+(mode==="signup"?"/auth/v1/signup":"/auth/v1/token?grant_type=password"),{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.msg||d.error_description||d.message||"Échec de la connexion");
+  if(!d.access_token){alert("Compte créé. Confirme ton email via le message reçu, puis connecte-toi.");return}
+  setSession(d);$("authPass").value="";await loadProducts();toast("Connecté ✔");showPage("home");
+ }catch(e){alert(e.message)}
+}
+function logout(){setSession(null);loadProducts();showPage("home")}
+function updateAuthUI(){
+ $("acctBtn").textContent=session?"👤 Compte":"Connexion";
+ $("authForm").style.display=session?"none":"block";
+ $("authInfo").style.display=session?"block":"none";
+ if(session)$("authWho").textContent="Connecté : "+session.user.email;
+}
+async function loadProducts(){
+ try{
+  const d=await api("/rest/v1/products?select=*&order=created_at.desc");
+  products=d.map(p=>({...p,desc:p.description,seller:p.seller_name,mine:!!(session&&p.seller_id===session.user.id)}));
+ }catch(e){toast("Impossible de charger les produits")}
+ render();updateCart();
+}
+/* ---------- Boutique ---------- */
 function render(){
- const q=(document.getElementById("search")?.value||"").toLowerCase();
- const list=products.filter(p=>(category==="Tous"||p.category===category)&&p.name.toLowerCase().includes(q));
- document.getElementById("products").innerHTML=list.length?list.map(p=>`
+ const q=$("search").value.toLowerCase();
+ const list=products.filter(p=>(category==="Tous"||p.category===category)&&(p.name+" "+(p.desc||"")).toLowerCase().includes(q));
+ $("products").innerHTML=list.length?list.map(p=>`
  <article class="card">
-  <div class="photo">${p.emoji}${p.id>6?'<span class="tag">Nouveau</span>':''}</div>
-  <div class="card-body"><h3>${p.name}</h3><div class="seller">Vendu par ${p.seller}</div>
-  <div class="price">${money(p.price)} FCFA</div>
-  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button></div>
- </article>`).join(""):"<p>Aucun produit trouvé.</p>";
-}
-function setCategory(c,el){
- category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
-}
-function add(id){const p=products.find(x=>x.id===id);if(p){cart.push(p);updateCart();flashCart()}}
-function updateCart(){
- document.getElementById("count").textContent=cart.length;
- document.getElementById("cartItems").innerHTML=cart.length?cart.map((p,i)=>`
- <div class="cart-item"><div><strong>${p.name}</strong><br><small>${money(p.price)} FCFA</small></div>
- <button class="remove" onclick="removeItem(${i})">Retirer</button></div>`).join(""):"<p>Votre panier est vide.</p>";
- document.getElementById("total").textContent=money(cart.reduce((s,p)=>s+p.price,0));
-}
-function removeItem(i){cart.splice(i,1);updateCart()}
-function toggleCart(){
- const panel=document.getElementById("cartPanel");
- panel.style.display=panel.style.display==="block"?"none":"block";updateCart();
-}
-function flashCart(){document.getElementById("cartPanel").style.display="block"}
-function showPage(name){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- if(name==="home"){window.scrollTo({top:0,behavior:"smooth"});document.getElementById("hero").style.display="block";document.getElementById("productsSection").style.display="block"}
- else{
-  document.getElementById("hero").style.display="none";document.getElementById("productsSection").style.display="none";
-  const page=document.getElementById(name==="sell"?"sellPage":name==="checkout"?"checkoutPage":"aboutPage");
-  page.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});
-  if(name==="checkout")document.getElementById("checkoutTotal").textContent=money(cart.reduce((s,p)=>s+p.price,0));
- }
-}
-function publishProduct(){
- const name=document.getElementById("newName").value.trim(),price=Number(document.getElementById("newPrice").value),emoji=document.getElementById("newEmoji").value||"🛍️",cat=document.getElementById("newCategory").value;
- if(!name||!price){alert("Indique au minimum le nom et le prix du produit.");return}
- products.push({id:Date.now(),name,price,emoji,category:cat,seller:"Nouveau vendeur"});
- alert("Produit ajouté à l'aperçu de la boutique.");
- document.getElementById("newName").value="";document.getElementById("newPrice").value="";document.getElementById("newEmoji").value="";
- showPage("home");render();
-}
-function checkout(){
- if(!cart.length){alert("Votre panier est vide.");return}
- document.getElementById("cartPanel").style.display="none";showPage("checkout");
-}
-function selectPay(btn,name){
- selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
-}
-function confirmOrder(){
- if(!cart.length){alert("Votre panier est vide.");return}
- if(!selectedPayment){alert("Choisis un mode de paiement.");return}
- const name=document.getElementById("buyerName").value.trim(),phone=document.getElementById("buyerPhone").value.trim();
- if(!name||!phone){alert("Renseigne ton nom et ton numéro de téléphone.");return}
- alert("Commande enregistrée dans l'interface !\nPaiement choisi : "+selectedPayment+"\nTotal : "+money(cart.reduce((s,p)=>s+p.price,0))+" FCFA.\n\nPour recevoir réellement le paiement, il faut maintenant connecter une API de paiement sécurisée.");
- cart=[];updateCart();showPage("home");
-}
-render();updateCart();
-</script>
-</body>
-</html>
+  <div cl
