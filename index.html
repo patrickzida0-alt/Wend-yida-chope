@@ -170,6 +170,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       <div class="field"><label>Catégorie</label><select id="newCategory"><option>Mode</option><option>Tech</option><option>Accessoires</option></select></div>
       <div class="field"><label>Photo (obligatoire)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
       <div class="field"><label>Nom du vendeur</label><input id="newSeller" placeholder="Ex. Boutique Faso"></div>
+      <div class="field"><label>Type de produit</label><label style="display:flex;align-items:center;gap:8px;font-weight:400;margin-top:8px"><input id="newDigital" type="checkbox" style="width:auto"> Produit numérique (livré par email, pas d'adresse de livraison)</label></div>
       <div class="field full"><label>Description</label><textarea id="newDesc" placeholder="Décris ton produit..."></textarea></div>
     </div>
     <button class="primary" style="margin-top:15px" onclick="publishProduct()">Publier le produit</button>
@@ -189,7 +190,8 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <div class="form-grid">
       <div class="field"><label>Nom complet</label><input id="buyerName" placeholder="Votre nom"></div>
       <div class="field"><label>Téléphone</label><input id="buyerPhone" placeholder="70 00 00 00"></div>
-      <div class="field full"><label>Adresse de livraison</label><textarea id="buyerAddress" placeholder="Ville, quartier, indications..."></textarea></div>
+      <div class="field" id="emailField" style="display:none"><label>Email (pour recevoir le produit numérique)</label><input id="buyerEmail" type="email" placeholder="vous@exemple.com"></div>
+      <div class="field full" id="addressField"><label>Adresse de livraison</label><textarea id="buyerAddress" placeholder="Ville, quartier, indications..."></textarea></div>
     </div>
     <button class="checkout" onclick="confirmOrder()">Confirmer la commande</button>
   </div>
@@ -234,7 +236,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <script>
 // ⚙️ À MODIFIER : numéros du vendeur (WhatsApp au format international sans +, ex. 22670123456)
 const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
-const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
+const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuwpIfHb";
 const K="wendyida_";
 let category="Tous",selectedPayment="",newImage="",products=[];
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
@@ -347,6 +349,9 @@ function showPage(name,target){
  if(name==="checkout"){
   $("checkoutTotal").textContent=money(total());
   $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${l.qty} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
+  const hasDigital=lines().some(l=>l.p.is_digital),hasPhysical=lines().some(l=>!l.p.is_digital);
+  $("emailField").style.display=hasDigital?"block":"none";
+  $("addressField").style.display=hasPhysical?"block":"none";
  }
  if(name==="admin")loadAdmin();
  if(target==="products")$("productsSection").scrollIntoView({behavior:"smooth"});
@@ -366,9 +371,9 @@ async function publishProduct(){
  if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
  if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
  try{
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()||null,category:$("newCategory").value,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
  }catch(e){alert("Publication impossible : "+e.message);return}
- ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");newImage="";
+ ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage="";
  category="Tous";$("search").value="";document.querySelectorAll(".cat").forEach((x,i)=>x.classList.toggle("active",i===0));
  await loadProducts();toast("Produit publié ✔");showPage("home","products");
 }
@@ -383,24 +388,26 @@ async function confirmOrder(){
  const L=lines();
  if(!L.length){alert("Votre panier est vide.");return}
  if(!selectedPayment){alert("Choisis un mode de paiement.");return}
- const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim();
+ const hasDigital=L.some(l=>l.p.is_digital),hasPhysical=L.some(l=>!l.p.is_digital);
+ const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim(),email=$("buyerEmail").value.trim();
  let phone=$("buyerPhone").value.replace(/\D/g,"");
  if(phone.startsWith("226")&&phone.length>8)phone=phone.slice(3);
  if(!name){alert("Renseigne ton nom.");return}
  if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
- if(!addr){alert("Renseigne ton adresse de livraison.");return}
+ if(hasPhysical&&!addr){alert("Renseigne ton adresse de livraison.");return}
+ if(hasDigital&&!email){alert("Renseigne ton email pour recevoir le produit numérique.");return}
  const id="WY-"+Date.now().toString().slice(-6),tot=total();
  try{
-  await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code:id,name,phone,address:addr,payment:selectedPayment,total:tot,items:L.map(l=>({name:l.p.name,qty:l.qty,price:l.p.price}))}});
+  await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code:id,name,phone,address:addr||null,email:email||null,payment:selectedPayment,total:tot,items:L.map(l=>({name:l.p.name,qty:l.qty,price:l.p.price,digital:!!l.p.is_digital}))}});
  }catch(e){alert("Commande non enregistrée : "+e.message);return}
- const msg=`🛒 Nouvelle commande ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})\nAdresse : ${addr}`;
+ const msg=`🛒 Nouvelle commande ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(addr?`\nAdresse : ${addr}`:"")+(email?`\nEmail (produit numérique) : ${email}`:"");
  const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
  let how="Vous paierez à la réception de votre commande.";
  if(selectedPayment.startsWith("Orange"))how=`Envoyez <strong>${money(tot)} FCFA</strong> par Orange Money au <strong>${esc(CONFIG.orange)}</strong> avec la référence <strong>${id}</strong>.`;
  $("doneBody").innerHTML=`<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
  $("waLink").href=url;
  cart=[];save("cart",cart);updateCart();
- ["buyerName","buyerPhone","buyerAddress"].forEach(i=>$(i).value="");
+ ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
  selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
  showPage("done");window.open(url,"_blank");
 }
@@ -408,7 +415,7 @@ async function confirmOrder(){
 async function loadAdmin(){
  try{
   const o=await api("/rest/v1/orders?select=*&order=created_at.desc");
-  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)} · ${esc(x.address)}</small><br><small>${x.items.map(i=>i.qty+"× "+esc(i.name)).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
+  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${x.items.map(i=>i.qty+"× "+esc(i.name)+(i.digital?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
  }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
 }
 async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
