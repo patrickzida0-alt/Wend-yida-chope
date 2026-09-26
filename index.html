@@ -147,7 +147,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   </div>
   <div class="categories">
     <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
-    <button class="cat" onclick="setCategory('Mode',this)">👕 Mode </button>
+    <button class="cat" onclick="setCategory('Mode',this)">👕 Mode</button>
     <button class="cat" onclick="setCategory('Tech',this)">🎧 Tech</button>
     <button class="cat" onclick="setCategory('Accessoires',this)">🎒 Accessoires</button>
   </div>
@@ -168,8 +168,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso"></div>
       <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
       <div class="field"><label>Catégorie</label><select id="newCategory"><option>Mode</option><option>Tech</option><option>Accessoires</option></select></div>
-      <div class="field"><label>Emoji (si pas de photo)</label><input id="newEmoji" placeholder="👕"></div>
-      <div class="field"><label>Photo (optionnel)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
+      <div class="field"><label>Photo (obligatoire)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
       <div class="field"><label>Nom du vendeur</label><input id="newSeller" placeholder="Ex. Boutique Faso"></div>
       <div class="field full"><label>Description</label><textarea id="newDesc" placeholder="Décris ton produit..."></textarea></div>
     </div>
@@ -235,7 +234,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <script>
 // ⚙️ À MODIFIER : numéros du vendeur (WhatsApp au format international sans +, ex. 22670123456)
 const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
-const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
+const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuwpIfHb";
 const K="wendyida_";
 let category="Tous",selectedPayment="",newImage="",products=[];
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
@@ -365,10 +364,11 @@ function handleImage(inp){
 async function publishProduct(){
  const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value));
  if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
+ if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
  try{
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:$("newEmoji").value.trim()||"🛍️",img:newImage||null,description:$("newDesc").value.trim()||null,category:$("newCategory").value,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()||null,category:$("newCategory").value,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
  }catch(e){alert("Publication impossible : "+e.message);return}
- ["newName","newPrice","newEmoji","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");newImage="";
+ ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");newImage="";
  category="Tous";$("search").value="";document.querySelectorAll(".cat").forEach((x,i)=>x.classList.toggle("active",i===0));
  await loadProducts();toast("Produit publié ✔");showPage("home","products");
 }
