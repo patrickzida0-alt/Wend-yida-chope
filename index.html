@@ -234,24 +234,29 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 </footer>
 
 <script>
-// ⚙️ À MODIFIER : numéros du vendeur (WhatsApp au format international sans +, ex. 22670123456)
+// ⚙️ Configuration WhatsApp & Orange Money
 const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
 const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
 const K="wendyida_";
 let category="Tous",selectedPayment="",newImage="",products=[];
+
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
 let cart=load("cart",[]),session=load("session",null);
 const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// Échappement HTML complet pour contrer les injections XSS
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money=n=>Number(n).toLocaleString("fr-FR");
 const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p);
 const total=()=>lines().reduce((s,l)=>s+l.p.price*l.qty,0);
+
 function toast(msg){
  let t=$("toast");
  if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#101514;color:#fff;padding:12px 18px;border-radius:12px;z-index:200;font-weight:700;transition:opacity .3s";document.body.appendChild(t)}
  t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2200);
 }
+
 /* ---------- Supabase ---------- */
 function setSession(d){session=d;save("session",d);updateAuthUI()}
 async function refresh(){
@@ -295,6 +300,7 @@ async function loadProducts(){
  }catch(e){toast("Impossible de charger les produits")}
  render();updateCart();
 }
+
 /* ---------- Boutique ---------- */
 function render(){
  const q=$("search").value.toLowerCase();
@@ -371,7 +377,7 @@ async function publishProduct(){
  if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
  if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
  try{
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()\vert{}\vert{}null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
  }catch(e){alert("Publication impossible : "+e.message);return}
  ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage="";
  category="Tous";$("search").value="";document.querySelectorAll(".cat").forEach((x,i)=>x.classList.toggle("active",i===0));
@@ -384,9 +390,19 @@ function checkout(){
 function selectPay(btn,name){
  selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
 }
+
+// Générateur de code de commande unique WY-XXXXXX
+function generateCode(){
+ const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+ let r="";
+ for(let i=0;i<6;i++) r+=chars.charAt(Math.floor(Math.random()*chars.length));
+ return "WY-"+r;
+}
+
 async function confirmOrder(){
  const L=lines();
- if(!L.length){alert("Votre panier est vide.");return}
+ const tot=total();
+ if(!L.length||tot<=0){alert("Votre panier est vide ou invalide.");return}
  if(!selectedPayment){alert("Choisis un mode de paiement.");return}
  const hasDigital=L.some(l=>l.p.is_digital),hasPhysical=L.some(l=>!l.p.is_digital);
  const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim(),email=$("buyerEmail").value.trim();
@@ -396,7 +412,8 @@ async function confirmOrder(){
  if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
  if(hasPhysical&&!addr){alert("Renseigne ton adresse de livraison.");return}
  if(hasDigital&&!email){alert("Renseigne ton email pour recevoir le produit numérique.");return}
- const id="WY-"+Date.now().toString().slice(-6),tot=total();
+ 
+ const id=generateCode();
  try{
   await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code:id,name,phone,address:addr||null,email:email||null,payment:selectedPayment,total:tot,items:L.map(l=>({name:l.p.name,qty:l.qty,price:l.p.price,digital:!!l.p.is_digital}))}});
  }catch(e){alert("Commande non enregistrée : "+e.message);return}
@@ -411,14 +428,16 @@ async function confirmOrder(){
  selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
  showPage("done");window.open(url,"_blank");
 }
+
 /* ---------- Admin ---------- */
 async function loadAdmin(){
  try{
   const o=await api("/rest/v1/orders?select=*&order=created_at.desc");
-  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${x.items.map(i=>i.qty+"× "+esc(i.name)+(i.digital?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
+  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${(x.items||[]).map(i=>esc(i.qty)+"× "+esc(i.name)+(i.digital?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
  }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
 }
 async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
+
 updateAuthUI();render();updateCart();loadProducts();
 </script>
 </body>
