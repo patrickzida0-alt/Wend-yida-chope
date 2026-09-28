@@ -360,7 +360,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>Publier un produit</h2>
-    <p style="color:var(--muted);margin-top:-8px">Ton produit sera visible après validation par l'administrateur.</p>
+    <p style="color:var(--muted);margin-top:-8px">Publier un produit coûte <strong>500 FCFA</strong>, à régler par Orange Money après l'envoi du formulaire. Ton produit sera mis en ligne dès la validation du paiement par l'administrateur.</p>
     <div class="form-grid">
       <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso / Moto Djakarta"></div>
       <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
@@ -480,7 +480,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   <p style="text-align:center;margin:30px 0 0">© 2026 Shop Éclair — Vente et achat en ligne</p>
 </footer>
 <script>
-const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
+const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57",listingFee:500};
 const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
 const IMG_PREFIX=SB+"/storage/v1/object/public/product-images/";
 const K="shopeclair_";
@@ -721,16 +721,23 @@ async function publishProduct(){
  if(price>100000000){alert("Prix trop élevé.");return}
  if(desc.length>1000){alert("Description trop longue (1000 caractères max).");return}
  if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
- publishing=true;let url=null;
+ publishing=true;let url=null,created=null;
  try{
   url=await uploadImage(newImage);
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+  const rows=await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=representation"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+  created=rows&&rows[0];
  }catch(e){if(url)dropImage(url);publishing=false;alert("Erreur : "+e.message);return}
  publishing=false;
  ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage=null;
  await loadProducts();
- toast(isAdmin?"Produit publié ✔":"Produit envoyé : il sera visible après validation ✔");
- showPage("home");
+ if(isAdmin){toast("Produit publié ✔");showPage("home");return}
+ const ref="P"+num(created&&created.id);
+ const msg=`⚡ Paiement frais de publication Shop Éclair\nProduit : ${name}\nRéférence : ${ref}\nMontant : ${money(CONFIG.listingFee)} FCFA (Orange Money)`;
+ const wa=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+ $("doneBody").innerHTML=`<p>Ton produit « ${esc(name)} » est enregistré, référence <strong>${esc(ref)}</strong>.</p><p>Il sera mis en ligne dès réception des <strong>${money(CONFIG.listingFee)} FCFA</strong> de frais de publication.</p><p>Envoie ce montant par Orange Money au <strong>${esc(CONFIG.orange)}</strong> en précisant la référence <strong>${esc(ref)}</strong>, puis préviens-nous sur WhatsApp.</p>`;
+ $("waLink").href=wa;
+ showPage("done");
+ window.open(wa,"_blank");
 }
 function checkout(){if(!lines().length){alert("Panier vide");return}$("cartPanel").style.display="none";showPage("checkout")}
 function selectPay(btn,name){selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #ffb700"}
@@ -781,7 +788,7 @@ async function loadAdmin(){
  if(!isAdmin){$("pendingBody").innerHTML="<p>Cette page est réservée à l'administrateur.</p>";$("adminBody").innerHTML="";return}
  try{
   const pend=await api("/rest/v1/products?approved=eq.false&select=*&order=created_at.desc&limit=100");
-  $("pendingBody").innerHTML=pend.length?pend.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.category)} · ${esc(p.seller_name)}${p.is_digital?" · numérique":""}</small>${p.description?`<br><small>${esc(p.description)}</small>`:""}</div><div style="text-align:right"><button class="primary" style="padding:8px 12px" onclick="approve(${num(p.id)})">Valider</button><br><button class="remove" onclick="reject(${num(p.id)})">Refuser</button></div></div>`}).join(""):"<p>Aucun produit en attente.</p>";
+  $("pendingBody").innerHTML=pend.length?pend.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>Réf. paiement : P${num(p.id)}</small><br><small>${esc(p.category)} · ${esc(p.seller_name)}${p.is_digital?" · numérique":""}</small>${p.description?`<br><small>${esc(p.description)}</small>`:""}</div><div style="text-align:right"><button class="primary" style="padding:8px 12px" onclick="approve(${num(p.id)})">Valider</button><br><button class="remove" onclick="reject(${num(p.id)})">Refuser</button></div></div>`}).join(""):"<p>Aucun produit en attente.</p>";
   const f=$("orderFilter").value;
   const o=await api("/rest/v1/orders?select=*&order=created_at.desc&limit=100"+(f?"&status=eq."+encodeURIComponent(f):""));
   $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${(Array.isArray(x.items)?x.items:[]).map(i=>num(i&&i.qty)+"× "+esc(i&&i.name)+(i&&i.digital===true?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${num(x.id)},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher.</p>";
