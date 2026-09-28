@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Wend-Yida Shop — marketplace burkinabè moderne">
+<meta name="description" content="Shop Éclair — Marketplace burkinabè rapide et moderne">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob: https://ulfbhvcmyzsnclsiwzql.supabase.co; connect-src https://ulfbhvcmyzsnclsiwzql.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
-<title>Wend-Yida Shop | Marketplace Burkina Faso</title>
+<title>Shop Éclair | Marketplace Burkina Faso</title>
 <style>
 :root{
-  --gold:#e6a817;--green:#087443;--red:#c73b32;--dark:#101514;
-  --cream:#fffaf0;--muted:#68706d;--white:#fff;--border:#e9e5da;
+  --gold:#ffb700;--accent:#ffe600;--green:#087443;--red:#c73b32;--dark:#0d0f12;
+  --cream:#fffdfa;--muted:#68706d;--white:#fff;--border:#e8e4d9;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f7f5ef;color:#17201d}
-button,input,select{font:inherit}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 header{
-  position:sticky;top:0;z-index:50;background:rgba(16,21,20,.96);
+  position:sticky;top:0;z-index:50;background:rgba(13,15,18,.96);
   color:#fff;border-bottom:1px solid #ffffff18;backdrop-filter:blur(12px)
 }
 .topbar{max-width:1200px;margin:auto;padding:14px 5%;display:flex;align-items:center;gap:18px}
 .brand{display:flex;align-items:center;gap:10px;min-width:max-content;text-decoration:none;color:#fff}
 .logo-mark{
   width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--green) 0 42%,var(--gold) 42% 58%,var(--red) 58%);
-  font-size:20px;font-weight:900;box-shadow:0 6px 20px #0005
+  background:linear-gradient(135deg,var(--dark) 0%,var(--gold) 100%);
+  color:#000;font-size:20px;font-weight:900;box-shadow:0 6px 20px #0005;border:1px solid var(--accent)
 }
 .logo-text{font-size:21px;font-weight:900;letter-spacing:-.5px}.logo-text span{color:var(--gold)}
 .search{flex:1;display:flex;max-width:620px;margin:auto}
@@ -36,13 +36,13 @@ header{
 .cart-btn{background:var(--gold);color:#111;border:0;padding:11px 14px;border-radius:11px;font-weight:900}
 .hero{
   background:
-   radial-gradient(circle at 15% 20%,#e6a8172a,transparent 27%),
+   radial-gradient(circle at 15% 20%,#ffb7002a,transparent 27%),
    radial-gradient(circle at 88% 30%,#08744335,transparent 30%),
-   linear-gradient(135deg,#101514,#18231f 55%,#321a16);
+   linear-gradient(135deg,#0d0f12,#181c21 55%,#262010);
   color:#fff;padding:70px 5% 62px;overflow:hidden
 }
 .hero-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center}
-.badge{display:inline-flex;padding:7px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff20;color:#ffd86a;font-weight:800}
+.badge{display:inline-flex;padding:7px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff20;color:#ffe600;font-weight:800}
 .hero h1{font-size:clamp(38px,6vw,70px);line-height:.98;margin:18px 0}
 .hero h1 span{color:var(--gold)}
 .hero p{font-size:18px;color:#d8dfdc;max-width:650px;line-height:1.6}
@@ -89,7 +89,7 @@ header{
 .remove{border:0;background:none;color:var(--red);font-size:12px}
 .total-row{display:flex;justify-content:space-between;font-size:20px;font-weight:900;margin-top:16px}
 .checkout{background:var(--green);color:#fff;border:0;width:100%;padding:13px;border-radius:10px;font-weight:900;margin-top:13px}
-footer{margin-top:45px;background:#101514;color:#bfc8c4;padding:35px 5%}
+footer{margin-top:45px;background:#0d0f12;color:#bfc8c4;padding:35px 5%}
 .footer-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
 footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;display:block;margin:7px 0}
 .notice{padding:13px 16px;background:#fff8dd;border:1px solid #f1dda0;border-radius:12px;margin-bottom:15px;font-size:14px}
@@ -106,7 +106,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <header>
   <div class="topbar">
     <a class="brand" href="#" onclick="showPage('home');return false">
-      <div class="logo-mark">WY</div><div class="logo-text">Wend-Yida <span>Shop</span></div>
+      <div class="logo-mark">⚡</div><div class="logo-text">Shop <span>Éclair</span></div>
     </a>
     <div class="search">
       <input id="search" placeholder="Rechercher un produit..." oninput="onSearch()">
@@ -123,8 +123,8 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   <div class="hero-inner">
     <div>
       <span class="badge">🇧🇫 Marketplace burkinabè</span>
-      <h1>Achetez. Vendez.<br><span>Simplement.</span></h1>
-      <p>Une boutique en ligne moderne pensée pour le Burkina Faso : produits, vendeurs locaux et commandes réunis au même endroit.</p>
+      <h1>Commandez à la vitesse de l'<span>Éclair.</span></h1>
+      <p>Une boutique en ligne moderne pensée pour le Burkina Faso : vos produits préférés et vendeurs locaux en quelques clics.</p>
       <div class="hero-buttons">
         <button class="primary" onclick="document.getElementById('productsSection').scrollIntoView()">Découvrir les produits</button>
         <button class="secondary" onclick="showPage('sell')">Publier un produit</button>
@@ -132,8 +132,8 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     </div>
     <div class="hero-card">
       <div class="flag"></div>
-      <h3>Wend-Yida</h3>
-      <p>Un nom, une identité et une expérience inspirés de notre marché et de notre culture.</p>
+      <h3>Shop Éclair</h3>
+      <p>Achetez et vendez facilement sur la plateforme de commerce burkinabè.</p>
       <div style="display:flex;justify-content:space-between;margin-top:20px;font-weight:800">
         <span>🇧🇫 Local</span><span>⚡ Rapide</span><span>🔒 Simple</span>
       </div>
@@ -144,7 +144,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <main>
 <section id="productsSection" class="container">
   <div class="section-head">
-    <div><h2>Nos produits</h2><p>Découvrez une sélection de produits disponibles sur Wend-Yida Shop.</p></div>
+    <div><h2>Nos produits</h2><p>Découvrez une sélection de produits disponibles sur Shop Éclair.</p></div>
   </div>
   <div class="categories">
     <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
@@ -200,27 +200,56 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="aboutPage" class="container page">
   <div class="page-box">
-    <h2>À propos de Wend-Yida Shop</h2>
-    <p>Wend-Yida Shop est conçu comme une marketplace en ligne mettant en avant une identité burkinabè, une navigation simple et une expérience mobile.</p>
-    <p>Le site actuel est une base front-end autonome. Pour devenir une plateforme complète, il faudra ajouter un serveur, une base de données, un système de comptes vendeurs/clients, la gestion des commandes et une passerelle de paiement sécurisée.</p>
+    <h2>À propos de Shop Éclair</h2>
+    <p>Shop Éclair est conçu comme une marketplace en ligne rapide mettant en avant une identité burkinabè, une navigation simple et une expérience mobile optimisée.</p>
+    <p>Le site actuel est une base front-end autonome connectée à une base de données sécurisée.</p>
   </div>
 </section>
-<section id="accountPage" class="container page"><div class="page-box" style="max-width:480px">
-  <h2>Mon compte</h2>
-  <div id="authForm"><div class="field"><label>Email</label><input id="authEmail" type="email"></div>
-   <div class="field" style="margin-top:10px"><label>Mot de passe (8 caractères min. pour créer un compte)</label><input id="authPass" type="password"></div>
-   <div style="display:flex;gap:10px;margin-top:15px"><button class="primary" onclick="auth('login')">Se connecter</button><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="auth('signup')">Créer un compte</button></div></div>
-  <div id="authInfo" style="display:none"><p id="authWho"></p>
-   <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="primary" onclick="showPage('sell')">Publier un produit</button><button class="primary" id="adminBtn" style="display:none" onclick="showPage('admin')">Administration</button><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="logout()">Déconnexion</button></div></div>
-</div></section>
-<section id="adminPage" class="container page"><div class="page-box">
-  <h2>Produits en attente de validation</h2><div id="pendingBody"></div>
-  <h2 style="margin-top:28px">Commandes</h2>
-  <div class="field" style="max-width:240px;margin-bottom:12px"><label>Filtrer par statut</label><select id="orderFilter" onchange="loadAdmin()"><option value="">Toutes</option><option>nouvelle</option><option>payée</option><option>livrée</option><option>annulée</option></select></div>
-  <div id="adminBody"></div>
-</div></section>
-<section id="donePage" class="container page"><div class="page-box"><h2>✅ Commande enregistrée</h2><div id="doneBody"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><a id="waLink" class="primary" target="_blank" rel="noopener" style="text-decoration:none">Envoyer sur WhatsApp</a><button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="showPage('home')">Retour à la boutique</button></div></div></section>
+
+<section id="accountPage" class="container page">
+  <div class="page-box" style="max-width:480px">
+    <h2>Mon compte</h2>
+    <div id="authForm">
+      <div class="field"><label>Email</label><input id="authEmail" type="email"></div>
+      <div class="field" style="margin-top:10px"><label>Mot de passe (8 caractères min.)</label><input id="authPass" type="password"></div>
+      <div style="display:flex;gap:10px;margin-top:15px">
+        <button class="primary" onclick="auth('login')">Se connecter</button>
+        <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="auth('signup')">Créer un compte</button>
+      </div>
+    </div>
+    <div id="authInfo" style="display:none">
+      <p id="authWho"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="primary" onclick="showPage('sell')">Publier un produit</button>
+        <button class="primary" id="adminBtn" style="display:none" onclick="showPage('admin')">Administration</button>
+        <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="logout()">Déconnexion</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="adminPage" class="container page">
+  <div class="page-box">
+    <h2>Produits en attente de validation</h2><div id="pendingBody"></div>
+    <h2 style="margin-top:28px">Commandes</h2>
+    <div class="field" style="max-width:240px;margin-bottom:12px">
+      <label>Filtrer par statut</label>
+      <select id="orderFilter" onchange="loadAdmin()"><option value="">Toutes</option><option>nouvelle</option><option>payée</option><option>livrée</option><option>annulée</option></select>
+    </div>
+    <div id="adminBody"></div>
+  </div>
+</section>
+
+<section id="donePage" class="container page">
+  <div class="page-box">
+    <h2>✅ Commande enregistrée</h2>
+    <div id="doneBody"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
+      <a id="waLink" class="primary" target="_blank" rel="noopener" style="text-decoration:none">Envoyer sur WhatsApp</a>
+      <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="showPage('home')">Retour à la boutique</button>
+    </div>
+  </div>
+</section>
 </main>
 
 <div id="cartPanel">
@@ -232,38 +261,41 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <footer>
   <div class="footer-inner">
-    <div><h3>🇧🇫 Wend-Yida Shop</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne.</p></div>
+    <div><h3>⚡ Shop Éclair</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne à toute vitesse.</p></div>
     <div><h3>Navigation</h3><a href="#" onclick="showPage('home')">Accueil</a><a href="#" onclick="showPage('sell')">Vendre</a><a href="#" onclick="showPage('about')">À propos</a></div>
     <div><h3>Services</h3><a href="#" onclick="showPage('home','products');return false">Produits</a><a href="#" onclick="showPage('checkout')">Paiement</a><a href="#" onclick="toggleCart()">Panier</a></div>
   </div>
-  <p style="text-align:center;margin:30px 0 0">© 2026 Wend-Yida Shop — Boutique en ligne</p>
+  <p style="text-align:center;margin:30px 0 0">© 2026 Shop Éclair — Vente et achat en ligne</p>
 </footer>
 
 <script>
-// ⚙️ À MODIFIER : numéros du vendeur (WhatsApp au format international sans +, ex. 22670123456)
 const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
 const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
 const IMG_PREFIX=SB+"/storage/v1/object/public/product-images/";
-const K="wendyida_";
+const K="shopeclair_";
 let category="Tous",selectedPayment="",newImage=null,products=[],isAdmin=false,ordering=false,publishing=false;
+
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
 let cart=load("cart",[]),session=load("session",null);
 cart=(Array.isArray(cart)?cart:[]).map(c=>({id:Number(c&&c.id),qty:Math.min(99,Math.floor(Number(c&&c.qty)))})).filter(c=>Number.isInteger(c.id)&&c.id>0&&c.qty>=1);
 if(session&&(!session.access_token||!session.user||!session.user.id))session=null;
+
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
 const money=n=>num(n).toLocaleString("fr-FR");
 const safeImg=u=>typeof u==="string"&&(u.startsWith(IMG_PREFIX)||/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u))?u:"";
 const imgPath=u=>typeof u==="string"&&u.startsWith(IMG_PREFIX)?u.slice(IMG_PREFIX.length):null;
-const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p&&l.p.approved);
+const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p&&(l.p.approved||l.p.mine));
 const total=()=>lines().reduce((s,l)=>s+l.p.price*l.qty,0);
+
 function toast(msg){
  let t=$("toast");
  if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#101514;color:#fff;padding:12px 18px;border-radius:12px;z-index:200;font-weight:700;transition:opacity .3s";document.body.appendChild(t)}
  t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2600);
 }
+
 /* ---------- Supabase ---------- */
 function setSession(d){session=d;isAdmin=false;save("session",d);updateAuthUI()}
 async function refresh(){
@@ -314,6 +346,7 @@ async function loadProducts(){
  }catch(e){toast("Impossible de charger les produits")}
  render();updateCart();
 }
+
 /* ---------- Boutique ---------- */
 function render(){
  const q=$("search").value.toLowerCase();
@@ -377,7 +410,6 @@ function showPage(name,target){
   $("emailField").style.display=hasDigital?"block":"none";
   $("addressField").style.display=hasPhysical?"block":"none";
  }
- if(name==="admin")loadAdmin();
  if(target==="products")$("productsSection").scrollIntoView({behavior:"smooth"});
  else window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -418,7 +450,7 @@ async function publishProduct(){
  publishing=true;let url=null;
  try{
   url=await uploadImage(newImage);
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
  }catch(e){if(url)dropImage(url);publishing=false;alert("Publication impossible : "+e.message);return}
  publishing=false;
  ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage=null;
@@ -432,11 +464,11 @@ function checkout(){
  $("cartPanel").style.display="none";showPage("checkout");
 }
 function selectPay(btn,name){
- selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
+ selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #ffb700";
 }
 function newCode(){
  const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",b=new Uint8Array(8);crypto.getRandomValues(b);
- return "WY-"+Array.from(b,x=>A[x%32]).join("");
+ return "SE-"+Array.from(b,x=>A[x%32]).join("");
 }
 async function confirmOrder(){
  if(ordering)return;
@@ -452,8 +484,9 @@ async function confirmOrder(){
  if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
  if(hasPhysical&&!addr){alert("Renseigne ton adresse de livraison.");return}
  if(hasDigital&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){alert("Renseigne un email valide pour recevoir le produit numérique.");return}
+ 
  ordering=true;
- const w=window.open("about:blank","_blank");   // ouvert tout de suite pour ne pas être bloqué
+ const w=window.open("about:blank","_blank");
  let id=null;
  try{
   for(let i=0;i<4&&!id;i++){
@@ -465,43 +498,30 @@ async function confirmOrder(){
   }
   if(!id)throw new Error("Réessaie dans un instant.");
  }catch(e){ordering=false;if(w)w.close();alert("Commande non enregistrée : "+e.message);return}
+ 
  const tot=total();
- const msg=`🛒 Nouvelle commande ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(hasPhysical&&addr?`\nAdresse : ${addr}`:"")+(hasDigital?`\nEmail (produit numérique) : ${email}`:"");
+ const msg=`⚡ Nouvelle commande Shop Éclair ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(hasPhysical&&addr?`\nAdresse : ${addr}`:"")+(hasDigital?`\nEmail : ${email}`:"");
  const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+ if(w)w.location=url;
+ 
  let how="Vous paierez à la réception de votre commande.";
  if(selectedPayment.startsWith("Orange"))how=`Envoyez <strong>${money(tot)} FCFA</strong> par Orange Money au <strong>${esc(CONFIG.orange)}</strong> avec la référence <strong>${esc(id)}</strong>.`;
- $("doneBody").innerHTML=`<p>Numéro de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
+ $("doneBody").innerHTML=`<p>Numéro de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte pour valider la commande auprès du vendeur.</p>`;
  $("waLink").href=url;
+ 
  cart=[];save("cart",cart);updateCart();
  ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
  selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
  ordering=false;
  showPage("done");
- if(w){try{w.opener=null}catch(e){}w.location.href=url}
 }
-/* ---------- Admin ---------- */
-async function loadAdmin(){
- if(!isAdmin){$("pendingBody").innerHTML="<p>Cette page est réservée à l'administrateur.</p>";$("adminBody").innerHTML="";return}
- try{
-  const pend=await api("/rest/v1/products?approved=eq.false&select=*&order=created_at.desc&limit=100");
-  $("pendingBody").innerHTML=pend.length?pend.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.category)} · ${esc(p.seller_name)}${p.is_digital?" · numérique":""}</small>${p.description?`<br><small>${esc(p.description)}</small>`:""}</div><div style="text-align:right"><button class="primary" style="padding:8px 12px" onclick="approve(${num(p.id)})">Valider</button><br><button class="remove" onclick="reject(${num(p.id)})">Refuser</button></div></div>`}).join(""):"<p>Aucun produit en attente.</p>";
-  const f=$("orderFilter").value;
-  const o=await api("/rest/v1/orders?select=*&order=created_at.desc&limit=100"+(f?"&status=eq."+encodeURIComponent(f):""));
-  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${(Array.isArray(x.items)?x.items:[]).map(i=>num(i&&i.qty)+"× "+esc(i&&i.name)+(i&&i.digital===true?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${num(x.id)},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher.</p>";
- }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
-}
-async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+num(id),{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
-async function approve(id){try{await api("/rest/v1/products?id=eq."+num(id),{method:"PATCH",body:{approved:true}});toast("Produit validé ✔");await loadAdmin();await loadProducts()}catch(e){alert(e.message)}}
-async function reject(id){
- if(!confirm("Refuser et supprimer ce produit ?"))return;
- try{
-  const rows=await api("/rest/v1/products?id=eq."+num(id)+"&select=img");
-  await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});
-  if(rows&&rows[0])dropImage(rows[0].img);
-  toast("Produit refusé");await loadAdmin();await loadProducts();
- }catch(e){alert(e.message)}
-}
-updateAuthUI();render();updateCart();loadProducts();checkAdmin();
+
+// Initialisation
+(async()=>{
+ updateAuthUI();
+ if(session)await checkAdmin();
+ await loadProducts();
+})();
 </script>
 </body>
 </html>
