@@ -439,6 +439,75 @@ async function loadAdmin(){
 async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
 
 updateAuthUI();render();updateCart();loadProducts();
+<script>
+ const r=new FileReader();
+ r.onload=()=>{const im=new Image();im.onload=()=>{
+  const s=Math.min(1,500/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  newImage=c.toDataURL("image/jpeg",.7);toast("Photo ajoutée ✔")};im.src=r.result};
+ r.readAsDataURL(f);
+}
+
+async function publishProduct(){
+ const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value));
+ if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
+ if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
+ try{
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"🛍️",img:newImage,description:$("newDesc").value.trim()\vert{}\vert{}null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:$("newSeller").value.trim()||session.user.email.split("@")[0]}});
+ }catch(e){alert("Publication impossible : "+e.message);return}
+ ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage="";
+ category="Tous";$("search").value="";document.querySelectorAll(".cat").forEach((x,i)=>x.classList.toggle("active",i===0));
+ await loadProducts();toast("Produit publié ✔");showPage("home","products");
+}
+
+function checkout(){
+ if(!lines().length){alert("Votre panier est vide.");return}
+ $("cartPanel").style.display="none";showPage("checkout");
+}
+
+function selectPay(btn,name){
+ selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #e6a817";
+}
+
+async function confirmOrder(){
+ const L=lines();
+ if(!L.length){alert("Votre panier est vide.");return}
+ if(!selectedPayment){alert("Choisis un mode de paiement.");return}
+ const hasDigital=L.some(l=>l.p.is_digital),hasPhysical=L.some(l=>!l.p.is_digital);
+ const name=$("buyerName").value.trim(),addr=hasPhysical?$("buyerAddress").value.trim():"",email=$("buyerEmail").value.trim();
+ let phone=$("buyerPhone").value.replace(/\D/g,"");
+ if(phone.startsWith("226")&&phone.length>8)phone=phone.slice(3);
+ if(!name){alert("Renseigne ton nom.");return}
+ if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
+ if(hasPhysical&&!addr){alert("Renseigne ton adresse de livraison.");return}
+ if(hasDigital&&!email){alert("Renseigne ton email pour recevoir le produit numérique.");return}
+ const id="WY-"+Date.now().toString().slice(-6),tot=total();
+ try{
+  await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code:id,name,phone,address:addr||null,email:email||null,payment:selectedPayment,total:tot,items:L.map(l=>({name:l.p.name,qty:l.qty,price:l.p.price,digital:!!l.p.is_digital}))}});
+ }catch(e){alert("Commande non enregistrée : "+e.message);return}
+ const msg=`🛒 Nouvelle commande ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(addr?`\nAdresse : ${addr}`:"")+(email?`\nEmail (produit numérique) : ${email}`:"");
+ const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+ let how="Vous paierez à la réception de votre commande.";
+ if(selectedPayment.startsWith("Orange"))how=`Envoyez <strong>${money(tot)} FCFA</strong> par Orange Money au <strong>${esc(CONFIG.orange)}</strong> avec la référence <strong>${id}</strong>.`;
+ $("doneBody").innerHTML=`<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
+ $("waLink").href=url;
+ cart=[];save("cart",cart);updateCart();
+ ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
+ selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
+ showPage("done");
+ window.location.href=url;
+}
+
+/* ---------- Admin ---------- */
+async function loadAdmin(){
+ try{
+  const o=await api("/rest/v1/orders?select=*&order=created_at.desc");
+  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${x.items.map(i=>i.qty+"× "+esc(i.name)+(i.digital?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
+ }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
+}
+
+async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
+updateAuthUI();render();updateCart();loadProducts();
 </script>
 </body>
 </html>
