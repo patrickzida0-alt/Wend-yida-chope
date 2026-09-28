@@ -89,12 +89,12 @@ footer a{color:var(--gold);text-decoration:none}
 
 <header>
  <div class="topbar">
-  <a href="#" class="brand" onclick="showPage('home')">
+  <a href="javascript:void(0)" class="brand" onclick="showPage('home')">
    <div class="logo-mark">W</div>
    <div class="logo-text">Wend-Yida<span>.shop</span></div>
   </a>
   <div class="search">
-   <input id="search" placeholder="Rechercher un produit, un vendeur, une ville..." oninput="onSearch()">
+   <input id="search" placeholder="Rechercher un produit..." oninput="onSearch()">
    <button onclick="onSearch()">🔍</button>
   </div>
   <div class="actions">
@@ -110,7 +110,7 @@ footer a{color:var(--gold);text-decoration:none}
   <div>
    <div class="badge">🇧🇫 Marketplace N°1 au Burkina Faso</div>
    <h1>Achetez & Vendez en toute <span>confiance</span></h1>
-   <p>Des milliers d'articles disponibles : téléphones, mode, électroménager, véhicules et services. Payez facilement via Orange Money ou à la livraison.</p>
+   <p>Des milliers d'articles disponibles : téléphones, mode, électroménager, véhicules et services.</p>
    <div class="hero-buttons">
     <button class="primary" onclick="showPage('home','products')">Explorer le marché</button>
     <button class="secondary" onclick="showPage('sell')">Publier une annonce</button>
@@ -119,7 +119,7 @@ footer a{color:var(--gold);text-decoration:none}
   <div class="hero-card">
    <div class="flag"></div>
    <h3>Achat local simple</h3>
-   <p>Mise en relation directe avec les vendeurs sur Ouagadougou, Bobo-Dioulasso et dans tout le Burkina Faso.</p>
+   <p>Mise en relation directe sur Ouagadougou, Bobo-Dioulasso et tout le Burkina.</p>
   </div>
  </div>
 </section>
@@ -128,7 +128,7 @@ footer a{color:var(--gold);text-decoration:none}
  <div class="section-head">
   <div>
    <h2>Articles récents</h2>
-   <p>Découvrez les dernières offres publiées par la communauté</p>
+   <p>Découvrez les dernières offres</p>
   </div>
   <div class="categories">
    <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
@@ -155,10 +155,8 @@ footer a{color:var(--gold);text-decoration:none}
  </div>
 </aside>
 
-<!-- PAGES -->
 <main class="container">
 
- <!-- COMPTE -->
  <section class="page" id="accountPage">
   <div class="form">
    <h2>Espace Membre</h2>
@@ -173,13 +171,10 @@ footer a{color:var(--gold);text-decoration:none}
    <div id="authInfo" style="display:none">
     <p id="authWho"></p>
     <button class="secondary" style="color:#111;border-color:#ccc;width:100%" onclick="logout()">Se déconnecter</button>
-    <hr style="margin:20px 0;border:0;border-top:1px solid #eee">
-    <button class="primary" style="width:100%" onclick="showPage('admin')">Gérer mes commandes (Admin)</button>
    </div>
   </div>
  </section>
 
- <!-- VENDRE -->
  <section class="page" id="sellPage">
   <div class="form">
    <h2>Publier une annonce</h2>
@@ -198,15 +193,12 @@ footer a{color:var(--gold);text-decoration:none}
    <textarea id="newDesc" rows="3" placeholder="État du produit, garantie, lieu..."></textarea>
    <label>Nom du vendeur / Boutique</label>
    <input id="newSeller" placeholder="ex: Shop Éclair">
-   <label>Type de produit</label>
-   <div style="margin:8px 0 16px"><input type="checkbox" id="newDigital" style="width:auto"> Produit ou service numérique</div>
    <label>Photo du produit (Obligatoire)</label>
    <input type="file" id="newPhoto" accept="image/*" onchange="handleImage(this)">
    <button class="primary" style="width:100%;margin-top:10px" onclick="publishProduct()">Publier maintenant</button>
   </div>
  </section>
 
- <!-- CHECKOUT -->
  <section class="page" id="checkoutPage">
   <div class="form">
    <h2>Finaliser la commande</h2>
@@ -223,14 +215,13 @@ footer a{color:var(--gold);text-decoration:none}
    <input id="buyerName" placeholder="Awa Ouédraogo">
    <label>Numéro Téléphone (WhatsApp)</label>
    <input id="buyerPhone" placeholder="70000000">
-   <div id="addressField"><label>Adresse de livraison (Ville, Quartier)</label><input id="buyerAddress" placeholder="Ouagadougou, Patte d'Oie"></div>
-   <div id="emailField" style="display:none"><label>Email (pour produit numérique)</label><input id="buyerEmail" placeholder="awa@gmail.com"></div>
+   <label>Adresse de livraison</label>
+   <input id="buyerAddress" placeholder="Ouagadougou, Patte d'Oie">
 
    <button class="primary" style="width:100%" onclick="confirmOrder()">Valider la commande</button>
   </div>
  </section>
 
- <!-- CONFIRMATION -->
  <section class="page" id="donePage">
   <div class="form" style="text-align:center">
    <div style="font-size:50px">🎉</div>
@@ -238,12 +229,6 @@ footer a{color:var(--gold);text-decoration:none}
    <div id="doneBody"></div>
    <a id="waLink" href="#" target="_blank" class="primary" style="display:inline-block;text-decoration:none;margin-top:15px">Envoyer sur WhatsApp</a>
   </div>
- </section>
-
- <!-- ADMIN -->
- <section class="page" id="adminPage">
-  <h2>Gestion des Commandes</h2>
-  <div id="adminBody"></div>
  </section>
 
 </main>
@@ -261,21 +246,24 @@ footer a{color:var(--gold);text-decoration:none}
 </footer>
 
 <script>
-// ⚙️ Configuration WhatsApp & Orange Money
 const CONFIG = { whatsapp: "22667663057", orange: "67 66 30 57" };
 const SB = "https://ulfbhvcmyzsnclsiwzql.supabase.co", KEY = "sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
 const K = "wendyida_";
 let category = "Tous", selectedPayment = "", newImage = "", products = [];
 
 function load(k, d) { try { const v = localStorage.getItem(K + k); return v ? JSON.parse(v) : d } catch (e) { return d } }
-function save(k, v) { try { localStorage.setItem(K + k, JSON.stringify(v)); return true } catch (e) { toast("Enregistrement impossible"); return false } }
+function save(k, v) { try { localStorage.setItem(K + k, JSON.stringify(v)); return true } catch (e) { return false } }
 let cart = load("cart", []), session = load("session", null);
 const $ = id => document.getElementById(id);
 
 const esc = s => String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const money = n => Number(n).toLocaleString("fr-FR");
-const lines = () => cart.map(c => ({ p: products.find(x => x.id === c.id), qty: c.qty })).filter(l => l.p);
-const total = () => lines().reduce((s, l) => s + l.p.price * l.qty, 0);
+const money = n => Number(n || 0).toLocaleString("fr-FR");
+
+function lines() {
+  if (!Array.isArray(cart) || !Array.isArray(products)) return [];
+  return cart.map(c => ({ p: products.find(x => x.id === c.id), qty: c.qty })).filter(l => l.p);
+}
+function total() { return lines().reduce((s, l) => s + (l.p.price || 0) * l.qty, 0); }
 
 function toast(msg) {
   let t = $("toast");
@@ -287,24 +275,21 @@ function toast(msg) {
   t.textContent = msg; t.style.opacity = 1; clearTimeout(t._h); t._h = setTimeout(() => t.style.opacity = 0, 2200);
 }
 
-/* ---------- Supabase ---------- */
-function setSession(d) { session = d; save("session", d); updateAuthUI() }
-async function refresh() {
-  if (!session || session.expires_at * 1000 > Date.now() + 60000) return;
-  try {
-    const r = await fetch(SB + "/auth/v1/token?grant_type=refresh_token", { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: session.refresh_token }) });
-    const d = await r.json(); if (!r.ok) throw 0; setSession(d);
-  } catch (e) { setSession(null) }
-}
 async function api(path, o = {}) {
-  await refresh();
   const h = { apikey: KEY, "Content-Type": "application/json", ...(o.headers || {}) };
-  if (session) h.Authorization = "Bearer " + session.access_token;
-  const r = await fetch(SB + path, { method: o.method || "GET", headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
-  const t = await r.text(); let d = null; try { d = t ? JSON.parse(t) : null } catch (e) { }
-  if (!r.ok) throw new Error((d && (d.message || d.msg)) || "Erreur " + r.status);
-  return d;
+  if (session && session.access_token) h.Authorization = "Bearer " + session.access_token;
+  try {
+    const r = await fetch(SB + path, { method: o.method || "GET", headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
+    const t = await r.text();
+    let d = null; try { d = t ? JSON.parse(t) : null } catch (e) {}
+    if (!r.ok) throw new Error((d && (d.message || d.msg)) || "Erreur " + r.status);
+    return d;
+  } catch(e) {
+    console.error(e);
+    return null;
+  }
 }
+
 async function auth(mode) {
   const email = $("authEmail").value.trim(), password = $("authPass").value;
   if (!email || password.length < 6) { alert("Email et mot de passe (6 caractères min.) requis."); return }
@@ -312,53 +297,46 @@ async function auth(mode) {
     const r = await fetch(SB + (mode === "signup" ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password"), { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
     const d = await r.json();
     if (!r.ok) throw new Error(d.msg || d.error_description || d.message || "Échec de la connexion");
-    if (!d.access_token) { alert("Compte créé. Confirme ton email via le message reçu, puis connecte-toi."); return }
-    setSession(d); $("authPass").value = ""; await loadProducts(); toast("Connecté ✔"); showPage("home");
+    if (!d.access_token) { alert("Compte créé. Connectez-vous."); return }
+    session = d; save("session", d); updateAuthUI(); toast("Connecté ✔"); showPage("home");
   } catch (e) { alert(e.message) }
 }
-function logout() { setSession(null); loadProducts(); showPage("home") }
+function logout() { session = null; save("session", null); updateAuthUI(); showPage("home") }
+
 function updateAuthUI() {
   $("acctBtn").textContent = session ? "👤 Compte" : "Connexion";
   $("authForm").style.display = session ? "none" : "block";
   $("authInfo").style.display = session ? "block" : "none";
-  if (session) $("authWho").textContent = "Connecté : " + session.user.email;
-}
-async function loadProducts() {
-  try {
-    const d = await api("/rest/v1/products?select=*&order=created_at.desc");
-    if (Array.isArray(d)) {
-      products = d.map(p => ({
-        ...p,
-        desc: p.description,
-        seller: p.seller_name,
-        mine: !!(session && p.seller_id === session.user.id)
-      }));
-    }
-  } catch (e) {
-    console.error("Erreur chargement produits:", e);
-    toast("Impossible de charger les produits");
-  }
-  render();
-  updateCart();
+  if (session && session.user) $("authWho").textContent = "Connecté : " + session.user.email;
 }
 
-/* ---------- Boutique ---------- */
+async function loadProducts() {
+  const d = await api("/rest/v1/products?select=*&order=created_at.desc");
+  if (Array.isArray(d)) {
+    products = d.map(p => ({ ...p, desc: p.description, seller: p.seller_name }));
+  } else {
+    products = [];
+  }
+  render(); updateCart();
+}
+
 function render() {
-  const q = $("search").value.toLowerCase();
+  const q = ($("search").value || "").toLowerCase();
   const list = products.filter(p => (category === "Tous" || p.category === category) && (p.name + " " + (p.desc || "")).toLowerCase().includes(q));
   $("products").innerHTML = list.length ? list.map(p => `
  <article class="card">
-  <div class="photo">${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">` : esc(p.emoji || "🛍️")}${p.mine ? '<span class="tag">Mon produit</span>' : ''}</div>
-  <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc ? `<div class="seller">${esc(p.desc)}</div>` : ''}<div class="seller">Vendu par ${esc(p.seller)}</div>
+  <div class="photo">${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">` : '🛍️'}</div>
+  <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc ? `<div class="seller">${esc(p.desc)}</div>` : ''}<div class="seller">Vendu par ${esc(p.seller || 'Vendeur')}</div>
   <div class="price">${money(p.price)} FCFA</div>
-  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button>
-  ${p.mine ? `<button class="remove" style="margin-top:8px" onclick="delProduct(${p.id})">Supprimer ce produit</button>` : ''}</div>
- </article>`).join("") : "<p>Aucun produit trouvé.</p>";
+  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button></div>
+ </article>`).join("") : "<p style='padding:20px'>Aucun produit disponible pour le moment.</p>";
 }
+
 function onSearch() { if (!$("productsSection").offsetParent) showPage("home", "products"); render() }
 function setCategory(c, el) {
   category = c; document.querySelectorAll(".cat").forEach(x => x.classList.remove("active")); el.classList.add("active"); render();
 }
+
 function add(id) {
   const c = cart.find(x => x.id === id); c ? c.qty++ : cart.push({ id, qty: 1 });
   save("cart", cart); updateCart(); toast("Ajouté au panier ✔");
@@ -369,41 +347,44 @@ function chg(id, d) {
   save("cart", cart); updateCart();
 }
 function removeItem(id) { cart = cart.filter(x => x.id !== id); save("cart", cart); updateCart() }
-async function delProduct(id) {
-  if (!confirm("Supprimer ce produit ?")) return;
-  try { await api("/rest/v1/products?id=eq." + id, { method: "DELETE" }); cart = cart.filter(c => c.id !== id); save("cart", cart); await loadProducts() } catch (e) { alert(e.message) }
-}
+
 function updateCart() {
   const L = lines();
   $("count").textContent = L.reduce((s, l) => s + l.qty, 0);
   $("cartItems").innerHTML = L.length ? L.map(l => `
  <div class="cart-item"><div><strong>${esc(l.p.name)}</strong><br><small>${money(l.p.price)} FCFA × ${l.qty}</small></div>
  <div style="text-align:right"><button class="close" onclick="chg(${l.p.id},-1)">−</button> <b>${l.qty}</b> <button class="close" onclick="chg(${l.p.id},1)">+</button><br>
- <button class="remove" onclick="removeItem(${l.p.id})">Retirer</button></div></div>`).join("") : "<p>Votre panier est vide.</p>";
+ <button class="remove" onclick="removeItem(${l.p.id})" style="padding:4px 8px;margin-top:4px">Retirer</button></div></div>`).join("") : "<p>Votre panier est vide.</p>";
   $("total").textContent = money(total());
 }
+
 function toggleCart() {
   const panel = $("cartPanel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block"; updateCart();
+  panel.style.display = (panel.style.display === "block") ? "none" : "block";
+  updateCart();
 }
+
 function showPage(name, target) {
-  if ((name === "sell" || name === "admin") && !session) { toast("Connecte-toi d'abord"); name = "account" }
+  if (name === "sell" && !session) {
+    toast("Veuillez vous connecter d'abord");
+    name = "account";
+  }
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  const home = name === "home";
+  const home = (name === "home");
   $("hero").style.display = home ? "block" : "none";
   $("productsSection").style.display = home ? "block" : "none";
-  if (!home) $(name + "Page").classList.add("active");
+  if (!home) {
+    const el = $(name + "Page");
+    if (el) el.classList.add("active");
+  }
   if (name === "checkout") {
     $("checkoutTotal").textContent = money(total());
     $("checkoutLines").innerHTML = lines().map(l => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${l.qty} × ${esc(l.p.name)}</span><span>${money(l.p.price * l.qty)} FCFA</span></div>`).join("");
-    const hasDigital = lines().some(l => l.p.is_digital), hasPhysical = lines().some(l => !l.p.is_digital);
-    $("emailField").style.display = hasDigital ? "block" : "none";
-    $("addressField").style.display = hasPhysical ? "block" : "none";
   }
-  if (name === "admin") loadAdmin();
   if (target === "products") $("productsSection").scrollIntoView({ behavior: "smooth" });
   else window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
 function handleImage(inp) {
   const f = inp.files[0]; if (!f) return;
   const r = new FileReader();
@@ -416,71 +397,49 @@ function handleImage(inp) {
   };
   r.readAsDataURL(f);
 }
+
 async function publishProduct() {
   const name = $("newName").value.trim(), price = Math.round(Number($("newPrice").value));
-  if (!name || !(price > 0)) { alert("Indique au minimum le nom et un prix valide."); return }
-  if (!newImage) { alert("Ajoute une photo : elle est obligatoire pour publier un produit."); return }
-  try {
-    await api("/rest/v1/products", { method: "POST", headers: { Prefer: "return=minimal" }, body: { name, price, emoji: "🛍️", img: newImage, description: $("newDesc").value.trim() \vert{}\vert{} null, category: $("newCategory").value, is_digital: $("newDigital").checked, seller_name: $("newSeller").value.trim() || session.user.email.split("@")[0] } });
-  } catch (e) { alert("Publication impossible : " + e.message); return }
-  ["newName", "newPrice", "newDesc", "newSeller", "newPhoto"].forEach(i => $(i).value = ""); $("newDigital").checked = false; newImage = "";
-  category = "Tous"; $("search").value = ""; document.querySelectorAll(".cat").forEach((x, i) => x.classList.toggle("active", i === 0));
-  await loadProducts(); toast("Produit publié ✔"); showPage("home", "products");
+  if (!name || !(price > 0)) { alert("Indiquez au minimum le nom et un prix valide."); return }
+  if (!newImage) { alert("Ajoutez une photo : elle est obligatoire."); return }
+  
+  const res = await api("/rest/v1/products", { method: "POST", headers: { Prefer: "return=minimal" }, body: { name, price, emoji: "🛍️", img: newImage, description: $("newDesc").value.trim() || null, category: $("newCategory").value, seller_name: $("newSeller").value.trim() || (session && session.user ? session.user.email.split("@")[0] : "Vendeur") } });
+  
+  ["newName", "newPrice", "newDesc", "newSeller", "newPhoto"].forEach(i => $(i).value = "");
+  newImage = "";
+  await loadProducts();
+  toast("Produit publié ✔");
+  showPage("home", "products");
 }
+
 function checkout() {
   if (!lines().length) { alert("Votre panier est vide."); return }
   $("cartPanel").style.display = "none"; showPage("checkout");
 }
-function selectPay(btn, name) {
-  selectedPayment = name; document.querySelectorAll(".pay").forEach(x => x.style.outline = "none"); btn.style.outline = "2px solid #e6a817";
-}
-function generateCode() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let r = "";
-  for (let i = 0; i < 6; i++) r += chars.charAt(Math.floor(Math.random() * chars.length));
-  return "WY-" + r;
-}
-async function confirmOrder() {
-  const L = lines();
-  const tot = total();
-  if (!L.length || tot <= 0) { alert("Votre panier est vide ou invalide."); return }
-  if (!selectedPayment) { alert("Choisis un mode de paiement."); return }
-  const hasDigital = L.some(l => l.p.is_digital), hasPhysical = L.some(l => !l.p.is_digital);
-  const name = $("buyerName").value.trim(), addr = $("buyerAddress").value.trim(), email = $("buyerEmail").value.trim();
-  let phone = $("buyerPhone").value.replace(/\D/g, "");
-  if (phone.startsWith("226") && phone.length > 8) phone = phone.slice(3);
-  if (!name) { alert("Renseigne ton nom."); return }
-  if (phone.length !== 8) { alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres."); return }
-  if (hasPhysical && !addr) { alert("Renseigne ton adresse de livraison."); return }
-  if (hasDigital && !email) { alert("Renseigne ton email pour recevoir le produit numérique."); return }
 
-  const id = generateCode();
-  try {
-    await api("/rest/v1/orders", { method: "POST", headers: { Prefer: "return=minimal" }, body: { code: id, name, phone, address: addr || null, email: email || null, payment: selectedPayment, total: tot, items: L.map(l => ({ name: l.p.name, qty: l.qty, price: l.p.price, digital: !!l.p.is_digital })) } });
-  } catch (e) { alert("Commande non enregistrée : " + e.message); return }
-  const msg = `🛒 Nouvelle commande ${id}\n` + L.map(l => `• ${l.qty} x ${l.p.name}${l.p.is_digital ? " (numérique)" : ""} — ${money(l.p.price * l.qty)} FCFA`).join("\n") + `\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})` + (addr ? `\nAdresse : ${addr}` : "") + (email ? `\nEmail (produit numérique) : ${email}` : "");
+function selectPay(btn, name) {
+  selectedPayment = name;
+  document.querySelectorAll(".pay").forEach(x => x.style.borderColor = "var(--border)");
+  btn.style.borderColor = "var(--gold)";
+}
+
+async function confirmOrder() {
+  const L = lines(), tot = total();
+  if (!L.length) return;
+  if (!selectedPayment) { alert("Choisissez un mode de paiement."); return }
+  const name = $("buyerName").value.trim(), addr = $("buyerAddress").value.trim(), phone = $("buyerPhone").value.trim();
+  if (!name || !phone || !addr) { alert("Remplissez tous les champs obligatoires."); return }
+
+  const id = "WY-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+  await api("/rest/v1/orders", { method: "POST", headers: { Prefer: "return=minimal" }, body: { code: id, name, phone, address: addr, payment: selectedPayment, total: tot, items: L.map(l => ({ name: l.p.name, qty: l.qty, price: l.p.price })) } });
+
+  const msg = `🛒 *Nouvelle commande ${id}*\n` + L.map(l => `• ${l.qty} x ${l.p.name} — ${money(l.p.price * l.qty)} FCFA`).join("\n") + `\n\n*Total :* ${money(tot)} FCFA\n*Paiement :* ${selectedPayment}\n*Client :* ${name} (${phone})\n*Adresse :* ${addr}`;
   const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-  let how = "Vous paierez à la réception de votre commande.";
-  if (selectedPayment.startsWith("Orange")) how = `Envoyez <strong>${money(tot)} FCFA</strong> par Orange Money au <strong>${esc(CONFIG.orange)}</strong> avec la référence <strong>${id}</strong>.`;
-  $("doneBody").innerHTML = `<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>${how}</p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
+
+  $("doneBody").innerHTML = `<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p>`;
   $("waLink").href = url;
   cart = []; save("cart", cart); updateCart();
-  ["buyerName", "buyerPhone", "buyerAddress", "buyerEmail"].forEach(i => $(i).value = "");
-  selectedPayment = ""; document.querySelectorAll(".pay").forEach(x => x.style.outline = "none");
   showPage("done"); window.open(url, "_blank");
-}
-async function loadAdmin() {
-  const b = $("adminBody"); b.innerHTML = "Chargement...";
-  try {
-    const list = await api("/rest/v1/orders?select=*&order=created_at.desc");
-    if (!list.length) { b.innerHTML = "<p>Aucune commande enregistrée.</p>"; return }
-    b.innerHTML = list.map(o => `
- <div class="form" style="max-width:100%;margin-bottom:15px">
-  <div style="display:flex;justify-content:space-between"><strong>${esc(o.code)}</strong><small>${new Date(o.created_at).toLocaleString()}</small></div>
-  <p><strong>Client :</strong> ${esc(o.name)} (${esc(o.phone)})<br><strong>Paiement :</strong> ${esc(o.payment)}<br>${o.address ? "<strong>Adresse :</strong> " + esc(o.address) + "<br>" : ""}${o.email ? "<strong>Email :</strong> " + esc(o.email) + "<br>" : ""}<strong>Total :</strong> ${money(o.total)} FCFA</p>
-  <ul>${(o.items || []).map(i => `<li>${i.qty} x ${esc(i.name)} (${money(i.price)} FCFA)</li>`).join("")}</ul>
- </div>`).join("");
-  } catch (e) { b.innerHTML = "<p>Erreur ou accès non autorisé.</p>" }
 }
 
 updateAuthUI();
