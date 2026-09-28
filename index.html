@@ -374,7 +374,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   </div>
 </section>
 
-<!-- PAGE REGALGES -->
+<!-- PAGE REGLAGES -->
 <section id="settingsPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -566,27 +566,30 @@ function toast(msg){
  t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2600);
 }
 
+/* FONCTION PARAMÈTRES CORRIGÉE */
 function saveSettings(){
- userSettings.lang=$("setLang").value;
- userSettings.notif=$("setNotif").value;
+ if($("setLang")) userSettings.lang=$("setLang").value;
+ if($("setNotif")) userSettings.notif=$("setNotif").value;
  save("user_settings",userSettings);
  toast("Paramètres enregistrés ✔");
 }
 
-/* ---------- FAVORIS & RECHERCHE ---------- */
+/* FONCTIONS FAVORIS ET RECHERCHE */
 function toggleFav(id,e){
- e.stopPropagation();
+ if(e&&e.stopPropagation) e.stopPropagation();
  if(favorites.includes(id)){favorites=favorites.filter(x=>x!==id)}else{favorites.push(id)}
  save("favorites",favorites);
  render();
 }
+
 function toggleFavoritesOnly(){
  showFavOnly=!showFavOnly;
- $("favToggleBtn").style.background=showFavOnly?"var(--gold)":"#ffffff0d";
+ const btn=$("favToggleBtn");
+ if(btn) btn.style.background=showFavOnly?"var(--gold)":"#ffffff0d";
  render();
 }
 
-/* ---------- Supabase API ---------- */
+/* Supabase API */
 function setSession(d){session=d;isAdmin=false;save("session",d);updateAuthUI()}
 async function refresh(){
  if(!session||session.expires_at*1000>Date.now()+60000)return;
@@ -633,7 +636,7 @@ async function loadProducts(){
  render();updateCart();
 }
 
-/* ---------- BOUTON ACHAT RAPIDE WHATSAPP ⚡ ---------- */
+/* BOUTON ACHAT RAPIDE WHATSAPP ⚡ */
 function quickWhatsAppOrder(id){
  const p=products.find(x=>x.id===id);
  if(!p)return;
@@ -641,7 +644,7 @@ function quickWhatsAppOrder(id){
  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 
-/* ---------- RENDU DES PRODUITS ---------- */
+/* RENDU DES PRODUITS */
 function render(){
  const q=$("search").value.toLowerCase();
  const maxP=num($("maxPriceFilter").value);
@@ -685,7 +688,7 @@ function render(){
  </article>`}).join(""):"<p style='grid-column:1/-1;padding:20px 0'>Aucun produit ne correspond à votre recherche.</p>";
 }
 
-function onSearch(){if(!$("productsSection").offsetParent)showPage("home","products");render()}
+function onSearch(){if(!$("productsSection").offsetParent)showPage("home");render()}
 function setCategory(c,el){
  category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
 }
@@ -731,13 +734,16 @@ function updateShippingCost(){
  $("checkoutTotal").textContent=money(total()+ship);
 }
 
-function showPage(name,target){
+function showPage(name){
  if((name==="sell"||name==="admin")&&!session){toast("Connecte-toi d'abord");name="account"}
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  const home=name==="home";
  $("hero").style.display=home?"block":"none";
  $("productsSection").style.display=home?"block":"none";
- if(!home)$(name+"Page").classList.add("active");
+ if(!home){
+  const target=$(name+"Page");
+  if(target) target.classList.add("active");
+ }
  if(name==="checkout"){
   updateShippingCost();
   $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${num(l.qty)} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
