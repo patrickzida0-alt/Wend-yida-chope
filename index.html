@@ -22,7 +22,7 @@ header{
 }
 .topbar{max-width:1200px;margin:auto;padding:12px 5%;display:flex;align-items:center;gap:20px}
 
-/* --- LOGO & ICÔNE ÉCLAIR HAUTE DÉFINITION --- */
+/* --- LOGO --- */
 .brand{
   display:flex;align-items:center;gap:12px;min-width:max-content;
   text-decoration:none;color:#fff;transition:transform .25s ease
@@ -74,7 +74,7 @@ header{
   text-transform:uppercase;margin-top:3px
 }
 
-/* --- BARRE DE RECHERCHE --- */
+/* --- RECHERCHE --- */
 .search{
   flex:1;display:flex;align-items:center;max-width:620px;margin:auto;
   position:relative;background:#181c23;border-radius:14px;
@@ -136,9 +136,38 @@ header{
 .container{max-width:1200px;margin:auto;padding:35px 5%}
 .section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px}
 .section-head h2{margin:0;font-size:28px}.section-head p{margin:5px 0;color:var(--muted)}
-.categories{display:flex;gap:10px;overflow:auto;padding-bottom:8px}
-.cat{white-space:nowrap;border:1px solid var(--border);background:#fff;padding:11px 15px;border-radius:999px;font-weight:800;color:#29332f}
-.cat.active,.cat:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+/* --- DESIGN DES RAYONS (SANS EMOJIS - VECTORIEL PRO) --- */
+.categories{
+  display:flex;gap:10px;overflow-x:auto;padding:4px 0 14px;scroll-behavior:smooth;
+}
+.categories::-webkit-scrollbar{height:4px}
+.categories::-webkit-scrollbar-thumb{background:#d0c9b8;border-radius:4px}
+
+.cat{
+  white-space:nowrap;border:1px solid var(--border);background:#fff;
+  padding:10px 18px;border-radius:999px;font-weight:800;font-size:13px;
+  color:#29332f;cursor:pointer;transition:all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.03);
+}
+.cat svg{
+  width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease
+}
+.cat:hover{
+  background:var(--dark);color:#fff;border-color:var(--dark);
+  transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.12)
+}
+.cat:hover svg{transform:scale(1.15)}
+
+.cat.active{
+  background:linear-gradient(135deg, var(--dark) 0%, #1e242c 100%);
+  color:var(--accent);border-color:var(--dark);
+  box-shadow:0 6px 18px rgba(13,15,18,0.25)
+}
+.cat.active svg{stroke:var(--accent)}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
 .card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 7px 24px #17201d0b;transition:.2s}
 .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px #17201d16}
@@ -150,7 +179,16 @@ header{
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
 .info{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px}.info strong{display:block;font-size:18px;margin-bottom:5px}.info span{color:var(--muted);font-size:14px}
 .page{display:none}.page.active{display:block}
-.page-box{background:#fff;border:1px solid var(--border);border-radius:20px;padding:25px}
+.page-box{background:#fff;border:1px solid var(--border);border-radius:20px;padding:25px;position:relative}
+
+/* --- BOUTON RETOUR ACCUEIL --- */
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;background:#f2efe7;color:#111;
+  border:1px solid var(--border);padding:8px 14px;border-radius:10px;
+  font-weight:800;font-size:13px;margin-bottom:18px;cursor:pointer;transition:all .2s
+}
+.back-btn:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
 .field label{font-weight:800;font-size:14px}.field input,.field select,.field textarea{padding:12px;border:1px solid #ddd8ca;border-radius:10px;outline:0;background:#fff}
@@ -238,14 +276,41 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <main>
 <section id="productsSection" class="container">
   <div class="section-head">
-    <div><h2>Nos produits</h2><p>Découvrez une sélection de produits disponibles sur Shop Éclair.</p></div>
+    <div><h2>Nos rayons & produits</h2><p>Découvrez une sélection de produits classés par rayon sur Shop Éclair.</p></div>
   </div>
+  
+  <!-- BARRE DE RAYONS TRAVAILLÉE AVEC ICÔNES VECTORIELLES SVG -->
   <div class="categories">
-    <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
-    <button class="cat" onclick="setCategory('Mode',this)">👕 Mode</button>
-    <button class="cat" onclick="setCategory('Tech',this)">🎧 Tech</button>
-    <button class="cat" onclick="setCategory('Accessoires',this)">🎒 Accessoires</button>
+    <button class="cat active" onclick="setCategory('Tous',this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      Tous les rayons
+    </button>
+    <button class="cat" onclick="setCategory('Véhicules',this)">
+      <svg viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.3.9L2 11.5C1.4 12 1 12.7 1 13.5V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+      Véhicules
+    </button>
+    <button class="cat" onclick="setCategory('Maison',this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Maison & Déco
+    </button>
+    <button class="cat" onclick="setCategory('Produits Numériques',this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Produits Numériques
+    </button>
+    <button class="cat" onclick="setCategory('Mode',this)">
+      <svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 0-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+      Mode
+    </button>
+    <button class="cat" onclick="setCategory('Tech',this)">
+      <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      Tech & Téléphones
+    </button>
+    <button class="cat" onclick="setCategory('Accessoires',this)">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Accessoires
+    </button>
   </div>
+  
   <div class="grid" id="products" style="margin-top:18px"></div>
 
   <div class="info-grid">
@@ -258,6 +323,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <!-- PAGE REGALGES / PARAMÈTRES UTILISATEUR -->
 <section id="settingsPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>⚙️ Paramètres de l'application</h2>
     <p>Personnalisez votre expérience de navigation sur Shop Éclair.</p>
     <div class="form-grid" style="margin-top:20px">
@@ -299,6 +365,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <!-- PAGE POLITIQUE DE CONFIDENTIALITÉ -->
 <section id="privacyPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>🔒 Politique de Confidentialité</h2>
     <p><em>Dernière mise à jour : Septembre 2026</em></p>
     
@@ -326,12 +393,23 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="sellPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>Publier un produit</h2>
     <p>Ajoute les informations de ton produit. Connecte-toi pour publier : ton produit sera visible par tous les visiteurs.</p>
     <div class="form-grid">
-      <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso"></div>
+      <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso / Moto Djakarta"></div>
       <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
-      <div class="field"><label>Catégorie</label><select id="newCategory"><option>Mode</option><option>Tech</option><option>Accessoires</option></select></div>
+      <div class="field">
+        <label>Rayon / Catégorie</label>
+        <select id="newCategory">
+          <option value="Véhicules">Véhicules</option>
+          <option value="Maison">Maison & Déco</option>
+          <option value="Produits Numériques">Produits Numériques</option>
+          <option value="Mode">Mode</option>
+          <option value="Tech">Tech & Téléphones</option>
+          <option value="Accessoires">Accessoires</option>
+        </select>
+      </div>
       <div class="field"><label>Photo (obligatoire)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
       <div class="field"><label>Nom du vendeur</label><input id="newSeller" placeholder="Ex. Boutique Faso"></div>
       <div class="field"><label>Type de produit</label><label style="display:flex;align-items:center;gap:8px;font-weight:400;margin-top:8px"><input id="newDigital" type="checkbox" style="width:auto"> Produit numérique (livré par email, pas d'adresse de livraison)</label></div>
@@ -343,6 +421,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="checkoutPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Continuer mes achats</button>
     <h2>Finaliser la commande</h2>
     <div class="notice">💡 Votre commande est envoyée au vendeur sur WhatsApp. Le paiement se fait à la livraison ou par transfert Orange Money selon le mode choisi.</div>
     <div id="checkoutLines"></div>
@@ -363,6 +442,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="aboutPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>À propos de Shop Éclair</h2>
     <p>Shop Éclair est conçu comme une marketplace en ligne rapide mettant en avant une identité burkinabè, une navigation simple et une expérience mobile optimisée.</p>
     <p>Le site actuel est une base front-end autonome connectée à une base de données sécurisée.</p>
@@ -371,6 +451,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="accountPage" class="container page">
   <div class="page-box" style="max-width:480px">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>Mon compte</h2>
     <div id="authForm">
       <div class="field"><label>Email</label><input id="authEmail" type="email"></div>
@@ -394,6 +475,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="adminPage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>Produits en attente de validation</h2><div id="pendingBody"></div>
     <h2 style="margin-top:28px">Commandes</h2>
     <div class="field" style="max-width:240px;margin-bottom:12px">
@@ -406,6 +488,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 
 <section id="donePage" class="container page">
   <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>✅ Commande enregistrée</h2>
     <div id="doneBody"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
@@ -535,16 +618,16 @@ function render(){
   const im=safeImg(p.img),tag=!p.approved?'<span class="tag">⏳ En attente</span>':p.mine?'<span class="tag">Mon produit</span>':'';
   return `
  <article class="card">
-  <div class="photo">${im?`<img src="${esc(im)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"🛍️")}${tag}</div>
+  <div class="photo">${im?`<img src="${esc(im)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"⚡")}${tag}</div>
   <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc?`<div class="seller">${esc(p.desc)}</div>`:''}<div class="seller">Vendu par ${esc(p.seller)}</div>
   <div class="price">${money(p.price)} FCFA</div>
   ${p.approved?`<button class="buy" onclick="add(${num(p.id)})">Ajouter au panier</button>`:`<div class="seller">En attente de validation par l'administrateur</div>`}
   ${p.mine?`<button class="remove" style="margin-top:8px" onclick="delProduct(${num(p.id)})">Supprimer ce produit</button>`:''}</div>
- </article>`}).join(""):"<p>Aucun produit trouvé.</p>";
+ </article>`}).join(""):"<p>Aucun produit trouvé dans ce rayon.</p>";
 }
 function onSearch(){if(!$("productsSection").offsetParent)showPage("home","products");render()}
 function setCategory(c,el){
- category=c;documentquerySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
+ category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
 }
 function add(id){
  const c=cart.find(x=>x.id===id);
@@ -630,7 +713,7 @@ async function publishProduct(){
  publishing=true;let url=null;
  try{
   url=await uploadImage(newImage);
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked\vert{}\vert{}$("newCategory").value==="Produits Numériques",seller_name:seller}});
  }catch(e){if(url)dropImage(url);publishing=false;alert("Publication impossible : "+e.message);return}
  publishing=false;
  ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage=null;
