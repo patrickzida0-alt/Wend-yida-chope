@@ -508,6 +508,22 @@ async function loadAdmin(){
 
 async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+id,{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
 updateAuthUI();render();updateCart();loadProducts();
-</script>
+function updateAuthUI() {
+  const btn = $("authBtn");
+  if (!btn) return;
+  if (session) {
+    btn.textContent = "Déconnexion";
+    btn.onclick = async () => {
+      await supabase.auth.signOut();
+      session = null;
+      updateAuthUI();
+      toast("Déconnecté ✔");
+      showPage("home");
+    };
+  } else {
+    btn.textContent = "Connexion";
+    btn.onclick = () => showPage("auth");
+  }
+}
 </body>
 </html>
