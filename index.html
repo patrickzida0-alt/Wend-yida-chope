@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Wend-Yida Shop — marketplace burkinabè moderne">
 <title>Wend-Yida Shop | Marketplace Burkina Faso</title>
 <style>
 :root{
@@ -12,14 +11,14 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f7f5ef;color:#17201d}
-button,input,select{font:inherit}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#f7f5ef;color:#17201d}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 header{
   position:sticky;top:0;z-index:50;background:rgba(16,21,20,.96);
   color:#fff;border-bottom:1px solid #ffffff18;backdrop-filter:blur(12px)
 }
-.topbar{max-width:1200px;margin:auto;padding:14px 5%;display:flex;align-items:center;gap:18px}
+.topbar{max-width:1200px;margin:auto;padding:14px 5%;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;min-width:max-content;text-decoration:none;color:#fff}
 .logo-mark{
   width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
@@ -27,7 +26,7 @@ header{
   font-size:20px;font-weight:900;box-shadow:0 6px 20px #0005
 }
 .logo-text{font-size:21px;font-weight:900;letter-spacing:-.5px}.logo-text span{color:var(--gold)}
-.search{flex:1;display:flex;max-width:620px;margin:auto}
+.search{flex:1;display:flex;min-width:260px;max-width:620px;margin:auto}
 .search input{width:100%;border:0;outline:0;padding:13px 16px;border-radius:12px 0 0 12px;background:#fff;color:#222}
 .search button{border:0;background:var(--gold);padding:0 17px;border-radius:0 12px 12px 0;font-weight:800}
 .actions{display:flex;gap:8px}
@@ -38,51 +37,38 @@ header{
    radial-gradient(circle at 15% 20%,#e6a8172a,transparent 27%),
    radial-gradient(circle at 88% 30%,#08744335,transparent 30%),
    linear-gradient(135deg,#101514,#18231f 55%,#321a16);
-  color:#fff;padding:70px 5% 62px;overflow:hidden
+  color:#fff;padding:60px 5%;overflow:hidden
 }
-.hero-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center}
+.hero-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:35px;align-items:center}
 .badge{display:inline-flex;padding:7px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff20;color:#ffd86a;font-weight:800}
-.hero h1{font-size:clamp(38px,6vw,70px);line-height:.98;margin:18px 0}
+.hero h1{font-size:clamp(32px,5vw,56px);line-height:1.1;margin:18px 0}
 .hero h1 span{color:var(--gold)}
-.hero p{font-size:18px;color:#d8dfdc;max-width:650px;line-height:1.6}
+.hero p{font-size:16px;color:#d8dfdc;line-height:1.6}
 .hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
 .primary,.secondary{border:0;border-radius:12px;padding:13px 18px;font-weight:900}
 .primary{background:var(--gold);color:#111}.secondary{background:#ffffff12;color:#fff;border:1px solid #ffffff2c}
-.hero-card{
-  background:#ffffff0d;border:1px solid #ffffff18;border-radius:24px;padding:25px;
-  box-shadow:0 25px 70px #0005
-}
-.flag{height:13px;border-radius:99px;background:linear-gradient(90deg,var(--green) 0 40%,var(--gold) 40% 60%,var(--red) 60%)}
-.hero-card h3{font-size:25px;margin:20px 0 8px}
-.hero-card p{font-size:14px}
+.hero-card{background:#ffffff0d;border:1px solid #ffffff18;border-radius:24px;padding:25px}
+.flag{height:8px;border-radius:99px;background:linear-gradient(90deg,var(--green) 0 40%,var(--gold) 40% 60%,var(--red) 60%)}
 .container{max-width:1200px;margin:auto;padding:35px 5%}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px}
-.section-head h2{margin:0;font-size:28px}.section-head p{margin:5px 0;color:var(--muted)}
-.categories{display:flex;gap:10px;overflow:auto;padding-bottom:8px}
-.cat{white-space:nowrap;border:1px solid var(--border);background:#fff;padding:11px 15px;border-radius:999px;font-weight:800;color:#29332f}
-.cat.active,.cat:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 7px 24px #17201d0b;transition:.2s}
-.card:hover{transform:translateY(-4px)}
-.photo{height:180px;background:#f0ece1;display:grid;place-items:center;font-size:62px;position:relative}
-.tag{position:absolute;top:10px;left:10px;background:#101514cf;color:#fff;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px;flex-wrap:wrap}
+.categories{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;max-width:100%}
+.cat{white-space:nowrap;border:1px solid var(--border);background:#fff;padding:10px 16px;border-radius:999px;font-weight:800}
+.cat.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 7px 24px #17201d0b}
+.photo{height:180px;background:#f0ece1;display:grid;place-items:center;font-size:50px}
 .card-body{padding:16px}
-.card h3{margin:0 0 6px;font-size:17px}.seller{font-size:12px;color:var(--muted)}
-.price{font-size:20px;font-weight:900;color:var(--green);margin:12px 0}
-.buy,.remove{width:100%;border:0;padding:12px;border-radius:12px;font-weight:900}
+.card h3{margin:0 0 6px;font-size:16px}.seller{font-size:12px;color:var(--muted)}
+.price{font-size:18px;font-weight:900;color:var(--green);margin:10px 0}
+.buy,.remove{width:100%;border:0;padding:11px;border-radius:12px;font-weight:900}
 .buy{background:var(--dark);color:#fff}.remove{background:#ffebe9;color:var(--red)}
 .panel{position:fixed;top:80px;right:5%;width:min(380px,90vw);background:#fff;border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 20px 50px #0003;display:none;z-index:60}
-.cart-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid #eee;align-items:center}
+.cart-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid #eee}
 .page{display:none}.page.active{display:block}
-.form{max-width:540px;margin:auto;background:#fff;border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:0 12px 36px #0000000a}
-.form input,.form select,.form textarea{width:100%;padding:13px 14px;border:1px solid #ddd;border-radius:12px;margin:8px 0 16px}
-.form label{font-size:13px;font-weight:800;color:#444}
-.payments{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 18px}
-.pay{border:2px solid var(--border);background:#fff;padding:14px;border-radius:14px;text-align:center;font-weight:800}
-.pay.active{border-color:var(--gold);background:#fffdf6}
+.form{max-width:520px;margin:auto;background:#fff;border:1px solid var(--border);border-radius:24px;padding:24px}
+.form input,.form select,.form textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin:6px 0 14px}
+.form label{font-size:13px;font-weight:800}
 .close{border:0;background:#eee;padding:6px 10px;border-radius:8px;font-weight:800}
-footer{background:var(--dark);color:#9da5a2;padding:40px 5% 60px;margin-top:60px;font-size:14px}
-footer a{color:var(--gold);text-decoration:none}
 </style>
 </head>
 <body>
@@ -94,8 +80,7 @@ footer a{color:var(--gold);text-decoration:none}
    <div class="logo-text">Wend-Yida<span>.shop</span></div>
   </a>
   <div class="search">
-   <input id="search" placeholder="Rechercher un produit..." oninput="onSearch()">
-   <button onclick="onSearch()">🔍</button>
+   <input id="search" placeholder="Rechercher un produit..." oninput="render()">
   </div>
   <div class="actions">
    <button class="icon-btn" onclick="showPage('sell')">➕ Vendre</button>
@@ -108,18 +93,18 @@ footer a{color:var(--gold);text-decoration:none}
 <section class="hero" id="hero">
  <div class="hero-inner">
   <div>
-   <div class="badge">🇧🇫 Marketplace N°1 au Burkina Faso</div>
-   <h1>Achetez & Vendez en toute <span>confiance</span></h1>
-   <p>Des milliers d'articles disponibles : téléphones, mode, électroménager, véhicules et services.</p>
+   <div class="badge">🇧🇫 Marketplace Burkina Faso</div>
+   <h1>Achetez & Vendez en <span>confiance</span></h1>
+   <p>Téléphones, mode, véhicules et services au Burkina.</p>
    <div class="hero-buttons">
-    <button class="primary" onclick="showPage('home','products')">Explorer le marché</button>
+    <button class="primary" onclick="showPage('home','productsSection')">Voir les annonces</button>
     <button class="secondary" onclick="showPage('sell')">Publier une annonce</button>
    </div>
   </div>
   <div class="hero-card">
    <div class="flag"></div>
-   <h3>Achat local simple</h3>
-   <p>Mise en relation directe sur Ouagadougou, Bobo-Dioulasso et tout le Burkina.</p>
+   <h3 style="margin:12px 0 6px">Vente locale directe</h3>
+   <p style="margin:0;font-size:14px">Ouagadougou, Bobo-Dioulasso et tout le pays.</p>
   </div>
  </div>
 </section>
@@ -127,8 +112,7 @@ footer a{color:var(--gold);text-decoration:none}
 <div class="container" id="productsSection">
  <div class="section-head">
   <div>
-   <h2>Articles récents</h2>
-   <p>Découvrez les dernières offres</p>
+   <h2 style="margin:0">Articles récents</h2>
   </div>
   <div class="categories">
    <button class="cat active" onclick="setCategory('Tous',this)">Tous</button>
@@ -138,7 +122,7 @@ footer a{color:var(--gold);text-decoration:none}
    <button class="cat" onclick="setCategory('Véhicules',this)">Véhicules</button>
   </div>
  </div>
- <div class="grid" id="products"></div>
+ <div class="grid" id="products">Chargement des produits...</div>
 </div>
 
 <aside class="panel" id="cartPanel">
@@ -156,7 +140,6 @@ footer a{color:var(--gold);text-decoration:none}
 </aside>
 
 <main class="container">
-
  <section class="page" id="accountPage">
   <div class="form">
    <h2>Espace Membre</h2>
@@ -179,9 +162,9 @@ footer a{color:var(--gold);text-decoration:none}
   <div class="form">
    <h2>Publier une annonce</h2>
    <label>Titre de l'annonce</label>
-   <input id="newName" placeholder="ex: iPhone 13 Pro 128Go">
+   <input id="newName" placeholder="ex: Samsung Galaxy S21">
    <label>Prix (FCFA)</label>
-   <input type="number" id="newPrice" placeholder="250000">
+   <input type="number" id="newPrice" placeholder="150000">
    <label>Catégorie</label>
    <select id="newCategory">
     <option>Électronique</option>
@@ -190,259 +173,159 @@ footer a{color:var(--gold);text-decoration:none}
     <option>Véhicules</option>
    </select>
    <label>Description</label>
-   <textarea id="newDesc" rows="3" placeholder="État du produit, garantie, lieu..."></textarea>
-   <label>Nom du vendeur / Boutique</label>
-   <input id="newSeller" placeholder="ex: Shop Éclair">
-   <label>Photo du produit (Obligatoire)</label>
-   <input type="file" id="newPhoto" accept="image/*" onchange="handleImage(this)">
+   <textarea id="newDesc" rows="3" placeholder="État du produit..."></textarea>
+   <label>Vendeur</label>
+   <input id="newSeller" placeholder="Nom de votre boutique">
    <button class="primary" style="width:100%;margin-top:10px" onclick="publishProduct()">Publier maintenant</button>
   </div>
  </section>
 
  <section class="page" id="checkoutPage">
   <div class="form">
-   <h2>Finaliser la commande</h2>
+   <h2>Commande</h2>
    <div id="checkoutLines"></div>
    <div style="margin:15px 0;font-weight:900;font-size:18px">Total : <span id="checkoutTotal">0</span> FCFA</div>
-   
-   <label>Mode de paiement</label>
-   <div class="payments">
-    <div class="pay" onclick="selectPay(this,'Orange Money')">Orange Money</div>
-    <div class="pay" onclick="selectPay(this,'Paiement à la livraison')">À la livraison</div>
-   </div>
-
-   <label>Votre Nom complet</label>
-   <input id="buyerName" placeholder="Awa Ouédraogo">
-   <label>Numéro Téléphone (WhatsApp)</label>
+   <label>Nom complet</label>
+   <input id="buyerName" placeholder="Votre nom">
+   <label>Téléphone WhatsApp</label>
    <input id="buyerPhone" placeholder="70000000">
-   <label>Adresse de livraison</label>
-   <input id="buyerAddress" placeholder="Ouagadougou, Patte d'Oie">
-
-   <button class="primary" style="width:100%" onclick="confirmOrder()">Valider la commande</button>
+   <label>Adresse</label>
+   <input id="buyerAddress" placeholder="Quartier, Ville">
+   <button class="primary" style="width:100%" onclick="confirmOrder()">Finaliser la commande</button>
   </div>
  </section>
-
- <section class="page" id="donePage">
-  <div class="form" style="text-align:center">
-   <div style="font-size:50px">🎉</div>
-   <h2>Commande envoyée !</h2>
-   <div id="doneBody"></div>
-   <a id="waLink" href="#" target="_blank" class="primary" style="display:inline-block;text-decoration:none;margin-top:15px">Envoyer sur WhatsApp</a>
-  </div>
- </section>
-
 </main>
 
-<footer>
- <div style="max-width:1200px;margin:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px">
-  <div>
-   <h3 style="color:#fff;margin:0 0 10px">Wend-Yida Shop</h3>
-   <p>La plateforme d'achat et vente de référence au Burkina Faso.</p>
-  </div>
-  <div>
-   <p>Contact WhatsApp : +226 67 66 30 57</p>
-  </div>
- </div>
-</footer>
-
 <script>
-const CONFIG = { whatsapp: "22667663057", orange: "67 66 30 57" };
+const CONFIG = { whatsapp: "22667663057" };
 const SB = "https://ulfbhvcmyzsnclsiwzql.supabase.co", KEY = "sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
-const K = "wendyida_";
-let category = "Tous", selectedPayment = "", newImage = "", products = [];
 
-function load(k, d) { try { const v = localStorage.getItem(K + k); return v ? JSON.parse(v) : d } catch (e) { return d } }
-function save(k, v) { try { localStorage.setItem(K + k, JSON.stringify(v)); return true } catch (e) { return false } }
-let cart = load("cart", []), session = load("session", null);
+let category = "Tous", cart = [], products = [];
+
 const $ = id => document.getElementById(id);
-
 const esc = s => String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const money = n => Number(n || 0).toLocaleString("fr-FR");
 
-function lines() {
-  if (!Array.isArray(cart) || !Array.isArray(products)) return [];
-  return cart.map(c => ({ p: products.find(x => x.id === c.id), qty: c.qty })).filter(l => l.p);
-}
-function total() { return lines().reduce((s, l) => s + (l.p.price || 0) * l.qty, 0); }
-
-function toast(msg) {
-  let t = $("toast");
-  if (!t) {
-    t = document.createElement("div"); t.id = "toast";
-    t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#101514;color:#fff;padding:12px 18px;border-radius:12px;z-index:200;font-weight:700;transition:opacity .3s";
-    document.body.appendChild(t);
-  }
-  t.textContent = msg; t.style.opacity = 1; clearTimeout(t._h); t._h = setTimeout(() => t.style.opacity = 0, 2200);
-}
-
-async function api(path, o = {}) {
-  const h = { apikey: KEY, "Content-Type": "application/json", ...(o.headers || {}) };
-  if (session && session.access_token) h.Authorization = "Bearer " + session.access_token;
+async function api(path, method = "GET", body = null) {
   try {
-    const r = await fetch(SB + path, { method: o.method || "GET", headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
-    const t = await r.text();
-    let d = null; try { d = t ? JSON.parse(t) : null } catch (e) {}
-    if (!r.ok) throw new Error((d && (d.message || d.msg)) || "Erreur " + r.status);
-    return d;
+    const r = await fetch(SB + path, {
+      method,
+      headers: { apikey: KEY, "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : null
+    });
+    return await r.json();
   } catch(e) {
     console.error(e);
     return null;
   }
 }
 
-async function auth(mode) {
-  const email = $("authEmail").value.trim(), password = $("authPass").value;
-  if (!email || password.length < 6) { alert("Email et mot de passe (6 caractères min.) requis."); return }
-  try {
-    const r = await fetch(SB + (mode === "signup" ? "/auth/v1/signup" : "/auth/v1/token?grant_type=password"), { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.msg || d.error_description || d.message || "Échec de la connexion");
-    if (!d.access_token) { alert("Compte créé. Connectez-vous."); return }
-    session = d; save("session", d); updateAuthUI(); toast("Connecté ✔"); showPage("home");
-  } catch (e) { alert(e.message) }
-}
-function logout() { session = null; save("session", null); updateAuthUI(); showPage("home") }
-
-function updateAuthUI() {
-  $("acctBtn").textContent = session ? "👤 Compte" : "Connexion";
-  $("authForm").style.display = session ? "none" : "block";
-  $("authInfo").style.display = session ? "block" : "none";
-  if (session && session.user) $("authWho").textContent = "Connecté : " + session.user.email;
-}
-
 async function loadProducts() {
-  const d = await api("/rest/v1/products?select=*&order=created_at.desc");
-  if (Array.isArray(d)) {
-    products = d.map(p => ({ ...p, desc: p.description, seller: p.seller_name }));
-  } else {
-    products = [];
-  }
-  render(); updateCart();
+  const d = await api("/rest/v1/products?select=*");
+  products = Array.isArray(d) ? d : [];
+  render();
 }
 
 function render() {
   const q = ($("search").value || "").toLowerCase();
-  const list = products.filter(p => (category === "Tous" || p.category === category) && (p.name + " " + (p.desc || "")).toLowerCase().includes(q));
-  $("products").innerHTML = list.length ? list.map(p => `
- <article class="card">
-  <div class="photo">${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">` : '🛍️'}</div>
-  <div class="card-body"><h3>${esc(p.name)}</h3>${p.desc ? `<div class="seller">${esc(p.desc)}</div>` : ''}<div class="seller">Vendu par ${esc(p.seller || 'Vendeur')}</div>
-  <div class="price">${money(p.price)} FCFA</div>
-  <button class="buy" onclick="add(${p.id})">Ajouter au panier</button></div>
- </article>`).join("") : "<p style='padding:20px'>Aucun produit disponible pour le moment.</p>";
+  const list = products.filter(p => (category === "Tous" || p.category === category) && (p.name || "").toLowerCase().includes(q));
+  
+  if (!list.length) {
+    $("products").innerHTML = "<p style='grid-column:1/-1;padding:20px;text-align:center'>Aucun produit trouvé.</p>";
+    return;
+  }
+
+  $("products").innerHTML = list.map(p => `
+    <article class="card">
+     <div class="photo">🛍️</div>
+     <div class="card-body">
+      <h3>${esc(p.name)}</h3>
+      <div class="seller">Vendeur: ${esc(p.seller_name || 'Anonyme')}</div>
+      <div class="price">${money(p.price)} FCFA</div>
+      <button class="buy" onclick="add(${p.id})">Ajouter au panier</button>
+     </div>
+    </article>
+  `).join("");
 }
 
-function onSearch() { if (!$("productsSection").offsetParent) showPage("home", "products"); render() }
 function setCategory(c, el) {
-  category = c; document.querySelectorAll(".cat").forEach(x => x.classList.remove("active")); el.classList.add("active"); render();
+  category = c;
+  document.querySelectorAll(".cat").forEach(x => x.classList.remove("active"));
+  el.classList.add("active");
+  render();
 }
 
 function add(id) {
-  const c = cart.find(x => x.id === id); c ? c.qty++ : cart.push({ id, qty: 1 });
-  save("cart", cart); updateCart(); toast("Ajouté au panier ✔");
-}
-function chg(id, d) {
-  const c = cart.find(x => x.id === id); if (!c) return; c.qty += d;
-  if (c.qty <= 0) cart = cart.filter(x => x.id !== id);
-  save("cart", cart); updateCart();
-}
-function removeItem(id) { cart = cart.filter(x => x.id !== id); save("cart", cart); updateCart() }
-
-function updateCart() {
-  const L = lines();
-  $("count").textContent = L.reduce((s, l) => s + l.qty, 0);
-  $("cartItems").innerHTML = L.length ? L.map(l => `
- <div class="cart-item"><div><strong>${esc(l.p.name)}</strong><br><small>${money(l.p.price)} FCFA × ${l.qty}</small></div>
- <div style="text-align:right"><button class="close" onclick="chg(${l.p.id},-1)">−</button> <b>${l.qty}</b> <button class="close" onclick="chg(${l.p.id},1)">+</button><br>
- <button class="remove" onclick="removeItem(${l.p.id})" style="padding:4px 8px;margin-top:4px">Retirer</button></div></div>`).join("") : "<p>Votre panier est vide.</p>";
-  $("total").textContent = money(total());
-}
-
-function toggleCart() {
-  const panel = $("cartPanel");
-  panel.style.display = (panel.style.display === "block") ? "none" : "block";
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const item = cart.find(x => x.id === id);
+  if (item) item.qty++; else cart.push({ id, p, qty: 1 });
   updateCart();
 }
 
-function showPage(name, target) {
-  if (name === "sell" && !session) {
-    toast("Veuillez vous connecter d'abord");
-    name = "account";
-  }
+function updateCart() {
+  $("count").textContent = cart.reduce((s, i) => s + i.qty, 0);
+  const tot = cart.reduce((s, i) => s + (i.p.price * i.qty), 0);
+  $("total").textContent = money(tot);
+
+  $("cartItems").innerHTML = cart.length ? cart.map(i => `
+    <div class="cart-item">
+     <div><strong>${esc(i.p.name)}</strong><br><small>${money(i.p.price)} FCFA</small></div>
+     <div>Qty: ${i.qty}</div>
+    </div>
+  `).join("") : "<p>Votre panier est vide.</p>";
+}
+
+function toggleCart() {
+  const p = $("cartPanel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+}
+
+function showPage(name, targetId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  const home = (name === "home");
+  const home = name === "home";
   $("hero").style.display = home ? "block" : "none";
   $("productsSection").style.display = home ? "block" : "none";
-  if (!home) {
-    const el = $(name + "Page");
-    if (el) el.classList.add("active");
-  }
-  if (name === "checkout") {
-    $("checkoutTotal").textContent = money(total());
-    $("checkoutLines").innerHTML = lines().map(l => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${l.qty} × ${esc(l.p.name)}</span><span>${money(l.p.price * l.qty)} FCFA</span></div>`).join("");
-  }
-  if (target === "products") $("productsSection").scrollIntoView({ behavior: "smooth" });
+  
+  if (!home) $(name + "Page").classList.add("active");
+  if (targetId) $(targetId).scrollIntoView({ behavior: "smooth" });
   else window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function handleImage(inp) {
-  const f = inp.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = () => {
-    const im = new Image(); im.onload = () => {
-      const s = Math.min(1, 500 / Math.max(im.width, im.height)), c = document.createElement("canvas");
-      c.width = im.width * s; c.height = im.height * s; c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-      newImage = c.toDataURL("image/jpeg", .7); toast("Photo ajoutée ✔");
-    }; im.src = r.result;
-  };
-  r.readAsDataURL(f);
-}
-
 async function publishProduct() {
-  const name = $("newName").value.trim(), price = Math.round(Number($("newPrice").value));
-  if (!name || !(price > 0)) { alert("Indiquez au minimum le nom et un prix valide."); return }
-  if (!newImage) { alert("Ajoutez une photo : elle est obligatoire."); return }
-  
-  const res = await api("/rest/v1/products", { method: "POST", headers: { Prefer: "return=minimal" }, body: { name, price, emoji: "🛍️", img: newImage, description: $("newDesc").value.trim() || null, category: $("newCategory").value, seller_name: $("newSeller").value.trim() || (session && session.user ? session.user.email.split("@")[0] : "Vendeur") } });
-  
-  ["newName", "newPrice", "newDesc", "newSeller", "newPhoto"].forEach(i => $(i).value = "");
-  newImage = "";
-  await loadProducts();
-  toast("Produit publié ✔");
-  showPage("home", "products");
+  const name = $("newName").value.trim(), price = Number($("newPrice").value);
+  if (!name || !price) { alert("Remplissez le nom et le prix"); return; }
+
+  await api("/rest/v1/products", "POST", {
+    name, price, category: $("newCategory").value,
+    seller_name: $("newSeller").value.trim() || "Vendeur"
+  });
+
+  alert("Annonce publiée !");
+  loadProducts();
+  showPage("home");
 }
 
 function checkout() {
-  if (!lines().length) { alert("Votre panier est vide."); return }
-  $("cartPanel").style.display = "none"; showPage("checkout");
+  if (!cart.length) return alert("Panier vide");
+  $("cartPanel").style.display = "none";
+  const tot = cart.reduce((s, i) => s + (i.p.price * i.qty), 0);
+  $("checkoutTotal").textContent = money(tot);
+  $("checkoutLines").innerHTML = cart.map(i => `<div>${i.qty}x ${esc(i.p.name)} - ${money(i.p.price * i.qty)} FCFA</div>`).join("");
+  showPage("checkout");
 }
 
-function selectPay(btn, name) {
-  selectedPayment = name;
-  document.querySelectorAll(".pay").forEach(x => x.style.borderColor = "var(--border)");
-  btn.style.borderColor = "var(--gold)";
+function confirmOrder() {
+  const name = $("buyerName").value, phone = $("buyerPhone").value, addr = $("buyerAddress").value;
+  if (!name || !phone) return alert("Nom et téléphone requis");
+  
+  const tot = cart.reduce((s, i) => s + (i.p.price * i.qty), 0);
+  const msg = `Nouvelle commande:\n` + cart.map(i => `- ${i.qty}x ${i.p.name}`).join("\n") + `\nTotal: ${money(tot)} FCFA\nClient: ${name} (${phone}) - ${addr}`;
+  
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+  cart = []; updateCart(); showPage("home");
 }
 
-async function confirmOrder() {
-  const L = lines(), tot = total();
-  if (!L.length) return;
-  if (!selectedPayment) { alert("Choisissez un mode de paiement."); return }
-  const name = $("buyerName").value.trim(), addr = $("buyerAddress").value.trim(), phone = $("buyerPhone").value.trim();
-  if (!name || !phone || !addr) { alert("Remplissez tous les champs obligatoires."); return }
-
-  const id = "WY-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-  await api("/rest/v1/orders", { method: "POST", headers: { Prefer: "return=minimal" }, body: { code: id, name, phone, address: addr, payment: selectedPayment, total: tot, items: L.map(l => ({ name: l.p.name, qty: l.qty, price: l.p.price })) } });
-
-  const msg = `🛒 *Nouvelle commande ${id}*\n` + L.map(l => `• ${l.qty} x ${l.p.name} — ${money(l.p.price * l.qty)} FCFA`).join("\n") + `\n\n*Total :* ${money(tot)} FCFA\n*Paiement :* ${selectedPayment}\n*Client :* ${name} (${phone})\n*Adresse :* ${addr}`;
-  const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-
-  $("doneBody").innerHTML = `<p>Numéro de commande : <strong>${id}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p>`;
-  $("waLink").href = url;
-  cart = []; save("cart", cart); updateCart();
-  showPage("done"); window.open(url, "_blank");
-}
-
-updateAuthUI();
 loadProducts();
 </script>
 </body>
