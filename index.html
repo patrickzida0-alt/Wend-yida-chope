@@ -255,7 +255,7 @@ footer a{color:var(--gold);text-decoration:none}
    <p>La plateforme d'achat et vente de référence au Burkina Faso.</p>
   </div>
   <div>
-   <p>Contact WhatsApp : <a href="https://wa.me/22667663057">+226 67 66 30 57</a></p>
+   <p>Contact WhatsApp : +226 67 66 30 57</p>
   </div>
  </div>
 </footer>
@@ -326,9 +326,20 @@ function updateAuthUI() {
 async function loadProducts() {
   try {
     const d = await api("/rest/v1/products?select=*&order=created_at.desc");
-    products = d.map(p => ({ ...p, desc: p.description, seller: p.seller_name, mine: !!(session && p.seller_id === session.user.id) }));
-  } catch (e) { toast("Impossible de charger les produits") }
-  render(); updateCart();
+    if (Array.isArray(d)) {
+      products = d.map(p => ({
+        ...p,
+        desc: p.description,
+        seller: p.seller_name,
+        mine: !!(session && p.seller_id === session.user.id)
+      }));
+    }
+  } catch (e) {
+    console.error("Erreur chargement produits:", e);
+    toast("Impossible de charger les produits");
+  }
+  render();
+  updateCart();
 }
 
 /* ---------- Boutique ---------- */
@@ -458,17 +469,22 @@ async function confirmOrder() {
   selectedPayment = ""; document.querySelectorAll(".pay").forEach(x => x.style.outline = "none");
   showPage("done"); window.open(url, "_blank");
 }
-
-/* ---------- Admin ---------- */
 async function loadAdmin() {
+  const b = $("adminBody"); b.innerHTML = "Chargement...";
   try {
-    const o = await api("/rest/v1/orders?select=*&order=created_at.desc");
-    $("adminBody").innerHTML = o.length ? o.map(x => `<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address ? " · " + esc(x.address) : ""}${x.email ? " · ✉️ " + esc(x.email) : ""}</small><br><small>${(x.items || []).map(i => esc(i.qty) + "× " + esc(i.name) + (i.digital ? " (numérique)" : "")).join(", ")}</small><br><select onchange="setStatus(${x.id},this.value)">${["nouvelle", "payée", "livrée", "annulée"].map(s => `<option${s === x.status ? " selected" : ""}>${s}</option>`).join("")}</select></div></div>`).join("") : "<p>Aucune commande à afficher (cette page est réservée à l'administrateur).</p>";
-  } catch (e) { $("adminBody").innerHTML = "<p>Erreur : " + esc(e.message) + "</p>" }
+    const list = await api("/rest/v1/orders?select=*&order=created_at.desc");
+    if (!list.length) { b.innerHTML = "<p>Aucune commande enregistrée.</p>"; return }
+    b.innerHTML = list.map(o => `
+ <div class="form" style="max-width:100%;margin-bottom:15px">
+  <div style="display:flex;justify-content:space-between"><strong>${esc(o.code)}</strong><small>${new Date(o.created_at).toLocaleString()}</small></div>
+  <p><strong>Client :</strong> ${esc(o.name)} (${esc(o.phone)})<br><strong>Paiement :</strong> ${esc(o.payment)}<br>${o.address ? "<strong>Adresse :</strong> " + esc(o.address) + "<br>" : ""}${o.email ? "<strong>Email :</strong> " + esc(o.email) + "<br>" : ""}<strong>Total :</strong> ${money(o.total)} FCFA</p>
+  <ul>${(o.items || []).map(i => `<li>${i.qty} x ${esc(i.name)} (${money(i.price)} FCFA)</li>`).join("")}</ul>
+ </div>`).join("");
+  } catch (e) { b.innerHTML = "<p>Erreur ou accès non autorisé.</p>" }
 }
-async function setStatus(id, status) { try { await api("/rest/v1/orders?id=eq." + id, { method: "PATCH", body: { status } }); toast("Statut mis à jour ✔") } catch (e) { alert(e.message) } }
 
-updateAuthUI(); render(); updateCart(); loadProducts();
+updateAuthUI();
+loadProducts();
 </script>
 </body>
 </html>
