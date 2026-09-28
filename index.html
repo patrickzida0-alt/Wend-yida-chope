@@ -16,8 +16,6 @@ html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f7f5ef;color:#17201d}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-
-/* --- BANNIÈRE DÉFILANTE --- */
 .promo-bar{
   background:linear-gradient(90deg, #111 0%, #262010 50%, #111 100%);
   color:var(--accent);font-size:12px;font-weight:800;padding:8px 0;
@@ -25,21 +23,17 @@ button{cursor:pointer}
 }
 .promo-track{display:inline-block;animation:marquee 22s linear infinite}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
 header{
   position:sticky;top:0;z-index:50;background:rgba(13,15,18,.88);
   color:#fff;border-bottom:1px solid #ffffff18;backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
 .topbar{max-width:1200px;margin:auto;padding:12px 5%;display:flex;align-items:center;gap:20px}
-
-/* --- LOGO --- */
 .brand{
   display:flex;align-items:center;gap:12px;min-width:max-content;
   text-decoration:none;color:#fff;transition:transform .25s ease
 }
 .brand:hover{transform:translateY(-1px)}
-
 .logo-mark{
   width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
   background:radial-gradient(circle at 30% 30%, rgba(255,230,0,0.25) 0%, rgba(13,15,18,0.95) 80%);
@@ -48,12 +42,10 @@ header{
   position:relative;overflow:hidden;
   animation:lightning-pulse 3s infinite ease-in-out
 }
-
 @keyframes lightning-pulse {
   0%, 100% { box-shadow: 0 0 15px rgba(255,183,0,0.25), inset 0 0 10px rgba(255,230,0,0.15); border-color: rgba(255,230,0,0.5); }
   50% { box-shadow: 0 0 25px rgba(255,230,0,0.55), inset 0 0 18px rgba(255,230,0,0.35); border-color: rgba(255,230,0,0.9); }
 }
-
 .lightning-icon {
   width:26px;height:26px;
   filter:drop-shadow(0 0 6px rgba(255,230,0,0.8));
@@ -63,7 +55,6 @@ header{
   transform:scale(1.15) rotate(-5deg);
   filter:drop-shadow(0 0 10px rgba(255,230,0,1))
 }
-
 .logo-text{
   font-size:22px;font-weight:900;letter-spacing:-.6px;
   display:flex;flex-direction:column;line-height:1
@@ -77,8 +68,6 @@ header{
   font-size:9px;font-weight:800;letter-spacing:1.5px;color:#8a94a0;
   text-transform:uppercase;margin-top:3px
 }
-
-/* --- RECHERCHE & ACTIONS --- */
 .search{
   flex:1;display:flex;align-items:center;max-width:620px;margin:auto;
   position:relative;background:rgba(255,255,255,0.07);border-radius:14px;
@@ -101,11 +90,9 @@ header{
   font-weight:900;font-size:13px;transition:all .2s ease
 }
 .search button:hover{transform:scale(1.02)}
-
 .actions{display:flex;gap:8px}
 .icon-btn{border:1px solid #ffffff25;background:#ffffff0d;color:#fff;padding:10px 12px;border-radius:11px}
 .cart-btn{background:var(--gold);color:#111;border:0;padding:11px 14px;border-radius:11px;font-weight:900}
-
 .hero{
   background:
    radial-gradient(circle at 15% 20%,#ffb7002a,transparent 27%),
@@ -127,12 +114,9 @@ header{
 }
 .flag{height:13px;border-radius:99px;background:linear-gradient(90deg,var(--green) 0 40%,var(--gold) 40% 60%,var(--red) 60%)}
 .hero-card h3{font-size:25px;margin:20px 0 8px}
-
 .container{max-width:1200px;margin:auto;padding:35px 5%}
 .section-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px;flex-wrap:wrap}
 .section-head h2{margin:0;font-size:28px}.section-head p{margin:5px 0;color:var(--muted)}
-
-/* --- BARRE DE FILTRES ET TRI --- */
 .filter-bar{
   display:flex;gap:10px;align-items:center;justify-content:space-between;
   margin-bottom:15px;background:#fff;padding:12px 16px;border-radius:14px;
@@ -140,12 +124,9 @@ header{
 }
 .filter-group{display:flex;gap:10px;align-items:center}
 .filter-select{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#fcfbf7;font-weight:700;font-size:13px}
-
-/* --- RAYONS (VECTORIEL PRO) --- */
 .categories{display:flex;gap:10px;overflow-x:auto;padding:4px 0 14px;scroll-behavior:smooth}
 .categories::-webkit-scrollbar{height:4px}
 .categories::-webkit-scrollbar-thumb{background:#d0c9b8;border-radius:4px}
-
 .cat{
   white-space:nowrap;border:1px solid var(--border);background:#fff;
   padding:10px 18px;border-radius:999px;font-weight:800;font-size:13px;
@@ -156,8 +137,6 @@ header{
 .cat:hover{background:var(--dark);color:#fff;border-color:var(--dark);transform:translateY(-2px)}
 .cat.active{background:linear-gradient(135deg, var(--dark) 0%, #1e242c 100%);color:var(--accent);border-color:var(--dark)}
 .cat.active svg{stroke:var(--accent)}
-
-/* --- GRILLE PRODUITS & CARTES --- */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
 .card{
   background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;
@@ -166,14 +145,10 @@ header{
 }
 .card:hover{transform:translateY(-4px);box-shadow:0 14px 35px rgba(23,32,29,0.12)}
 .photo{height:190px;background:linear-gradient(135deg,#f1eee4,#e6e1d4);display:grid;place-items:center;font-size:72px;position:relative}
-
-/* Badges */
 .badges{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:5px;z-index:2}
 .tag{background:var(--red);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:900}
 .tag-stock{background:#ff9800;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:900}
 .tag-top{background:var(--green);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:900}
-
-/* Bouton Favoris */
 .fav-btn{
   position:absolute;right:10px;top:10px;width:32px;height:32px;border-radius:50%;
   background:rgba(255,255,255,0.9);border:0;display:grid;place-items:center;
@@ -181,13 +156,11 @@ header{
 }
 .fav-btn:hover{transform:scale(1.15)}
 .fav-btn.active{color:var(--red)}
-
 .card-body{padding:16px;display:flex;flex-direction:column;flex:1}
 .card h3{margin:0 0 6px;font-size:16px;font-weight:800}
 .rating{color:#ffb700;font-size:13px;font-weight:800;margin-bottom:6px}
 .price{font-size:20px;font-weight:950;margin:6px 0;color:#111}
 .seller{font-size:12px;color:var(--muted);margin-bottom:12px}
-
 .card-actions{display:flex;gap:8px;margin-top:auto}
 .buy{flex:1;padding:11px;border:0;border-radius:10px;background:var(--dark);color:#fff;font-weight:800}
 .buy:hover{background:var(--green)}
@@ -196,33 +169,27 @@ header{
   display:grid;place-items:center;font-size:16px;transition:background .2s
 }
 .wa-quick:hover{background:#1eb854}
-
-/* --- SKELETON LOADING --- */
 .skeleton{
   background:linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
   background-size:200% 100%;animation:loading 1.5s infinite;border-radius:18px;height:320px
 }
 @keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
 .info{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px}.info strong{display:block;font-size:18px;margin-bottom:5px}.info span{color:var(--muted);font-size:14px}
 .page{display:none}.page.active{display:block}
 .page-box{background:#fff;border:1px solid var(--border);border-radius:20px;padding:25px;position:relative}
-
 .back-btn{
   display:inline-flex;align-items:center;gap:8px;background:#f2efe7;color:#111;
   border:1px solid var(--border);padding:8px 14px;border-radius:10px;
   font-weight:800;font-size:13px;margin-bottom:18px;cursor:pointer
 }
 .back-btn:hover{background:var(--dark);color:#fff}
-
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
 .field label{font-weight:800;font-size:14px}.field input,.field select,.field textarea{padding:12px;border:1px solid #ddd8ca;border-radius:10px;outline:0;background:#fff}
 .field textarea{min-height:100px;resize:vertical}
 .payment-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:15px 0}
 .pay{border:1px solid var(--border);background:#fff;border-radius:12px;padding:15px;text-align:left}.pay strong{display:block}.pay small{color:var(--muted)}
-
 #cartPanel{
   display:none;position:fixed;right:16px;top:78px;width:min(430px,calc(100% - 32px));max-height:78vh;overflow:auto;
   background:#fff;padding:20px;border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,0.25);z-index:100;border:1px solid var(--border)
@@ -236,7 +203,6 @@ footer{margin-top:45px;background:#0d0f12;color:#bfc8c4;padding:35px 5%}
 .footer-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
 footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;display:block;margin:7px 0}
 .notice{padding:13px 16px;background:#fff8dd;border:1px solid #f1dda0;border-radius:12px;margin-bottom:15px;font-size:14px}
-
 @media(max-width:850px){
  .topbar{flex-wrap:wrap}.brand{flex:1}.search{order:3;flex-basis:100%}
  .hero-inner{grid-template-columns:1fr}.hero-card{display:none}
@@ -247,14 +213,11 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 </style>
 </head>
 <body>
-
-<!-- BANNIÈRE DÉFILANTE -->
 <div class="promo-bar">
   <div class="promo-track">
     ⚡ Bienvenue sur Shop Éclair — Vente et Achat en ligne au Burkina Faso &nbsp;&nbsp;•&nbsp;&nbsp; 📦 Livraison rapide à Ouagadougou et Bobo-Dioulasso &nbsp;&nbsp;•&nbsp;&nbsp; 🧡 Paiement sécurisé via Orange Money &nbsp;&nbsp;•&nbsp;&nbsp; ⚡ Vendez vos produits gratuitement en quelques clics ! &nbsp;&nbsp;•&nbsp;&nbsp;
   </div>
 </div>
-
 <header>
   <div class="topbar">
     <a class="brand" href="#" onclick="showPage('home');return false">
@@ -288,7 +251,6 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     </div>
   </div>
 </header>
-
 <section class="hero" id="hero">
   <div class="hero-inner">
     <div>
@@ -310,14 +272,11 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     </div>
   </div>
 </section>
-
 <main>
 <section id="productsSection" class="container">
   <div class="section-head">
     <div><h2>Nos rayons & produits</h2><p>Découvrez une sélection de produits classés par rayon sur Shop Éclair.</p></div>
   </div>
-  
-  <!-- BARRE DE RAYONS VECTORIELS -->
   <div class="categories">
     <button class="cat active" onclick="setCategory('Tous',this)">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
@@ -348,8 +307,6 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       Accessoires
     </button>
   </div>
-
-  <!-- BARRE DE TRI ET FILTRES -->
   <div class="filter-bar">
     <div class="filter-group">
       <label style="font-size:13px;font-weight:800">Trier par :</label>
@@ -364,17 +321,13 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       <input type="number" id="maxPriceFilter" placeholder="Ex: 50000" class="filter-select" style="width:110px" oninput="render()">
     </div>
   </div>
-  
   <div class="grid" id="products"></div>
-
   <div class="info-grid">
     <div class="info"><strong>🇧🇫 Pensé pour le Burkina</strong><span>Une identité locale et une expérience adaptée aux utilisateurs burkinabè.</span></div>
     <div class="info"><strong>📱 Paiement Orange Money</strong><span>Règlement rapide et simple directement via votre téléphone portable.</span></div>
     <div class="info"><strong>🛍️ Acheteurs & vendeurs</strong><span>Une base simple pour transformer la boutique en véritable marketplace.</span></div>
   </div>
 </section>
-
-<!-- PAGE REGLAGES -->
 <section id="settingsPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -396,8 +349,6 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <button class="primary" style="margin-top:20px" onclick="saveSettings()">Enregistrer mes préférences</button>
   </div>
 </section>
-
-<!-- PAGE PRIVACY -->
 <section id="privacyPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -405,12 +356,11 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <p>Shop Éclair collecte uniquement les informations nécessaires à la livraison de vos commandes. Vos données de paiement Orange Money sont traitées en toute sécurité sur le réseau de l'opérateur.</p>
   </div>
 </section>
-
-<!-- PAGE VENDEUR -->
 <section id="sellPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
     <h2>Publier un produit</h2>
+    <p style="color:var(--muted);margin-top:-8px">Ton produit sera visible après validation par l'administrateur.</p>
     <div class="form-grid">
       <div class="field"><label>Nom du produit</label><input id="newName" placeholder="Ex. Chemise Faso / Moto Djakarta"></div>
       <div class="field"><label>Prix (FCFA)</label><input id="newPrice" type="number" placeholder="5000"></div>
@@ -433,25 +383,19 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <button class="primary" style="margin-top:15px" onclick="publishProduct()">Publier le produit</button>
   </div>
 </section>
-
-<!-- PAGE COMMANDE -->
 <section id="checkoutPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Continuer mes achats</button>
     <h2>Finaliser la commande</h2>
     <div class="notice">💡 Votre commande est envoyée au vendeur sur WhatsApp. Le paiement s'effectue via Orange Money ou à la livraison.</div>
     <div id="checkoutLines"></div>
-    
     <div class="payment-list">
       <button class="pay" onclick="selectPay(this,'Orange Money Burkina')"><strong>🟠 Orange Money</strong><small>Burkina Faso</small></button>
       <button class="pay" onclick="selectPay(this,'Paiement à la livraison')"><strong>🚚 À la livraison</strong><small>Selon disponibilité</small></button>
     </div>
-
     <div class="form-grid">
       <div class="field"><label>Nom complet</label><input id="buyerName" placeholder="Votre nom"></div>
       <div class="field"><label>Téléphone</label><input id="buyerPhone" placeholder="70 00 00 00"></div>
-      
-      <!-- SÉLECTEUR VILLE ET QUARTIER -->
       <div class="field" id="cityField">
         <label>Ville de livraison</label>
         <select id="buyerCity" onchange="updateShippingCost()">
@@ -461,19 +405,14 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
           <option value="Autre">Autre ville (+2 500 FCFA)</option>
         </select>
       </div>
-
       <div class="field" id="emailField" style="display:none"><label>Email (produit numérique)</label><input id="buyerEmail" type="email" placeholder="vous@exemple.com"></div>
       <div class="field full" id="addressField"><label>Quartier & indications de livraison</label><textarea id="buyerAddress" placeholder="Quartier, rue, bâtiment..."></textarea></div>
     </div>
-
     <div style="margin-top:20px;font-size:16px;font-weight:800">Frais de livraison : <span id="shippingCost">1 000</span> FCFA</div>
     <h3>Total à payer : <span id="checkoutTotal">0</span> FCFA</h3>
-
     <button class="checkout" onclick="confirmOrder()">Confirmer la commande</button>
   </div>
 </section>
-
-<!-- PAGE À PROPOS -->
 <section id="aboutPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -481,8 +420,6 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <p>Shop Éclair est conçu comme une marketplace en ligne rapide mettant en avant une identité burkinabè, une navigation simple et une expérience mobile optimisée.</p>
   </div>
 </section>
-
-<!-- PAGE COMPTE -->
 <section id="accountPage" class="container page">
   <div class="page-box" style="max-width:480px">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -506,8 +443,16 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     </div>
   </div>
 </section>
-
-<!-- PAGE CONFIRMATION -->
+<section id="adminPage" class="container page">
+  <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
+    <h2>Produits en attente de validation</h2>
+    <div id="pendingBody"></div>
+    <h2 style="margin-top:28px">Commandes</h2>
+    <div class="field" style="max-width:240px;margin-bottom:12px"><label>Filtrer par statut</label><select id="orderFilter" onchange="loadAdmin()"><option value="">Toutes</option><option>nouvelle</option><option>payée</option><option>livrée</option><option>annulée</option></select></div>
+    <div id="adminBody"></div>
+  </div>
+</section>
 <section id="donePage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
@@ -520,15 +465,12 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   </div>
 </section>
 </main>
-
-<!-- PANIER FIXE -->
 <div id="cartPanel">
   <div class="cart-head"><h2 style="margin:0">Votre panier</h2><button class="close" onclick="toggleCart()">×</button></div>
   <div id="cartItems"></div>
   <div class="total-row"><span>Total</span><span><span id="total">0</span> FCFA</span></div>
   <button class="checkout" onclick="checkout()">Passer au paiement</button>
 </div>
-
 <footer>
   <div class="footer-inner">
     <div><h3>⚡ Shop Éclair</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne à toute vitesse.</p></div>
@@ -537,7 +479,6 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
   </div>
   <p style="text-align:center;margin:30px 0 0">© 2026 Shop Éclair — Vente et achat en ligne</p>
 </footer>
-
 <script>
 const CONFIG={whatsapp:"22667663057",orange:"67 66 30 57"};
 const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmltn93765UufnpQsQ_zuWpIfHb";
@@ -545,51 +486,43 @@ const IMG_PREFIX=SB+"/storage/v1/object/public/product-images/";
 const K="shopeclair_";
 let category="Tous",selectedPayment="",newImage=null,products=[],isAdmin=false,ordering=false,publishing=false;
 let showFavOnly=false;
-
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
-
 let cart=load("cart",[]),session=load("session",null),userSettings=load("user_settings",{lang:'fr',currency:'XOF',notif:'wa'});
+cart=(Array.isArray(cart)?cart:[]).map(c=>({id:Number(c&&c.id),qty:Math.min(99,Math.floor(Number(c&&c.qty)))})).filter(c=>Number.isInteger(c.id)&&c.id>0&&c.qty>=1);
+if(session&&(!session.access_token||!session.user||!session.user.id))session=null;
 let favorites=load("favorites",[]);
-
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
 const money=n=>num(n).toLocaleString("fr-FR");
 const safeImg=u=>typeof u==="string"&&(u.startsWith(IMG_PREFIX)||/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u))?u:"";
+const imgPath=u=>typeof u==="string"&&u.startsWith(IMG_PREFIX)?u.slice(IMG_PREFIX.length):null;
 const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p&&(l.p.approved||l.p.mine));
 const total=()=>lines().reduce((s,l)=>s+l.p.price*l.qty,0);
-
 function toast(msg){
  let t=$("toast");
  if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#101514;color:#fff;padding:12px 18px;border-radius:12px;z-index:200;font-weight:700;transition:opacity .3s";document.body.appendChild(t)}
  t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2600);
 }
-
-/* FONCTION PARAMÈTRES CORRIGÉE */
 function saveSettings(){
  if($("setLang")) userSettings.lang=$("setLang").value;
  if($("setNotif")) userSettings.notif=$("setNotif").value;
  save("user_settings",userSettings);
  toast("Paramètres enregistrés ✔");
 }
-
-/* FONCTIONS FAVORIS ET RECHERCHE */
 function toggleFav(id,e){
  if(e&&e.stopPropagation) e.stopPropagation();
  if(favorites.includes(id)){favorites=favorites.filter(x=>x!==id)}else{favorites.push(id)}
  save("favorites",favorites);
  render();
 }
-
 function toggleFavoritesOnly(){
  showFavOnly=!showFavOnly;
  const btn=$("favToggleBtn");
  if(btn) btn.style.background=showFavOnly?"var(--gold)":"#ffffff0d";
  render();
 }
-
-/* Supabase API */
 function setSession(d){session=d;isAdmin=false;save("session",d);updateAuthUI()}
 async function refresh(){
  if(!session||session.expires_at*1000>Date.now()+60000)return;
@@ -607,16 +540,21 @@ async function api(path,o={}){
  if(!r.ok)throw new Error((d&&(d.message||d.msg))||"Erreur "+r.status);
  return d;
 }
-
+async function checkAdmin(){
+ isAdmin=false;
+ if(session){try{isAdmin=(await api("/rest/v1/rpc/is_admin",{method:"POST",body:{}}))===true}catch(e){}}
+ updateAuthUI();
+}
 async function auth(mode){
  const email=$("authEmail").value.trim(),password=$("authPass").value;
  if(!email||!password){alert("Email et mot de passe requis.");return}
+ if(mode==="signup"&&password.length<8){alert("Mot de passe : 8 caractères minimum.");return}
  try{
   const r=await fetch(SB+(mode==="signup"?"/auth/v1/signup":"/auth/v1/token?grant_type=password"),{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
   const d=await r.json();
   if(!r.ok)throw new Error(d.msg||d.error_description||d.message||"Échec");
-  if(!d.access_token){alert("Compte créé. Connectez-vous après validation.");return}
-  setSession(d);$("authPass").value="";await loadProducts();toast("Connecté ✔");showPage("home");
+  if(!d.access_token){alert("Compte créé. Confirme ton email via le message reçu, puis connecte-toi.");return}
+  setSession(d);$("authPass").value="";await checkAdmin();await loadProducts();toast("Connecté ✔");showPage("home");
  }catch(e){alert(e.message)}
 }
 function logout(){setSession(null);loadProducts();showPage("home")}
@@ -624,9 +562,9 @@ function updateAuthUI(){
  $("acctBtn").textContent=session?"👤 Compte":"Connexion";
  $("authForm").style.display=session?"none":"block";
  $("authInfo").style.display=session?"block":"none";
+ $("adminBtn").style.display=isAdmin?"":"none";
  if(session)$("authWho").textContent="Connecté : "+session.user.email;
 }
-
 async function loadProducts(){
  $("products").innerHTML=`<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>`;
  try{
@@ -635,36 +573,28 @@ async function loadProducts(){
  }catch(e){toast("Erreur de chargement")}
  render();updateCart();
 }
-
-/* BOUTON ACHAT RAPIDE WHATSAPP ⚡ */
 function quickWhatsAppOrder(id){
  const p=products.find(x=>x.id===id);
  if(!p)return;
- const msg=`⚡ *Commande Rapide Shop Éclair*\n\nBonjour, je souhaite acheter le produit suivant :\n- *${p.name}*\n- Prix : ${money(p.price)} FCFA\n\nMerci de me contacter pour la livraison !`;
+ const msg=`⚡ Commande Rapide Shop Éclair\n\nBonjour, je souhaite acheter le produit suivant :\n- ${p.name}\n- Prix : ${money(p.price)} FCFA\n\nMerci de me contacter pour la livraison !`;
  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
 }
-
-/* RENDU DES PRODUITS */
 function render(){
  const q=$("search").value.toLowerCase();
  const maxP=num($("maxPriceFilter").value);
  const sort=$("sortBy").value;
-
  let list=products.filter(p=>(p.approved||p.mine)&&
   (category==="Tous"||p.category===category)&&
   (p.name+" "+(p.desc||"")).toLowerCase().includes(q)&&
   (!maxP||p.price<=maxP)&&
   (!showFavOnly||favorites.includes(p.id))
  );
-
  if(sort==="price-asc")list.sort((a,b)=>a.price-b.price);
  else if(sort==="price-desc")list.sort((a,b)=>b.price-a.price);
-
  $("products").innerHTML=list.length?list.map(p=>{
   const im=safeImg(p.img);
   const isFav=favorites.includes(p.id);
   const tag=!p.approved?'<span class="tag">⏳ En attente</span>':p.mine?'<span class="tag-top">Mon produit</span>':'';
-  
   return `
  <article class="card">
   <button class="fav-btn ${isFav?'active':''}" onclick="toggleFav(${num(p.id)},event)">${isFav?'❤️':'🤍'}</button>
@@ -684,15 +614,14 @@ function render(){
         <button class="wa-quick" title="Acheter direct sur WhatsApp" onclick="quickWhatsAppOrder(${num(p.id)})">⚡</button>
       `:`<div class="seller">En attente de validation</div>`}
     </div>
+    ${p.mine?`<button class="remove" style="margin-top:8px;text-align:left" onclick="delProduct(${num(p.id)})">Supprimer ce produit</button>`:''}
   </div>
  </article>`}).join(""):"<p style='grid-column:1/-1;padding:20px 0'>Aucun produit ne correspond à votre recherche.</p>";
 }
-
 function onSearch(){if(!$("productsSection").offsetParent)showPage("home");render()}
 function setCategory(c,el){
  category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
 }
-
 function add(id){
  const c=cart.find(x=>x.id===id);
  if(c){if(c.qty<99)c.qty++}else cart.push({id,qty:1});
@@ -704,7 +633,12 @@ function chg(id,d){
  save("cart",cart);updateCart();
 }
 function removeItem(id){cart=cart.filter(x=>x.id!==id);save("cart",cart);updateCart()}
-
+async function dropImage(u){const p=imgPath(u);if(!p)return;try{await api("/storage/v1/object/product-images/"+p,{method:"DELETE"})}catch(e){}}
+async function delProduct(id){
+ if(!confirm("Supprimer ce produit ?"))return;
+ const prod=products.find(x=>x.id===id);
+ try{await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});if(prod)dropImage(prod.img);cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
+}
 function updateCart(){
  const L=lines();
  $("count").textContent=L.reduce((s,l)=>s+l.qty,0);
@@ -714,26 +648,24 @@ function updateCart(){
  <button class="remove" onclick="removeItem(${num(l.p.id)})">Retirer</button></div></div>`).join(""):"<p>Votre panier est vide.</p>";
  $("total").textContent=money(total());
 }
-
 function toggleCart(){
  const panel=$("cartPanel");
  panel.style.display=panel.style.display==="block"?"none":"block";updateCart();
 }
-
 function getShippingCost(){
+ const hasPhysical=lines().some(l=>!l.p.is_digital);
+ if(!hasPhysical)return 0;
  const city=$("buyerCity")?$("buyerCity").value:"Ouagadougou";
  if(city==="Ouagadougou")return 1000;
  if(city==="Bobo-Dioulasso")return 1500;
  if(city==="Koudougou")return 2000;
  return 2500;
 }
-
 function updateShippingCost(){
  const ship=getShippingCost();
  $("shippingCost").textContent=money(ship);
  $("checkoutTotal").textContent=money(total()+ship);
 }
-
 function showPage(name){
  if((name==="sell"||name==="admin")&&!session){toast("Connecte-toi d'abord");name="account"}
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
@@ -745,63 +677,128 @@ function showPage(name){
   if(target) target.classList.add("active");
  }
  if(name==="checkout"){
+  const hasDigital=lines().some(l=>l.p.is_digital),hasPhysical=lines().some(l=>!l.p.is_digital);
+  $("emailField").style.display=hasDigital?"block":"none";
+  $("cityField").style.display=hasPhysical?"block":"none";
+  $("addressField").style.display=hasPhysical?"block":"none";
   updateShippingCost();
   $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${num(l.qty)} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
  }
+ if(name==="admin")loadAdmin();
  window.scrollTo({top:0,behavior:"smooth"});
 }
-
 function handleImage(inp){
  const f=inp.files[0];newImage=null;if(!f)return;
+ if(!/^image\//.test(f.type)){alert("Choisis un fichier image.");inp.value="";return}
  const url=URL.createObjectURL(f),im=new Image();
  im.onload=()=>{
   const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement("canvas");
   c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
   c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
-  c.toBlob(b=>{newImage=b;toast("Photo prête ✔")},"image/jpeg",.8);
+  c.toBlob(b=>{
+   if(b&&b.size>450000)return c.toBlob(b2=>{newImage=b2;toast("Photo prête ✔")},"image/jpeg",.5);
+   newImage=b;toast("Photo prête ✔");
+  },"image/jpeg",.8);
  };
+ im.onerror=()=>{URL.revokeObjectURL(url);alert("Image illisible : essaie une autre photo.");inp.value=""};
  im.src=url;
 }
-
+async function uploadImage(blob){
+ await refresh();
+ if(!session)throw new Error("Session expirée, reconnecte-toi.");
+ const path=session.user.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+".jpg";
+ const r=await fetch(SB+"/storage/v1/object/product-images/"+path,{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"image/jpeg"},body:blob});
+ if(!r.ok){let m="";try{m=(await r.json()).message}catch(e){}throw new Error("Envoi de la photo impossible"+(m?" ("+m+")":""))}
+ return IMG_PREFIX+path;
+}
 async function publishProduct(){
  if(publishing)return;
  if(!session){toast("Connecte-toi d'abord");showPage("account");return}
- const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value));
- if(!name||!(price>0)||!newImage){alert("Indique le nom, le prix et une photo.");return}
- publishing=true;
+ const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value)),desc=$("newDesc").value.trim();
+ const seller=($("newSeller").value.trim()||session.user.email.split("@")[0]).slice(0,60);
+ if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
+ if(name.length>120){alert("Nom trop long (120 caractères max).");return}
+ if(price>100000000){alert("Prix trop élevé.");return}
+ if(desc.length>1000){alert("Description trop longue (1000 caractères max).");return}
+ if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
+ publishing=true;let url=null;
  try{
-  const path=session.user.id+"/"+Date.now()+".jpg";
-  await fetch(SB+"/storage/v1/object/product-images/"+path,{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"image/jpeg"},body:newImage});
-  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,img:IMG_PREFIX+path,description:$("newDesc").value,category:$("newCategory").value,seller_name:$("newSeller").value||"Shop"}});
-  toast("Produit envoyé ✔");showPage("home");await loadProducts();
- }catch(e){alert("Erreur: "+e.message)}
+  url=await uploadImage(newImage);
+  await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=minimal"},body:{name,price,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+ }catch(e){if(url)dropImage(url);publishing=false;alert("Erreur : "+e.message);return}
  publishing=false;
+ ["newName","newPrice","newDesc","newSeller","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage=null;
+ await loadProducts();
+ toast(isAdmin?"Produit publié ✔":"Produit envoyé : il sera visible après validation ✔");
+ showPage("home");
 }
-
 function checkout(){if(!lines().length){alert("Panier vide");return}$("cartPanel").style.display="none";showPage("checkout")}
 function selectPay(btn,name){selectedPayment=name;document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");btn.style.outline="2px solid #ffb700"}
-
+function newCode(){
+ const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",b=new Uint8Array(8);crypto.getRandomValues(b);
+ return "SE-"+Array.from(b,x=>A[x%32]).join("");
+}
 async function confirmOrder(){
  if(ordering)return;
- const L=lines();if(!L.length||!selectedPayment)return alert("Vérifiez la commande et le mode de paiement.");
- const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim(),phone=$("buyerPhone").value.replace(/\D/g,"");
- const city=$("buyerCity").value;
- if(!name||phone.length!==8)return alert("Entrez un nom et un numéro burkinabè à 8 chiffres.");
- 
+ const L=lines();
+ if(!L.length){alert("Votre panier est vide.");return}
+ if(!selectedPayment){alert("Choisissez un mode de paiement.");return}
+ const hasDigital=L.some(l=>l.p.is_digital),hasPhysical=L.some(l=>!l.p.is_digital);
+ const name=$("buyerName").value.trim(),addr=$("buyerAddress").value.trim(),email=$("buyerEmail").value.trim(),city=$("buyerCity").value;
+ let phone=$("buyerPhone").value.replace(/\D/g,"");
+ if(phone.startsWith("226")&&phone.length>8)phone=phone.slice(3);
+ if(!name){alert("Entrez votre nom.");return}
+ if(name.length>100||addr.length>300){alert("Nom ou adresse trop long.");return}
+ if(phone.length!==8){alert("Numéro invalide : le numéro burkinabè comporte 8 chiffres.");return}
+ if(hasPhysical&&!addr){alert("Renseignez votre quartier de livraison.");return}
+ if(hasDigital&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){alert("Renseignez un email valide pour recevoir le produit numérique.");return}
  ordering=true;
- const tot=total()+getShippingCost();
- const id="SE-"+Math.random().toString(36).substring(2,8).toUpperCase();
- 
- const msg=`⚡ *Commande Shop Éclair ${id}*\n`+L.map(l=>`• ${l.qty} x ${l.p.name} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+`\n\n*Frais de livraison (${city})* : ${money(getShippingCost())} FCFA\n*Total* : ${money(tot)} FCFA\n*Paiement* : ${selectedPayment}\n*Client* : ${name} (${phone})\n*Livraison* : ${city}, ${addr}`;
+ const w=window.open("about:blank","_blank");
+ let id=null;
+ try{
+  for(let i=0;i<4&&!id;i++){
+   const code=newCode();
+   try{
+    await api("/rest/v1/orders",{method:"POST",headers:{Prefer:"return=minimal"},body:{code,name,phone,address:hasPhysical?(city+", "+addr):null,email:hasDigital?email:null,payment:selectedPayment,items:L.map(l=>({id:l.p.id,qty:l.qty}))}});
+    id=code;
+   }catch(e){if(!/duplicate|unique|orders_code/i.test(e.message))throw e}
+  }
+  if(!id)throw new Error("Réessayez dans un instant.");
+ }catch(e){ordering=false;if(w)w.close();alert("Commande non enregistrée : "+e.message);return}
+ const ship=getShippingCost(),tot=total()+ship;
+ const msg=`⚡ Commande Shop Éclair ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+(hasPhysical?`\n\nFrais de livraison (${city}) : ${money(ship)} FCFA`:"")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(hasPhysical&&addr?`\nLivraison : ${city}, ${addr}`:"")+(hasDigital?`\nEmail (produit numérique) : ${email}`:"");
  const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
- window.open(url,"_blank");
-
- $("doneBody").innerHTML=`<p>N° de commande : <strong>${id}</strong><br>Total avec livraison : <strong>${money(tot)} FCFA</strong></p><p>Validez votre envoi sur WhatsApp pour finaliser avec le vendeur.</p>`;
+ $("doneBody").innerHTML=`<p>N° de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
  $("waLink").href=url;
- cart=[];save("cart",cart);updateCart();ordering=false;showPage("done");
+ cart=[];save("cart",cart);updateCart();
+ ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
+ selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
+ ordering=false;
+ showPage("done");
+ if(w){try{w.opener=null}catch(e){}w.location.href=url}
 }
-
-(async()=>{updateAuthUI();await loadProducts()})();
+async function loadAdmin(){
+ if(!isAdmin){$("pendingBody").innerHTML="<p>Cette page est réservée à l'administrateur.</p>";$("adminBody").innerHTML="";return}
+ try{
+  const pend=await api("/rest/v1/products?approved=eq.false&select=*&order=created_at.desc&limit=100");
+  $("pendingBody").innerHTML=pend.length?pend.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.category)} · ${esc(p.seller_name)}${p.is_digital?" · numérique":""}</small>${p.description?`<br><small>${esc(p.description)}</small>`:""}</div><div style="text-align:right"><button class="primary" style="padding:8px 12px" onclick="approve(${num(p.id)})">Valider</button><br><button class="remove" onclick="reject(${num(p.id)})">Refuser</button></div></div>`}).join(""):"<p>Aucun produit en attente.</p>";
+  const f=$("orderFilter").value;
+  const o=await api("/rest/v1/orders?select=*&order=created_at.desc&limit=100"+(f?"&status=eq."+encodeURIComponent(f):""));
+  $("adminBody").innerHTML=o.length?o.map(x=>`<div class="cart-item" style="grid-template-columns:1fr"><div><strong>${esc(x.code)}</strong> — ${money(x.total)} FCFA — ${esc(x.payment)}<br><small>${esc(x.name)} · ${esc(x.phone)}${x.address?" · "+esc(x.address):""}${x.email?" · ✉️ "+esc(x.email):""}</small><br><small>${(Array.isArray(x.items)?x.items:[]).map(i=>num(i&&i.qty)+"× "+esc(i&&i.name)+(i&&i.digital===true?" (numérique)":"")).join(", ")}</small><br><select onchange="setStatus(${num(x.id)},this.value)">${["nouvelle","payée","livrée","annulée"].map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):"<p>Aucune commande à afficher.</p>";
+ }catch(e){$("adminBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
+}
+async function setStatus(id,status){try{await api("/rest/v1/orders?id=eq."+num(id),{method:"PATCH",body:{status}});toast("Statut mis à jour ✔")}catch(e){alert(e.message)}}
+async function approve(id){try{await api("/rest/v1/products?id=eq."+num(id),{method:"PATCH",body:{approved:true}});toast("Produit validé ✔");await loadAdmin();await loadProducts()}catch(e){alert(e.message)}}
+async function reject(id){
+ if(!confirm("Refuser et supprimer ce produit ?"))return;
+ try{
+  const rows=await api("/rest/v1/products?id=eq."+num(id)+"&select=img");
+  await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});
+  if(rows&&rows[0])dropImage(rows[0].img);
+  toast("Produit refusé");await loadAdmin();await loadProducts();
+ }catch(e){alert(e.message)}
+}
+(async()=>{updateAuthUI();await loadProducts();await checkAdmin()})();
 </script>
 </body>
 </html>
