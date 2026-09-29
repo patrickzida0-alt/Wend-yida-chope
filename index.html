@@ -203,6 +203,8 @@ footer{margin-top:45px;background:#0d0f12;color:#bfc8c4;padding:35px 5%}
 .footer-inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
 footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;display:block;margin:7px 0}
 .notice{padding:13px 16px;background:#fff8dd;border:1px solid #f1dda0;border-radius:12px;margin-bottom:15px;font-size:14px}
+.certif{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:5px;background:#1d9bf0;color:#fff;padding:4px 10px 4px 5px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(29,155,240,.45)}
+.certif svg{width:16px;height:16px;flex:none}
 @media(max-width:850px){
  .topbar{flex-wrap:wrap}.brand{flex:1}.search{order:3;flex-basis:100%}
  .hero-inner{grid-template-columns:1fr}.hero-card{display:none}
@@ -343,7 +345,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       </div>
       <div class="field">
         <label>Notifications de commande</label>
-        <select id="setNotif"><option value="wa">WhatsApp & SMS</option><option value="email">Email uniquement</option></select>
+       <select id="setNotif"><option value="wa">WhatsApp & SMS</option><option value="email">Email uniquement</option></select>
       </div>
     </div>
     <button class="primary" style="margin-top:20px" onclick="saveSettings()">Enregistrer mes préférences</button>
@@ -436,6 +438,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
       <p id="authWho"></p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="primary" onclick="showPage('sell')">Publier un produit</button>
+        <button class="primary" id="dashBtn" style="display:none" onclick="showPage('dash')">Espace vendeur</button>
         <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="showPage('settings')">⚙️ Paramètres</button>
         <button class="primary" id="adminBtn" style="display:none" onclick="showPage('admin')">Administration</button>
         <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd" onclick="logout()">Déconnexion</button>
@@ -451,6 +454,53 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     <h2 style="margin-top:28px">Commandes</h2>
     <div class="field" style="max-width:240px;margin-bottom:12px"><label>Filtrer par statut</label><select id="orderFilter" onchange="loadAdmin()"><option value="">Toutes</option><option>nouvelle</option><option>payée</option><option>livrée</option><option>annulée</option></select></div>
     <div id="adminBody"></div>
+    <h2 style="margin-top:28px">Tous les produits (modération)</h2>
+    <div id="allProdBody"></div>
+    <h2 style="margin-top:28px">Vendeurs (certification)</h2>
+    <div id="sellersBody"></div>
+      </div></section>
+<section id="sellerSignupPage" class="container page">
+  <div class="page-box" style="max-width:520px">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
+    <h2>Devenir vendeur</h2>
+    <p style="color:var(--muted)">Les acheteurs vous contacteront directement sur WhatsApp. Votre numéro sera visible pour eux.</p>
+    <div id="sAuthFields">
+      <div class="field"><label>Email</label><input id="sEmail" type="email"></div>
+      <div class="field" style="margin-top:10px"><label>Mot de passe (8 caractères min.)</label><input id="sPass" type="password"></div>
+      <p style="font-size:13px">Déjà un compte ? <a href="#" onclick="showPage('account');return false">Connectez-vous</a> puis revenez ici.</p>
+    </div>
+    <div class="field" style="margin-top:10px"><label>Numéro WhatsApp (8 chiffres)</label><input id="sPhone" inputmode="numeric" placeholder="70 00 00 00"></div>
+    <div class="field" style="margin-top:10px"><label>Nom de votre boutique</label><input id="sShop" placeholder="Ex. Boutique Faso"></div>
+    <button class="primary" style="margin-top:15px" onclick="becomeSeller()">Créer mon compte vendeur</button>
+  </div>
+</section>
+<section id="dashPage" class="container page">
+  <div class="page-box">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
+    <h2>Espace vendeur</h2>
+    <div class="form-grid">
+      <div class="field"><label>Numéro WhatsApp</label><input id="dashPhone" inputmode="numeric"></div>
+      <div class="field"><label>Nom de la boutique</label><input id="dashShop"></div>
+    </div>
+    <button class="primary" style="margin-top:12px" onclick="saveSeller()">Enregistrer</button>
+    <button class="secondary" style="background:#f2efe7;color:#111;border-color:#ddd;margin-top:12px" onclick="showPage('sell')">+ Publier un produit</button>
+    <h3 style="margin-top:24px">Mes produits</h3>
+    <div id="dashProducts"></div>
+  </div>
+</section>
+<section id="ratePage" class="container page">
+  <div class="page-box" style="max-width:520px">
+    <button class="back-btn" onclick="showPage('home')">← 🏠 Retour à l'accueil</button>
+    <h2>Noter un vendeur</h2>
+    <p style="color:var(--muted)">Entrez le numéro de votre commande (ex. SE-ABCD2345). La note est possible une fois la commande confirmée comme payée ou livrée.</p>
+    <div class="field"><label>Numéro de commande</label><input id="rCode" placeholder="SE-XXXXXXXX" autocapitalize="characters"></div>
+    <button class="primary" style="margin-top:10px" onclick="rateLookup()">Continuer</button>
+    <div id="rateForm" style="display:none;margin-top:16px">
+      <div class="field"><label>Vendeur</label><select id="rSeller"></select></div>
+      <div class="field" style="margin-top:10px"><label>Votre note</label><div id="rStars" style="font-size:34px;cursor:pointer"></div></div>
+      <div class="field" style="margin-top:10px"><label>Commentaire (facultatif)</label><textarea id="rComment" maxlength="300"></textarea></div>
+      <button class="primary" style="margin-top:12px" onclick="rateSubmit()">Envoyer mon avis</button>
+    </div>
   </div>
 </section>
 <section id="donePage" class="container page">
@@ -474,7 +524,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <footer>
   <div class="footer-inner">
     <div><h3>⚡ Shop Éclair</h3><p>Marketplace burkinabè moderne pour acheter et vendre en ligne à toute vitesse.</p></div>
-    <div><h3>Navigation</h3><a href="#" onclick="showPage('home')">Accueil</a><a href="#" onclick="showPage('sell')">Vendre</a><a href="#" onclick="showPage('about')">À propos</a></div>
+    <div><h3>Navigation</h3><a href="#" onclick="showPage('home')">Accueil</a><a href="#" onclick="showPage('sell')">Vendre</a><a href="#" onclick="showPage('about')">À propos</a><a href="#" onclick="showPage('rate');return false">⭐ Noter un vendeur</a></div>
     <div><h3>Informations</h3><a href="#" onclick="showPage('settings')">⚙️ Paramètres</a><a href="#" onclick="showPage('privacy')">🔒 Confidentialité</a><a href="#" onclick="toggleCart()">Panier</a></div>
   </div>
   <p style="text-align:center;margin:30px 0 0">© 2026 Shop Éclair — Vente et achat en ligne</p>
@@ -485,7 +535,7 @@ const SB="https://ulfbhvcmyzsnclsiwzql.supabase.co",KEY="sb_publishable_biJYJmlt
 const IMG_PREFIX=SB+"/storage/v1/object/public/product-images/";
 const K="shopeclair_";
 let category="Tous",selectedPayment="",newImage=null,products=[],isAdmin=false,ordering=false,publishing=false;
-let showFavOnly=false;
+let showFavOnly=false,me=null;
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
 let cart=load("cart",[]),session=load("session",null),userSettings=load("user_settings",{lang:'fr',currency:'XOF',notif:'wa'});
@@ -523,12 +573,12 @@ function toggleFavoritesOnly(){
  if(btn) btn.style.background=showFavOnly?"var(--gold)":"#ffffff0d";
  render();
 }
-function setSession(d){session=d;isAdmin=false;save("session",d);updateAuthUI()}
+function setSession(d){session=d;isAdmin=false;if(!d)me=null;save("session",d);updateAuthUI()}
 async function refresh(){
  if(!session||session.expires_at*1000>Date.now()+60000)return;
  try{
   const r=await fetch(SB+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:session.refresh_token})});
-  const d=await r.json();if(!r.ok)throw 0;setSession(d);
+  const d=await r.json();if(!r.ok)throw 0;setSession(d);checkAdmin();
  }catch(e){setSession(null)}
 }
 async function api(path,o={}){
@@ -543,7 +593,7 @@ async function api(path,o={}){
 async function checkAdmin(){
  isAdmin=false;
  if(session){try{isAdmin=(await api("/rest/v1/rpc/is_admin",{method:"POST",body:{}}))===true}catch(e){}}
- updateAuthUI();
+ updateAuthUI();render();
 }
 async function auth(mode){
  const email=$("authEmail").value.trim(),password=$("authPass").value;
@@ -552,9 +602,9 @@ async function auth(mode){
  try{
   const r=await fetch(SB+(mode==="signup"?"/auth/v1/signup":"/auth/v1/token?grant_type=password"),{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
   const d=await r.json();
-  if(!r.ok)throw new Error(d.msg||d.error_description||d.message||"Échec");
+   if(!r.ok)throw new Error(d.msg||d.error_description||d.message||"Échec");
   if(!d.access_token){alert("Compte créé. Confirme ton email via le message reçu, puis connecte-toi.");return}
-  setSession(d);$("authPass").value="";await checkAdmin();await loadProducts();toast("Connecté ✔");showPage("home");
+  setSession(d);$("authPass").value="";await checkAdmin();await loadMe();await loadProducts();toast("Connecté ✔");showPage("home");
  }catch(e){alert(e.message)}
 }
 function logout(){setSession(null);loadProducts();showPage("home")}
@@ -563,21 +613,26 @@ function updateAuthUI(){
  $("authForm").style.display=session?"none":"block";
  $("authInfo").style.display=session?"block":"none";
  $("adminBtn").style.display=isAdmin?"":"none";
+ $("dashBtn").style.display=me?"":"none";
  if(session)$("authWho").textContent="Connecté : "+session.user.email;
 }
 async function loadProducts(){
  $("products").innerHTML=`<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>`;
  try{
   const d=await api("/rest/v1/products?select=*&order=created_at.desc");
-  products=d.map(p=>({...p,desc:p.description,seller:p.seller_name,mine:!!(session&&p.seller_id===session.user.id)}));
+  let sm={},st={};
+  try{(await api("/rest/v1/sellers?select=user_id,phone,certified")).forEach(x=>sm[x.user_id]=x)}catch(e){try{(await api("/rest/v1/sellers?select=user_id,phone")).forEach(x=>sm[x.user_id]=x)}catch(e2){}}
+  try{(await api("/rest/v1/seller_stats?select=*")).forEach(x=>st[x.seller_id]=x)}catch(e){}
+  products=d.map(p=>({...p,desc:p.description,seller:p.seller_name,phone:(sm[p.seller_id]||{}).phone||"",cert:!!(sm[p.seller_id]&&sm[p.seller_id].certified),avg:st[p.seller_id]?Number(st[p.seller_id].avg_stars):0,nrat:st[p.seller_id]?Number(st[p.seller_id].n):0,mine:!!(session&&p.seller_id===session.user.id)}));
  }catch(e){toast("Erreur de chargement")}
  render();updateCart();
+ if($("dashPage").classList.contains("active"))loadDash();
 }
 function quickWhatsAppOrder(id){
  const p=products.find(x=>x.id===id);
  if(!p)return;
  const msg=`⚡ Commande Rapide Shop Éclair\n\nBonjour, je souhaite acheter le produit suivant :\n- ${p.name}\n- Prix : ${money(p.price)} FCFA\n\nMerci de me contacter pour la livraison !`;
- window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
+ window.open(`https://wa.me/${p.phone?"226"+p.phone:CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 function render(){
  const q=$("search").value.toLowerCase();
@@ -601,10 +656,11 @@ function render(){
   <div class="photo">
     ${im?`<img src="${esc(im)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"⚡")}
     <div class="badges">${tag}</div>
+    ${p.cert?'<span class="certif" title="Vendeur certifié par Shop Éclair"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#1d9bf0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Certifié par Shop Éclair</span>':''}
   </div>
   <div class="card-body">
     <h3>${esc(p.name)}</h3>
-    <div class="rating">⭐⭐⭐⭐⭐ (5.0)</div>
+    <div class="rating">${p.nrat?`⭐ ${p.avg.toFixed(1)} <span style="color:var(--muted);font-weight:600">(${p.nrat} avis)</span>`:'<span style="color:var(--muted);font-weight:600">Aucun avis</span>'}</div>
     ${p.desc?`<div class="seller">${esc(p.desc)}</div>`:''}
     <div class="seller">Vendu par ${esc(p.seller)}</div>
     <div class="price">${money(p.price)} FCFA</div>
@@ -614,7 +670,7 @@ function render(){
         <button class="wa-quick" title="Acheter direct sur WhatsApp" onclick="quickWhatsAppOrder(${num(p.id)})">⚡</button>
       `:`<div class="seller">En attente de validation</div>`}
     </div>
-    ${p.mine?`<button class="remove" style="margin-top:8px;text-align:left" onclick="delProduct(${num(p.id)})">Supprimer ce produit</button>`:''}
+    ${(p.mine||isAdmin)?`<button class="remove" style="margin-top:8px;text-align:left" onclick="delProduct(${num(p.id)})">Supprimer ce produit</button>`:''}
   </div>
  </article>`}).join(""):"<p style='grid-column:1/-1;padding:20px 0'>Aucun produit ne correspond à votre recherche.</p>";
 }
@@ -667,14 +723,15 @@ function updateShippingCost(){
  $("checkoutTotal").textContent=money(total()+ship);
 }
 function showPage(name){
- if((name==="sell"||name==="admin")&&!session){toast("Connecte-toi d'abord");name="account"}
+ if(name==="admin"&&!session){toast("Connecte-toi d'abord");name="account"}
+ if((name==="sell"||name==="dash")&&!me)name="sellerSignup";
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  const home=name==="home";
  $("hero").style.display=home?"block":"none";
  $("productsSection").style.display=home?"block":"none";
  if(!home){
   const target=$(name+"Page");
-  if(target) target.classList.add("active");
+   if(target) target.classList.add("active");
  }
  if(name==="checkout"){
   const hasDigital=lines().some(l=>l.p.is_digital),hasPhysical=lines().some(l=>!l.p.is_digital);
@@ -684,7 +741,9 @@ function showPage(name){
   updateShippingCost();
   $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${num(l.qty)} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
  }
- if(name==="admin")loadAdmin();
+ if(name==="admin"){loadAdmin();loadAllProds();loadSellersAdmin()}
+ if(name==="dash")loadDash();
+ if(name==="sellerSignup")$("sAuthFields").style.display=session?"none":"block";
  window.scrollTo({top:0,behavior:"smooth"});
 }
 function handleImage(inp){
@@ -715,7 +774,7 @@ async function publishProduct(){
  if(publishing)return;
  if(!session){toast("Connecte-toi d'abord");showPage("account");return}
  const name=$("newName").value.trim(),price=Math.round(Number($("newPrice").value)),desc=$("newDesc").value.trim();
- const seller=($("newSeller").value.trim()||session.user.email.split("@")[0]).slice(0,60);
+ const seller=((me&&me.shop_name)||$("newSeller").value.trim()||session.user.email.split("@")[0]).slice(0,60);
  if(!name||!(price>0)){alert("Indique au minimum le nom et un prix valide.");return}
  if(name.length>120){alert("Nom trop long (120 caractères max).");return}
  if(price>100000000){alert("Prix trop élevé.");return}
@@ -735,7 +794,7 @@ async function publishProduct(){
  const msg=`⚡ Paiement frais de publication Shop Éclair\nProduit : ${name}\nRéférence : ${ref}\nMontant : ${money(CONFIG.listingFee)} FCFA (Orange Money)`;
  const wa=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
  $("doneBody").innerHTML=`<p>Ton produit « ${esc(name)} » est enregistré, référence <strong>${esc(ref)}</strong>.</p><p>Il sera mis en ligne dès réception des <strong>${money(CONFIG.listingFee)} FCFA</strong> de frais de publication.</p><p>Envoie ce montant par Orange Money au <strong>${esc(CONFIG.orange)}</strong> en précisant la référence <strong>${esc(ref)}</strong>, puis préviens-nous sur WhatsApp.</p>`;
- $("waLink").href=wa;
+ $("waLink").href=wa;$("waLink").style.display="";
  showPage("done");
  window.open(wa,"_blank");
 }
@@ -760,7 +819,10 @@ async function confirmOrder(){
  if(hasPhysical&&!addr){alert("Renseignez votre quartier de livraison.");return}
  if(hasDigital&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){alert("Renseignez un email valide pour recevoir le produit numérique.");return}
  ordering=true;
- const w=window.open("about:blank","_blank");
+ const groups={};
+ L.forEach(l=>{const ph=l.p.phone?"226"+l.p.phone:CONFIG.whatsapp;(groups[ph]=groups[ph]||[]).push(l)});
+ const keys=Object.keys(groups);
+ const w=keys.length===1?window.open("about:blank","_blank"):null;
  let id=null;
  try{
   for(let i=0;i<4&&!id;i++){
@@ -770,19 +832,22 @@ async function confirmOrder(){
     id=code;
    }catch(e){if(!/duplicate|unique|orders_code/i.test(e.message))throw e}
   }
-  if(!id)throw new Error("Réessayez dans un instant.");
- }catch(e){ordering=false;if(w)w.close();alert("Commande non enregistrée : "+e.message);return}
+  if(!id)throw new Error("retry");
+ }catch(e){id=newCode();toast("Commande non enregistrée en ligne : envoyez-la par WhatsApp.")}
  const ship=getShippingCost(),tot=total()+ship;
- const msg=`⚡ Commande Shop Éclair ${id}\n`+L.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+(hasPhysical?`\n\nFrais de livraison (${city}) : ${money(ship)} FCFA`:"")+`\nTotal : ${money(tot)} FCFA\nPaiement : ${selectedPayment}\nClient : ${name} (${phone})`+(hasPhysical&&addr?`\nLivraison : ${city}, ${addr}`:"")+(hasDigital?`\nEmail (produit numérique) : ${email}`:"");
- const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
- $("doneBody").innerHTML=`<p>N° de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p>Appuyez sur « Envoyer sur WhatsApp » si la fenêtre ne s'est pas ouverte : ce message prévient le vendeur.</p>`;
- $("waLink").href=url;
+ const links=keys.map(ph=>{
+  const g=groups[ph],sub=g.reduce((s,l)=>s+l.p.price*l.qty,0);
+  const msg=`⚡ Commande Shop Éclair ${id}\n`+g.map(l=>`• ${l.qty} x ${l.p.name}${l.p.is_digital?" (numérique)":""} — ${money(l.p.price*l.qty)} FCFA`).join("\n")+(keys.length===1?(hasPhysical?`\n\nFrais de livraison (${city}) : ${money(ship)} FCFA`:"")+`\nTotal : ${money(tot)} FCFA`:`\n\nSous-total : ${money(sub)} FCFA`)+`\nPaiement : ${selectedPayment}\nClient : ${name} — ${phone}`+(g.some(l=>!l.p.is_digital)?`\nLivraison : ${city}, ${addr}`:"")+(hasDigital&&email?`\nEmail : ${email}`:"");
+  return {seller:g[0].p.seller,url:`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`};
+ });
+ $("doneBody").innerHTML=`<p>N° de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p style="color:var(--muted);font-size:14px">Après confirmation de votre commande, notez le vendeur avec ce numéro (« Noter un vendeur », en bas de page).</p><p>Envoyez votre commande ${links.length>1?"à chaque vendeur":"au vendeur"} sur WhatsApp :</p>`+links.map(k=>`<p><a class="primary" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block" href="${esc(k.url)}">Envoyer à ${esc(k.seller)} sur WhatsApp</a></p>`).join("");
+ $("waLink").style.display="none";
  cart=[];save("cart",cart);updateCart();
  ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
  selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
  ordering=false;
- showPage("done");
- if(w){try{w.opener=null}catch(e){}w.location.href=url}
+  showPage("done");
+ if(w){try{w.opener=null}catch(e){}w.location.href=links[0].url}
 }
 async function loadAdmin(){
  if(!isAdmin){$("pendingBody").innerHTML="<p>Cette page est réservée à l'administrateur.</p>";$("adminBody").innerHTML="";return}
@@ -805,7 +870,103 @@ async function reject(id){
   toast("Produit refusé");await loadAdmin();await loadProducts();
  }catch(e){alert(e.message)}
 }
-(async()=>{updateAuthUI();await loadProducts();await checkAdmin()})();
+async function loadMe(){
+ me=null;
+ if(session){try{const r=await api("/rest/v1/sellers?user_id=eq."+encodeURIComponent(session.user.id)+"&select=*");me=r&&r[0]||null}catch(e){}}
+ updateAuthUI();
+}
+const normPhone=v=>{let p=String(v).replace(/\D/g,"");if(p.startsWith("226")&&p.length>8)p=p.slice(3);return p};
+async function becomeSeller(){
+ const phone=normPhone($("sPhone").value),shop=$("sShop").value.trim().slice(0,60);
+ if(phone.length!==8){alert("Numéro WhatsApp invalide : 8 chiffres.");return}
+ if(!shop){alert("Indiquez le nom de votre boutique.");return}
+ try{
+  if(!session){
+   const email=$("sEmail").value.trim(),password=$("sPass").value;
+   if(!email||password.length<8){alert("Email et mot de passe (8 caractères min.) requis.");return}
+   const r=await fetch(SB+"/auth/v1/signup",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
+   const d=await r.json();
+   if(!r.ok)throw new Error(d.msg||d.error_description||d.message||"Échec");
+   if(!d.access_token){alert("Compte créé. Confirmez votre email, connectez-vous, puis revenez créer votre profil vendeur.");showPage("account");return}
+   setSession(d);await checkAdmin();
+  }
+  await api("/rest/v1/sellers",{method:"POST",headers:{Prefer:"return=minimal"},body:{user_id:session.user.id,phone,shop_name:shop}});
+  await loadMe();await loadProducts();toast("Compte vendeur créé ✔");showPage("sell");
+ }catch(e){alert("Erreur : "+e.message)}
+}
+function loadDash(){
+ if(!me)return;
+ if(document.activeElement!==$("dashPhone"))$("dashPhone").value=me.phone;
+ if(document.activeElement!==$("dashShop"))$("dashShop").value=me.shop_name;
+ const mine=products.filter(p=>p.mine);
+ $("dashProducts").innerHTML=mine.length?mine.map(p=>`<div class="cart-item"><div><strong>${esc(p.name)}</strong><br><small>${p.approved?"En ligne":"⏳ En attente de validation"}</small></div><div style="text-align:right"><input id="pr_${num(p.id)}" type="number" value="${num(p.price)}" style="width:100px;padding:6px"> <button class="close" onclick="setPrice(${num(p.id)})">✔</button><br><button class="remove" onclick="delProduct(${num(p.id)})">Supprimer</button></div></div>`).join(""):"<p>Vous n'avez pas encore de produit.</p>";
+}
+async function setPrice(id){
+ const price=Math.round(Number($("pr_"+id).value));
+ if(!(price>0)||price>100000000){alert("Prix invalide.");return}
+ try{
+  const r=await api("/rest/v1/products?id=eq."+num(id),{method:"PATCH",headers:{Prefer:"return=representation"},body:{price}});
+  if(!r||!r.length)throw new Error("Modification refusée.");
+  toast("Prix mis à jour ✔");await loadProducts();
+ }catch(e){alert(e.message)}
+}
+async function saveSeller(){
+ const phone=normPhone($("dashPhone").value),shop=$("dashShop").value.trim().slice(0,60);
+ if(phone.length!==8||!shop){alert("Numéro (8 chiffres) et nom de boutique requis.");return}
+ try{
+  const r=await api("/rest/v1/sellers?user_id=eq."+encodeURIComponent(session.user.id),{method:"PATCH",headers:{Prefer:"return=representation"},body:{phone,shop_name:shop}});
+  if(!r||!r.length)throw new Error("Modification refusée.");
+  await loadMe();await loadProducts();toast("Profil mis à jour ✔");
+ }catch(e){alert(e.message)}
+}
+async function loadAllProds(){
+ if(!isAdmin){$("allProdBody").innerHTML="";return}
+ try{
+  const d=await api("/rest/v1/products?select=id,name,price,seller_name,img,approved&order=created_at.desc&limit=200");
+  $("allProdBody").innerHTML=d.length?d.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.seller_name)} · ${p.approved?"en ligne":"en attente"}</small></div><button class="remove" onclick="adminDel(${num(p.id)})">Supprimer</button></div>`}).join(""):"<p>Aucun produit.</p>";
+ }catch(e){$("allProdBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
+}
+async function adminDel(id){
+ if(!confirm("Supprimer ce produit définitivement ?"))return;
+ try{
+  const rows=await api("/rest/v1/products?id=eq."+num(id)+"&select=img");
+  const del=await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE",headers:{Prefer:"return=representation"}});
+  if(!del||!del.length)throw new Error("Suppression refusée : exécutez d'abord le fichier SQL.");
+  if(rows&&rows[0])dropImage(rows[0].img);
+  toast("Produit supprimé");await loadAllProds();await loadProducts();
+ }catch(e){alert(e.message)}
+}
+let rStar=0;
+function setStars(n){rStar=n;$("rStars").innerHTML=[1,2,3,4,5].map(i=>`<span onclick="setStars(${i})" style="color:#ffb700">${i<=n?"★":"☆"}</span>`).join(" ")}
+async function rateLookup(){
+ const code=$("rCode").value.trim().toUpperCase();
+ if(!/^SE-[A-Z0-9]{8}$/.test(code)){alert("Numéro de commande invalide (ex. SE-ABCD2345).");return}
+ try{
+  const rows=await api("/rest/v1/rpc/order_sellers",{method:"POST",body:{p_code:code}});
+  if(!rows||!rows.length){alert("Commande introuvable ou pas encore confirmée (payée ou livrée).");$("rateForm").style.display="none";return}
+  $("rSeller").innerHTML=rows.map(r=>`<option value="${esc(r.seller_id)}">${esc(r.shop_name)}${r.already?" (déjà noté)":""}</option>`).join("");
+  $("rCode").value=code;setStars(0);$("rateForm").style.display="block";
+ }catch(e){alert("Erreur : "+e.message)}
+}
+async function rateSubmit(){
+ if(!rStar){alert("Choisissez une note de 1 à 5 étoiles.");return}
+ try{
+   await api("/rest/v1/rpc/rate_seller",{method:"POST",body:{p_code:$("rCode").value.trim().toUpperCase(),p_seller:$("rSeller").value,p_stars:rStar,p_comment:$("rComment").value.trim().slice(0,300)||null}});
+  toast("Merci pour votre avis ✔");$("rComment").value="";$("rateForm").style.display="none";await loadProducts();showPage("home");
+ }catch(e){alert(e.message)}
+}
+async function loadSellersAdmin(){
+ if(!isAdmin){$("sellersBody").innerHTML="";return}
+ try{
+  const S=await api("/rest/v1/sellers?select=user_id,shop_name,phone,certified&order=created_at.desc&limit=200");
+  let st={};try{(await api("/rest/v1/seller_stats?select=*")).forEach(x=>st[x.seller_id]=x)}catch(e){}
+  $("sellersBody").innerHTML=S.length?S.map(s=>{const a=st[s.user_id];return `<div class="cart-item"><div><strong>${esc(s.shop_name)}</strong>${s.certified?' <span style="color:#1d9bf0;font-weight:800">✔ Certifié</span>':''}<br><small>+226 ${esc(s.phone)} · ${a?"⭐ "+Number(a.avg_stars).toFixed(1)+" ("+num(a.n)+" avis)":"aucun avis"}</small></div><button class="${s.certified?'remove':'buy'}" style="padding:8px 12px;flex:none" onclick="setCert('${esc(s.user_id)}',${!s.certified})">${s.certified?"Retirer":"Certifier"}</button></div>`}).join(""):"<p>Aucun vendeur.</p>";
+ }catch(e){$("sellersBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
+}
+async function setCert(id,val){
+ try{await api("/rest/v1/rpc/set_certified",{method:"POST",body:{p_seller:id,p_value:val}});toast(val?"Vendeur certifié ✔":"Certification retirée");await loadSellersAdmin();await loadProducts()}catch(e){alert(e.message)}
+}
+(async()=>{updateAuthUI();await loadMe();await loadProducts();await checkAdmin()})();
 </script>
 </body>
 </html>
