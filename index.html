@@ -211,6 +211,18 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 .notice{padding:13px 16px;background:#fff8dd;border:1px solid #f1dda0;border-radius:12px;margin-bottom:15px;font-size:14px}
 .certif{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:5px;background:#1d9bf0;color:#fff;padding:4px 10px 4px 5px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(29,155,240,.45)}
 .certif svg{width:16px;height:16px;flex:none}
+.slides{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.slides::-webkit-scrollbar{display:none}
+.slides img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:center}
+.sl-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center;padding:0}
+.sl-btn.prev{left:8px}.sl-btn.next{right:8px}
+.dots{position:absolute;right:10px;bottom:10px;z-index:3;display:flex;gap:5px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 3px rgba(0,0,0,.4)}
+.dots i.on{background:#fff}
+.photo-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.slot{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px}
+.slot input{padding:8px;max-width:100%;min-width:0;border:1px solid #ddd8ca;border-radius:10px}
+.prev-img{width:100%;height:90px;object-fit:cover;border-radius:8px;display:none}
 @media(max-width:850px){
  .topbar{flex-wrap:wrap}.brand{flex:1}.search{order:3;flex-basis:100%}
  .hero-inner{grid-template-columns:1fr}.hero-card{display:none}
@@ -340,7 +352,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <section id="settingsPage" class="container page">
   <div class="page-box">
     <button class="back-btn" onclick="showPage('home')" data-i18n="back">← 🏠 Retour à l'accueil</button>
-    <h2 data-i18n="setTitle">⚙️ Paramètres de l'application</h2>
+    <h2 data-i18n="setTitle">⚙️ Paramètres </h2>
     <div class="form-grid" style="margin-top:20px">
       <div class="field">
         <label for="setLang" data-i18n="setLang">Langue d'affichage</label>
@@ -386,7 +398,13 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
           <option value="Accessoires">Accessoires</option>
         </select>
       </div>
-      <div class="field"><label for="newPhoto">Photo (obligatoire)</label><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this)"></div>
+      <div class="field full"><label>Photos du produit (la 1re est obligatoire, 2 autres facultatives)</label>
+        <div class="photo-slots">
+          <div class="slot"><span>Photo 1 *</span><input id="newPhoto" type="file" accept="image/*" onchange="handleImage(this,0)"><img id="prev0" class="prev-img" alt=""><button type="button" class="remove" id="rm0" style="display:none" onclick="clearPhoto(0)">Retirer</button></div>
+          <div class="slot"><span>Photo 2</span><input id="newPhoto2" type="file" accept="image/*" onchange="handleImage(this,1)"><img id="prev1" class="prev-img" alt=""><button type="button" class="remove" id="rm1" style="display:none" onclick="clearPhoto(1)">Retirer</button></div>
+          <div class="slot"><span>Photo 3</span><input id="newPhoto3" type="file" accept="image/*" onchange="handleImage(this,2)"><img id="prev2" class="prev-img" alt=""><button type="button" class="remove" id="rm2" style="display:none" onclick="clearPhoto(2)">Retirer</button></div>
+        </div>
+      </div>
       <div class="field"><label>Type de produit</label><label style="display:flex;align-items:center;gap:8px;font-weight:400;margin-top:8px"><input id="newDigital" type="checkbox" style="width:auto"> Produit numérique (livré par email)</label></div>
       <div class="field full"><label for="newDesc">Description</label><textarea id="newDesc" maxlength="1000" placeholder="Décris ton produit..."></textarea></div>
     </div>
@@ -746,14 +764,15 @@ function render(){
  else if(sort==="price-desc")list.sort((a,b)=>b.price-a.price);
  const total_=list.length;list=list.slice(0,shown);
  $("products").innerHTML=(total_?list.map(p=>{
-  const im=safeImg(p.img);
+  const ims=[p.img].concat(Array.isArray(p.imgs)?p.imgs:[]).map(safeImg).filter(Boolean);
+  const photoHtml=!ims.length?esc(p.emoji||"⚡"):ims.length===1?`<img src="${esc(ims[0])}" alt="${esc(p.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">`:`<div class="slides" onscroll="onSlide(this)">${ims.map(u=>`<img src="${esc(u)}" alt="${esc(p.name)}" loading="lazy" decoding="async">`).join("")}</div><button class="sl-btn prev" aria-label="Précédente" onclick="slide(this,-1)">‹</button><button class="sl-btn next" aria-label="Suivante" onclick="slide(this,1)">›</button><div class="dots">${ims.map((u,k)=>`<i class="${k?"":"on"}"></i>`).join("")}</div>`;
   const isFav=favorites.includes(p.id);
   const tag=!p.approved?`<span class="tag">${t("pending")}</span>`:p.mine?`<span class="tag-top">${t("mine")}</span>`:'';
   return `
  <article class="card">
   <button class="fav-btn ${isFav?'active':''}" aria-label="Favori" onclick="toggleFav(${num(p.id)},event)">${isFav?'❤️':'🤍'}</button>
   <div class="photo">
-    ${im?`<img src="${esc(im)}" alt="${esc(p.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"⚡")}
+    ${photoHtml}
     <div class="badges">${tag}</div>
     ${p.cert?`<span class="certif" title="${t("certTxt")}"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#1d9bf0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>${t("certTxt")}</span>`:''}
   </div>
@@ -789,11 +808,18 @@ function chg(id,d){
  save("cart",cart);updateCart();
 }
 function removeItem(id){cart=cart.filter(x=>x.id!==id);save("cart",cart);updateCart()}
+function dropAll(p){[p.img].concat(Array.isArray(p.imgs)?p.imgs:[]).forEach(dropImage)}
+async function getImgs(id){
+ try{return await api("/rest/v1/products?id=eq."+num(id)+"&select=img,imgs")}
+ catch(e){return await api("/rest/v1/products?id=eq."+num(id)+"&select=img")}
+}
+function slide(btn,d){const sl=btn.parentElement.querySelector(".slides");sl.scrollBy({left:d*sl.clientWidth,behavior:"smooth"})}
+function onSlide(sl){const k=Math.round(sl.scrollLeft/sl.clientWidth);sl.parentElement.querySelectorAll(".dots i").forEach((d,j)=>d.classList.toggle("on",j===k))}
 async function dropImage(u){const p=imgPath(u);if(!p)return;try{await api("/storage/v1/object/product-images/"+p,{method:"DELETE"})}catch(e){}}
 async function delProduct(id){
  if(!confirm("Supprimer ce produit ?"))return;
  const prod=products.find(x=>x.id===id);
- try{await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});if(prod)dropImage(prod.img);cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
+ try{await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});if(prod)dropAll(prod);cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
 }
 function updateCart(){
  const L=lines();
@@ -833,19 +859,28 @@ function showPage(name){
  if(name==="sellerSignup")$("sAuthFields").style.display=session?"none":"block";
  window.scrollTo({top:0,behavior:"smooth"});
 }
-function handleImage(inp){
- const f=inp.files[0];newImage=null;if(!f)return;
+let newImages=[null,null,null],prevUrls=[null,null,null];
+function setPreview(i,blob){
+ if(prevUrls[i]){URL.revokeObjectURL(prevUrls[i]);prevUrls[i]=null}
+ const im=$("prev"+i),rm=$("rm"+i);
+ if(blob){prevUrls[i]=URL.createObjectURL(blob);im.src=prevUrls[i];im.style.display="block";rm.style.display=""}
+ else{im.removeAttribute("src");im.style.display="none";rm.style.display="none"}
+}
+function clearPhoto(i){newImages[i]=null;$(i?"newPhoto"+(i+1):"newPhoto").value="";setPreview(i,null)}
+function handleImage(inp,i){
+ const f=inp.files[0];newImages[i]=null;setPreview(i,null);if(!f)return;
  if(!/^image\//.test(f.type)){alert("Choisis un fichier image.");inp.value="";return}
  const url=URL.createObjectURL(f),im=new Image();
- const fail=()=>{newImage=null;alert("Impossible de traiter cette photo : essaie-en une autre.");inp.value=""};
+ const fail=()=>{clearPhoto(i);alert("Impossible de traiter cette photo : essaie-en une autre.")};
  im.onload=()=>{
-  const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement("canvas");
-  c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+  const sc=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));
   c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+  const ok=b=>{newImages[i]=b;setPreview(i,b);toast("Photo "+(i+1)+" prête ✔")};
   c.toBlob(b=>{
    if(!b)return fail();
-   if(b.size>450000)return c.toBlob(b2=>{if(!b2||b2.size>900000)return fail();newImage=b2;toast("Photo prête ✔")},"image/jpeg",.5);
-   newImage=b;toast("Photo prête ✔");
+   if(b.size>450000)return c.toBlob(b2=>{if(!b2||b2.size>900000)return fail();ok(b2)},"image/jpeg",.5);
+   ok(b);
   },"image/jpeg",.8);
  };
  im.onerror=()=>{URL.revokeObjectURL(url);alert("Image illisible : essaie une autre photo.");inp.value=""};
@@ -868,15 +903,19 @@ async function publishProduct(){
  if(name.length>120){alert("Nom trop long (120 caractères max).");return}
  if(price_>100000000){alert("Prix trop élevé.");return}
  if(desc.length>1000){alert("Description trop longue (1000 caractères max).");return}
- if(!newImage){alert("Ajoute une photo : elle est obligatoire pour publier un produit.");return}
- publishing=true;let url=null,created=null;
+ if(!newImages[0]){alert("Ajoute au moins la photo 1 : elle est obligatoire pour publier un produit.");return}
+ publishing=true;const urls=[];let created=null;
+ const blobs=newImages.filter(Boolean);
  try{
-  url=await uploadImage(newImage);
-  const rows=await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=representation"},body:{name,price:price_,emoji:"⚡",img:url,description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
+  for(let i=0;i<blobs.length;i++){
+   if(blobs.length>1)toast("Envoi de la photo "+(i+1)+"/"+blobs.length+"…");
+   urls.push(await uploadImage(blobs[i]));
+  }
+  const rows=await api("/rest/v1/products",{method:"POST",headers:{Prefer:"return=representation"},body:{name,price:price_,emoji:"⚡",img:urls[0],...(urls.length>1?{imgs:urls.slice(1)}:{}),description:desc||null,category:$("newCategory").value,is_digital:$("newDigital").checked,seller_name:seller}});
   created=rows&&rows[0];
- }catch(e){if(url)dropImage(url);publishing=false;alert("Erreur : "+e.message);return}
+ }catch(e){urls.forEach(dropImage);publishing=false;alert(/imgs/i.test(e.message)?"Colonne « imgs » manquante : exécutez d'abord la ligne SQL dans Supabase.":"Erreur : "+e.message);return}
  publishing=false;
- ["newName","newPrice","newDesc","newPhoto"].forEach(i=>$(i).value="");$("newDigital").checked=false;newImage=null;
+ ["newName","newPrice","newDesc"].forEach(i=>$(i).value="");$("newDigital").checked=false;[0,1,2].forEach(clearPhoto);
  await loadProducts();
  if(isAdmin){toast("Produit publié ✔");showPage("home");return}
  const ref="P"+num(created&&created.id);
@@ -955,9 +994,9 @@ async function approve(id){try{await api("/rest/v1/products?id=eq."+num(id),{met
 async function reject(id){
  if(!confirm("Refuser et supprimer ce produit ?"))return;
  try{
-  const rows=await api("/rest/v1/products?id=eq."+num(id)+"&select=img");
+  const rows=await getImgs(id);
   await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});
-  if(rows&&rows[0])dropImage(rows[0].img);
+  if(rows&&rows[0])dropAll(rows[0]);
   toast("Produit refusé");await loadAdmin();await loadProducts();
  }catch(e){alert(e.message)}
 }
@@ -1030,10 +1069,10 @@ async function loadAllProds(){
 async function adminDel(id){
  if(!confirm("Supprimer ce produit définitivement ?"))return;
  try{
-  const rows=await api("/rest/v1/products?id=eq."+num(id)+"&select=img");
+  const rows=await getImgs(id);
   const del=await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE",headers:{Prefer:"return=representation"}});
   if(!del||!del.length)throw new Error("Suppression refusée : exécutez d'abord le fichier SQL.");
-  if(rows&&rows[0])dropImage(rows[0].img);
+  if(rows&&rows[0])dropAll(rows[0]);
   toast("Produit supprimé");await loadAllProds();await loadProducts();
  }catch(e){alert(e.message)}
 }
