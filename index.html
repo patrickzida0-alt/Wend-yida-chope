@@ -21,7 +21,7 @@ button{cursor:pointer}
   color:var(--accent);font-size:12px;font-weight:800;padding:8px 0;
   overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,230,0,0.2)
 }
-.promo-track{display:inline-flex;animation:marquee 22s linear infinite}
+.promo-track{display:inline-block;animation:marquee 22s linear infinite}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 header{
   position:sticky;top:0;z-index:50;background:rgba(13,15,18,.88);
@@ -154,7 +154,7 @@ header{
   background:rgba(255,255,255,0.9);border:0;display:grid;place-items:center;
   cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.15);z-index:2;font-size:15px;transition:transform .2s
 }
-  .fav-btn:hover{transform:scale(1.15)}
+.fav-btn:hover{transform:scale(1.15)}
 .fav-btn.active{color:var(--red)}
 .card-body{padding:16px;display:flex;flex-direction:column;flex:1}
 .card h3{margin:0 0 6px;font-size:16px;font-weight:800}
@@ -217,7 +217,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
 <body>
 <div class="promo-bar">
   <div class="promo-track">
-    <span>⚡ Bienvenue sur Shop Éclair — Vente et Achat en ligne au Burkina Faso &nbsp;&nbsp;•&nbsp;&nbsp; 📦 Livraison rapide à Ouagadougou et Bobo-Dioulasso &nbsp;&nbsp;•&nbsp;&nbsp; 🧡 Paiement par Orange Money ou à la livraison &nbsp;&nbsp;•&nbsp;&nbsp; ⚡ Publiez vos produits pour seulement 60 FCFA ! &nbsp;&nbsp;•&nbsp;&nbsp;</span><span>⚡ Bienvenue sur Shop Éclair — Vente et Achat en ligne au Burkina Faso &nbsp;&nbsp;•&nbsp;&nbsp; 📦 Livraison rapide à Ouagadougou et Bobo-Dioulasso &nbsp;&nbsp;•&nbsp;&nbsp; 🧡 Paiement par Orange Money ou à la livraison &nbsp;&nbsp;•&nbsp;&nbsp; ⚡ Publiez vos produits pour seulement 60 FCFA ! &nbsp;&nbsp;•&nbsp;&nbsp;</span>
+    ⚡ Bienvenue sur Shop Éclair — Vente et Achat en ligne au Burkina Faso &nbsp;&nbsp;•&nbsp;&nbsp; 📦 Livraison rapide à Ouagadougou et Bobo-Dioulasso &nbsp;&nbsp;•&nbsp;&nbsp; 🧡 Paiement sécurisé via Orange Money &nbsp;&nbsp;•&nbsp;&nbsp; ⚡ Vendez vos produits gratuitement en quelques clics ! &nbsp;&nbsp;•&nbsp;&nbsp;
   </div>
 </div>
 <header>
@@ -241,7 +241,7 @@ footer h3{color:#fff;margin-top:0}footer a{color:#bfc8c4;text-decoration:none;di
     </a>
     <div class="search">
       <span class="search-icon-left">🔍</span>
-      <input id="search" placeholder="Rechercher un produit, une marque..." oninput="onSearchDebounced()">
+      <input id="search" placeholder="Rechercher un produit, une marque..." oninput="onSearch()">
       <button onclick="onSearch()">Rechercher</button>
     </div>
     <div class="actions">
@@ -538,18 +538,17 @@ let category="Tous",selectedPayment="",newImage=null,products=[],isAdmin=false,o
 let showFavOnly=false,me=null;
 function load(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(K+k,JSON.stringify(v));return true}catch(e){toast("Enregistrement impossible");return false}}
-let cart=load("cart",[]),session=load("session",null),userSettings=load("user_settings",{lang:'fr',currency:'XOF',notif:'wa'});
+  let cart=load("cart",[]),session=load("session",null),userSettings=load("user_settings",{lang:'fr',currency:'XOF',notif:'wa'});
 cart=(Array.isArray(cart)?cart:[]).map(c=>({id:Number(c&&c.id),qty:Math.min(99,Math.floor(Number(c&&c.qty)))})).filter(c=>Number.isInteger(c.id)&&c.id>0&&c.qty>=1);
 if(session&&(!session.access_token||!session.user||!session.user.id))session=null;
 let favorites=load("favorites",[]);
 const $=id=>document.getElementById(id);
-const norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
 const money=n=>num(n).toLocaleString("fr-FR");
 const safeImg=u=>typeof u==="string"&&(u.startsWith(IMG_PREFIX)||/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u))?u:"";
 const imgPath=u=>typeof u==="string"&&u.startsWith(IMG_PREFIX)?u.slice(IMG_PREFIX.length):null;
-const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p&&(l.p.approved||l.p.mine));
+const lines=()=>cart.map(c=>({p:products.find(x=>x.id===c.id),qty:c.qty})).filter(l=>l.p&&!l.p.sold&&(l.p.approved||l.p.mine));
 const total=()=>lines().reduce((s,l)=>s+l.p.price*l.qty,0);
 function toast(msg){
  let t=$("toast");
@@ -636,12 +635,12 @@ function quickWhatsAppOrder(id){
  window.open(`https://wa.me/${p.phone?"226"+p.phone:CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 function render(){
- const q=norm($("search").value);
+ const q=$("search").value.toLowerCase();
  const maxP=num($("maxPriceFilter").value);
  const sort=$("sortBy").value;
- let list=products.filter(p=>(p.approved||p.mine)&&
+ let list=products.filter(p=>!p.sold&&(p.approved||p.mine)&&
   (category==="Tous"||p.category===category)&&
-  norm(p.name+" "+(p.desc||"")).includes(q)&&
+  (p.name+" "+(p.desc||"")).toLowerCase().includes(q)&&
   (!maxP||p.price<=maxP)&&
   (!showFavOnly||favorites.includes(p.id))
  );
@@ -655,7 +654,7 @@ function render(){
  <article class="card">
   <button class="fav-btn ${isFav?'active':''}" onclick="toggleFav(${num(p.id)},event)">${isFav?'❤️':'🤍'}</button>
   <div class="photo">
-    ${im?`<img src="${esc(im)}" alt="${esc(p.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"⚡")}
+    ${im?`<img src="${esc(im)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:esc(p.emoji||"⚡")}
     <div class="badges">${tag}</div>
     ${p.cert?'<span class="certif" title="Vendeur certifié par Shop Éclair"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#1d9bf0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Certifié par Shop Éclair</span>':''}
   </div>
@@ -675,7 +674,6 @@ function render(){
   </div>
  </article>`}).join(""):"<p style='grid-column:1/-1;padding:20px 0'>Aucun produit ne correspond à votre recherche.</p>";
 }
-let _st;const onSearchDebounced=()=>{clearTimeout(_st);_st=setTimeout(onSearch,180)};
 function onSearch(){if(!$("productsSection").offsetParent)showPage("home");render()}
 function setCategory(c,el){
  category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));el.classList.add("active");render();
@@ -695,7 +693,7 @@ async function dropImage(u){const p=imgPath(u);if(!p)return;try{await api("/stor
 async function delProduct(id){
  if(!confirm("Supprimer ce produit ?"))return;
  const prod=products.find(x=>x.id===id);
- try{const del=await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE",headers:{Prefer:"return=representation"}});if(!del||!del.length)throw new Error("Suppression refusée.");if(prod)dropImage(prod.img);cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
+ try{await api("/rest/v1/products?id=eq."+num(id),{method:"DELETE"});if(prod)dropImage(prod.img);cart=cart.filter(c=>c.id!==id);save("cart",cart);await loadProducts()}catch(e){alert(e.message)}
 }
 function updateCart(){
  const L=lines();
@@ -743,7 +741,7 @@ function showPage(name){
   updateShippingCost();
   $("checkoutLines").innerHTML=lines().map(l=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>${num(l.qty)} × ${esc(l.p.name)}</span><span>${money(l.p.price*l.qty)} FCFA</span></div>`).join("");
  }
-  if(name==="admin"){loadAdmin();loadAllProds();loadSellersAdmin()}
+ if(name==="admin"){loadAdmin();loadAllProds();loadSellersAdmin()}
  if(name==="dash")loadDash();
  if(name==="sellerSignup")$("sAuthFields").style.display=session?"none":"block";
  window.scrollTo({top:0,behavior:"smooth"});
@@ -845,7 +843,7 @@ async function confirmOrder(){
  $("doneBody").innerHTML=`<p>N° de commande : <strong>${esc(id)}</strong><br>Total : <strong>${money(tot)} FCFA</strong></p><p style="color:var(--muted);font-size:14px">Après confirmation de votre commande, notez le vendeur avec ce numéro (« Noter un vendeur », en bas de page).</p><p>Envoyez votre commande ${links.length>1?"à chaque vendeur":"au vendeur"} sur WhatsApp :</p>`+links.map(k=>`<p><a class="primary" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block" href="${esc(k.url)}">Envoyer à ${esc(k.seller)} sur WhatsApp</a></p>`).join("");
  $("waLink").style.display="none";
  cart=[];save("cart",cart);updateCart();
- ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
+  ["buyerName","buyerPhone","buyerAddress","buyerEmail"].forEach(i=>$(i).value="");
  selectedPayment="";document.querySelectorAll(".pay").forEach(x=>x.style.outline="none");
  ordering=false;
   showPage("done");
@@ -877,9 +875,10 @@ async function loadMe(){
  if(session){try{const r=await api("/rest/v1/sellers?user_id=eq."+encodeURIComponent(session.user.id)+"&select=*");me=r&&r[0]||null}catch(e){}}
  updateAuthUI();
 }
+const shopErr=e=>/duplicate|unique|shop_name/i.test((e&&e.message)||"")?"Ce nom de boutique est déjà pris. Choisissez-en un autre.":null;
 const normPhone=v=>{let p=String(v).replace(/\D/g,"");if(p.startsWith("226")&&p.length>8)p=p.slice(3);return p};
 async function becomeSeller(){
- const phone=normPhone($("sPhone").value),shop=$("sShop").value.trim().slice(0,60);
+ const phone=normPhone($("sPhone").value),shop=$("sShop").value.replace(/\s+/g," ").trim().slice(0,60);
  if(phone.length!==8){alert("Numéro WhatsApp invalide : 8 chiffres.");return}
  if(!shop){alert("Indiquez le nom de votre boutique.");return}
  try{
@@ -894,14 +893,14 @@ async function becomeSeller(){
   }
   await api("/rest/v1/sellers",{method:"POST",headers:{Prefer:"return=minimal"},body:{user_id:session.user.id,phone,shop_name:shop}});
   await loadMe();await loadProducts();toast("Compte vendeur créé ✔");showPage("sell");
- }catch(e){alert("Erreur : "+e.message)}
+ }catch(e){alert(shopErr(e)||"Erreur : "+e.message)}
 }
 function loadDash(){
  if(!me)return;
  if(document.activeElement!==$("dashPhone"))$("dashPhone").value=me.phone;
  if(document.activeElement!==$("dashShop"))$("dashShop").value=me.shop_name;
  const mine=products.filter(p=>p.mine);
- $("dashProducts").innerHTML=mine.length?mine.map(p=>`<div class="cart-item"><div><strong>${esc(p.name)}</strong><br><small>${p.approved?"En ligne":"⏳ En attente de validation"}</small></div><div style="text-align:right"><input id="pr_${num(p.id)}" type="number" value="${num(p.price)}" style="width:100px;padding:6px"> <button class="close" onclick="setPrice(${num(p.id)})">✔</button><br><button class="remove" onclick="delProduct(${num(p.id)})">Supprimer</button></div></div>`).join(""):"<p>Vous n'avez pas encore de produit.</p>";
+ $("dashProducts").innerHTML=mine.length?mine.map(p=>`<div class="cart-item"><div><strong>${esc(p.name)}</strong><br><small>${p.sold?"✅ Vendu (retiré de la boutique)":p.approved?"En ligne":"⏳ En attente de validation"}</small></div><div style="text-align:right">${p.sold?"":`<input id="pr_${num(p.id)}" type="number" value="${num(p.price)}" style="width:100px;padding:6px"> <button class="close" onclick="setPrice(${num(p.id)})">✔</button><br><button class="remove" style="color:#087443;font-weight:700;margin-right:14px" onclick="markSold(${num(p.id)})">Vendu</button>`}<button class="remove" onclick="delProduct(${num(p.id)})">Supprimer</button></div></div>`).join(""):"<p>Vous n'avez pas encore de produit.</p>";
 }
 async function setPrice(id){
  const price=Math.round(Number($("pr_"+id).value));
@@ -912,20 +911,29 @@ async function setPrice(id){
   toast("Prix mis à jour ✔");await loadProducts();
  }catch(e){alert(e.message)}
 }
+async function markSold(id){
+ if(!confirm("Marquer ce produit comme vendu ? Il sera retiré de la boutique."))return;
+ try{
+  const r=await api("/rest/v1/products?id=eq."+num(id),{method:"PATCH",headers:{Prefer:"return=representation"},body:{sold:true}});
+  if(!r||!r.length)throw new Error("Modification refusée.");
+  cart=cart.filter(c=>c.id!==id);save("cart",cart);
+  toast("Produit marqué vendu ✔");await loadProducts();
+ }catch(e){alert(/sold/i.test(e.message)?"Exécutez d'abord le fichier SQL (colonne « sold » manquante).":e.message)}
+}
 async function saveSeller(){
- const phone=normPhone($("dashPhone").value),shop=$("dashShop").value.trim().slice(0,60);
+ const phone=normPhone($("dashPhone").value),shop=$("dashShop").value.replace(/\s+/g," ").trim().slice(0,60);
  if(phone.length!==8||!shop){alert("Numéro (8 chiffres) et nom de boutique requis.");return}
  try{
   const r=await api("/rest/v1/sellers?user_id=eq."+encodeURIComponent(session.user.id),{method:"PATCH",headers:{Prefer:"return=representation"},body:{phone,shop_name:shop}});
   if(!r||!r.length)throw new Error("Modification refusée.");
   await loadMe();await loadProducts();toast("Profil mis à jour ✔");
- }catch(e){alert(e.message)}
+ }catch(e){alert(shopErr(e)||e.message)}
 }
 async function loadAllProds(){
  if(!isAdmin){$("allProdBody").innerHTML="";return}
  try{
-  const d=await api("/rest/v1/products?select=id,name,price,seller_name,img,approved&order=created_at.desc&limit=200");
-  $("allProdBody").innerHTML=d.length?d.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.seller_name)} · ${p.approved?"en ligne":"en attente"}</small></div><button class="remove" onclick="adminDel(${num(p.id)})">Supprimer</button></div>`}).join(""):"<p>Aucun produit.</p>";
+  const d=await api("/rest/v1/products?select=id,name,price,seller_name,img,approved,sold&order=created_at.desc&limit=200");
+  $("allProdBody").innerHTML=d.length?d.map(p=>{const im=safeImg(p.img);return `<div class="cart-item"><div>${im?`<img src="${esc(im)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;float:left;margin-right:10px">`:""}<strong>${esc(p.name)}</strong> — ${money(p.price)} FCFA<br><small>${esc(p.seller_name)} · ${p.sold?"vendu":p.approved?"en ligne":"en attente"}</small></div><button class="remove" onclick="adminDel(${num(p.id)})">Supprimer</button></div>`}).join(""):"<p>Aucun produit.</p>";
  }catch(e){$("allProdBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
 }
 async function adminDel(id){
@@ -958,11 +966,11 @@ async function rateSubmit(){
  }catch(e){alert(e.message)}
 }
 async function loadSellersAdmin(){
- if(!isAdmin){$("sellersBody").innerHTML="";return}
+  if(!isAdmin){$("sellersBody").innerHTML="";return}
  try{
   const S=await api("/rest/v1/sellers?select=user_id,shop_name,phone,certified&order=created_at.desc&limit=200");
   let st={};try{(await api("/rest/v1/seller_stats?select=*")).forEach(x=>st[x.seller_id]=x)}catch(e){}
-  $("sellersBody").innerHTML=S.length?S.map(s=>{const a=st[s.user_id];return `<div class="cart-item"><div><strong>${esc(s.shop_name)}</strong>${s.certified?' <span style="color:#1d9bf0;font-weight:800">✔ Certifié</span>':''}<br><small>+226 ${esc(s.phone)} · ${a?"⭐ "+Number(a.avg_stars).toFixed(1)+" ("+num(a.n)+" avis)":"aucun avis"}</small></div><button class="${s.certified?'remove':'buy'}" style="padding:8px 12px;flex:none" data-uid="${esc(s.user_id)}" data-val="${!s.certified}" onclick="setCert(this.dataset.uid,this.dataset.val==='true')">${s.certified?"Retirer":"Certifier"}</button></div>`}).join(""):"<p>Aucun vendeur.</p>";
+  $("sellersBody").innerHTML=S.length?S.map(s=>{const a=st[s.user_id];return `<div class="cart-item"><div><strong>${esc(s.shop_name)}</strong>${s.certified?' <span style="color:#1d9bf0;font-weight:800">✔ Certifié</span>':''}<br><small>+226 ${esc(s.phone)} · ${a?"⭐ "+Number(a.avg_stars).toFixed(1)+" ("+num(a.n)+" avis)":"aucun avis"}</small></div><button class="${s.certified?'remove':'buy'}" style="padding:8px 12px;flex:none" onclick="setCert('${esc(s.user_id)}',${!s.certified})">${s.certified?"Retirer":"Certifier"}</button></div>`}).join(""):"<p>Aucun vendeur.</p>";
  }catch(e){$("sellersBody").innerHTML="<p>Erreur : "+esc(e.message)+"</p>"}
 }
 async function setCert(id,val){
